@@ -1,0 +1,16 @@
+.outlet {
+  margin-top: 60px;
+}
+footer {
+  padding: 1rem 2rem;
+  color: white;
+  background-color: #303846;
+}
+.hr {
+  width: 100%;
+  border: none;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-color: #e0e0e0;
+  margin: 0 0;
+}

@@ -1,0 +1,9 @@
+.feature {
+  max-width: 280px;
+  text-align: center;
+  margin: 0 1rem;
+}
+.feature_description {
+  line-height: 1.75rem;
+  color: #5e6678;
+}

@@ -20,7 +20,7 @@ const NavigationBar = (props: Props) => {
       <div className={styles.navbar_items}>
         <Link to='/' className={styles.navbar_title}>
           <div className={styles.navbar_logo}>
-            <img src='logo192.png' />
+            <img src='https://avatars.githubusercontent.com/u/69074203?s=64' />
           </div>
           <b>软件创新实践基地</b>
         </Link>

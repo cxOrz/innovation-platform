@@ -45,5 +45,6 @@
 }
 .navbar_logo img {
   margin-right: 0.5rem;
+  border-radius: 20%;
   height: 100%;
 }

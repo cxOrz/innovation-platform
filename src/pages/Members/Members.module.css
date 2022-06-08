@@ -18,6 +18,7 @@
 }
 .primary_section {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   box-sizing: border-box;
   padding: 2rem 5rem;

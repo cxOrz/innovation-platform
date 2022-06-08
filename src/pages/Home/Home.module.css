@@ -1,0 +1,31 @@
+.head_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0;
+}
+.head_section img {
+  width: 192px;
+  border-radius: 20%;
+}
+
+.home_title {
+  font-size: 3rem;
+  color: #393e46;
+}
+.home_paragraph {
+  margin: 0 auto 2rem;
+  font-size: 1.5rem;
+  text-align: center;
+  max-width: 600px;
+  color: #80909f;
+}
+
+.primary_section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 2rem 5rem;
+  background-color: #eff0f5;
+}
