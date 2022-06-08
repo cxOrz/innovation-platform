@@ -22,7 +22,7 @@ const NavigationBar = (props: Props) => {
           <div className={styles.navbar_logo}>
             <img src='logo192.png' />
           </div>
-          <b>创新实践基地</b>
+          <b>软件创新实践基地</b>
         </Link>
         <NavLinks linkProps={links} />
       </div>

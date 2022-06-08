@@ -1,0 +1,44 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-height: 230px;
+  width: 300px;
+  margin: 48px 1rem;
+  padding: 1.25rem;
+  background-color: white;
+  border: solid #e6e7ea 1px;
+  border-radius: 8px;
+}
+.card_title {
+  margin: -3rem 0 0;
+  text-align: center;
+  color: #393e46;
+}
+.card_description {
+  width: 100%;
+  font-size: 14px;
+  color: #5e6678;
+  margin-top: 8px;
+}
+.avatar {
+  position: relative;
+  top: -70px;
+  align-self: center;
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+  box-shadow: 0 5px 5px #cccccc;
+}
+.hr {
+  width: 100%;
+  border: none;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-color: #efeff1;
+  margin-bottom: 1.25rem;
+}
+.ports {
+  display: flex;
+  justify-content: center;
+}
