@@ -1,5 +1,5 @@
 import { GitHub, Twitter, Web } from '@mui/icons-material'
-import Bilibili from '../../assets/bilibili.svg'
+import Bilibili from '../../assets/icons/bilibili.svg'
 import { IconButton } from '@mui/material'
 import React from 'react'
 import { Member } from '../../configs/members'
