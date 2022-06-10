@@ -11,7 +11,7 @@ const NavigationBar = (props: Props) => {
   const location = useLocation()
   const navigate = useNavigate()
   const links: LinkProps[] = [
-    { to: '/apps', label: '应用', isActive: location.pathname === '/apps' ? true : false },
+    { to: '/apps', label: '应用', isActive: location.pathname.match(/^\/apps/) ? true : false },
     { to: '/members', label: '成员概览', isActive: location.pathname === '/members' ? true : false }
   ]
 

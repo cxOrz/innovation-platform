@@ -1,5 +1,20 @@
 .container {
   display: flex;
   flex-wrap: wrap;
-  padding: 1rem 0.5rem;
+  padding: 1rem;
+}
+.category {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.category_name {
+  color: #393e46;
+  margin: 0.5rem 0;
+  padding: 0 1rem;
+  text-align: left;
+}
+.section{
+  width: 100%;
+  margin: 0 2rem;
 }

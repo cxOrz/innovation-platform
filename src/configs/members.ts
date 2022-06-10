@@ -32,5 +32,11 @@ export const members: Member[] = [
     githubUserName: 'Gezi-lzq',
     blog: 'https://gezi-lzq.github.io/',
     bilibili: 'https://space.bilibili.com/153258889',
+  },
+  {
+    name: '胥天昊',
+    description: '头发多多',
+    github: 'https://github.com/Xiaobaicai350',
+    githubUserName: 'Xiaobaicai350',
   }
 ]

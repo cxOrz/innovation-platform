@@ -3,8 +3,8 @@
   position: relative;
   top: 0;
   box-sizing: border-box;
-  min-width: 300px;
-  margin: 1rem 1rem;
+  width: 300px;
+  margin: 0.75rem;
   padding: 1rem;
   text-align: left;
   background-color: white;
@@ -40,7 +40,7 @@
   background-color: #f4f5fa;
 }
 .avatar img {
-  margin-top: 0.5rem;
+  margin-top: 0.65rem;
   width: 1.75rem;
   height: 1.75rem;
 }

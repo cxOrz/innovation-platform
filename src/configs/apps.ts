@@ -10,11 +10,11 @@ type Category = '基地应用' | '平台工具' | '其他分类'
 
 export const apps: Application[] = [
   {
-    title: '应用提交',
-    note: '将你开发的应用提交至此',
-    description: '你可以提交你开发的应用，审核过后会添加到应用页面，供大家使用。',
-    picture: 'apply-my-app.webp',
-    url: '',
+    title: 'Neumorphism.io',
+    note: '生成拟态CSS效果代码',
+    description: 'Generate Soft-UI CSS code',
+    picture: 'neumorphism.io.webp',
+    url: 'https://neumorphism.io',
     category: '平台工具'
   }
 ]
