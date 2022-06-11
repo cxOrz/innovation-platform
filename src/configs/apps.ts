@@ -125,6 +125,14 @@ export const apps: Applications = {
       url: 'https://www.runoob.com',
       category: 'learn'
     },
+    {
+      title: 'roadmap.sh',
+      note: '各类开发技术路线图',
+      description: `Cheatsheets for experienced React developers getting started with TypeScript`,
+      picture: 'roadmap.webp',
+      url: 'https://roadmap.sh',
+      category: 'tools'
+    },
   ],
   others: []
 }
