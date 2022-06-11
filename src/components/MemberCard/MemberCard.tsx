@@ -1,5 +1,4 @@
 import { GitHub, Twitter, Web } from '@mui/icons-material'
-import Bilibili from '../../assets/icons/bilibili.svg'
 import { IconButton } from '@mui/material'
 import React from 'react'
 import { Member } from '../../configs/members'
@@ -42,7 +41,7 @@ const MemberCard = ({ member }: Props) => {
           member.bilibili &&
           <IconButton sx={{ width: '2.5rem', height: '2.5rem', backgroundColor: '#f4f5fa', marginX: 1 }}
             target='_blank' href={member.bilibili}>
-            <img alt='bilibili-icon' width='16' src={Bilibili} />
+            <img alt='bilibili-icon' width='16' src='/assets/icons/bilibili.svg' />
           </IconButton>
         }
       </div>

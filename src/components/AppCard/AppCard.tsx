@@ -15,7 +15,7 @@ const AppCard = ({ data, click }: Props) => {
       click ? click(e) : (() => { })()
     }}>
       <div className={styles.avatar}>
-        <img alt='app-icon' src={require(`../../assets/app/logos/${data.picture}`)} />
+        <img alt='app-icon' src={`/assets/app/logos/${data.picture}`} />
       </div>
       <div>
         <h3 className={styles.app_title}>{data.title}</h3>
