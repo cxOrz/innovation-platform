@@ -34,7 +34,7 @@ const AppCard = ({ data, click }: Props) => {
           right: '1rem',
           top: '1.5rem'
         }}>
-        <ArrowForwardIos sx={{ width: '1rem', color: '#cccccc' }} />
+        <ArrowForwardIos sx={{ width: '1rem', color: '#cccccc', ":hover": { color: '#5e6678' } }} />
       </IconButton>
     </div>
   )
