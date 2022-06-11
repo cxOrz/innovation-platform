@@ -12,7 +12,7 @@ const AppDetail = (props: Props) => {
   return (
     <div>
       <div>
-        <img src={require(`../../assets/app/logos/${data.picture}`)} />
+        <img alt='app-logo' src={require(`../../assets/app/logos/${data.picture}`)} />
       </div>
     </div>
   )

@@ -23,7 +23,7 @@ export const apps: Applications = {
   frontend: [
     {
       title: 'Dribbble',
-      note: '发掘最棒的设计灵感',
+      note: '发现最棒的设计灵感',
       description: 'Generate Soft-UI CSS code',
       picture: 'dribbble.svg',
       url: 'https://dribbble.com',
@@ -89,6 +89,14 @@ export const apps: Applications = {
   backend: [
   ],
   tools: [
+    {
+      title: 'Vercel',
+      note: '自动构建部署静态网站',
+      description: 'Vercel combines the best developer experience with an obsessive focus on end-user performance.',
+      picture: 'vercel.webp',
+      url: 'https://vercel.com',
+      category: 'tools'
+    },
     {
       title: 'Carbon',
       note: '生成你提供代码的截图',

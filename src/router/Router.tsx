@@ -4,6 +4,7 @@ import App from '../App'
 import AppDetail from '../pages/AppDetail/AppDetail'
 import Applications from '../pages/Applications/Applications'
 import ApplyApp from '../pages/ApplyApp/ApplyApp'
+import Blog from '../pages/Blog/Blog'
 import Home from '../pages/Home/Home'
 import Members from '../pages/Members/Members'
 import User from '../pages/User/User'
@@ -17,6 +18,7 @@ const AppRouter = () => {
           <Route path='apps' element={<Applications />} />
           <Route path='apps/apply-app' element={<ApplyApp />} />
           <Route path='apps/:category/:id' element={<AppDetail />} />
+          <Route path='blog' element={<Blog />} />
           <Route path='members' element={<Members />} />
           <Route path='user' element={<User />} />
         </Route>

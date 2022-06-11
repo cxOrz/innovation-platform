@@ -18,10 +18,22 @@
 .navbar_items_right {
   justify-content: end;
 }
+.exlink {
+  margin-right: 0.5rem;
+  color: #1c1e21;
+  font-weight: 500;
+  text-decoration: none;
+  vertical-align: middle;
+  transition: color 200ms;
+}
+.exlink:hover {
+  color: #00adb5;
+}
 .navbar_item {
   color: #1c1e21;
   padding: 4px 12px;
   text-decoration: none;
+  transition: color 200ms;
 }
 .navbar_item:hover {
   color: #00adb5;
@@ -35,6 +47,7 @@
   align-items: center;
   color: #1c1e21;
   text-decoration: none;
+  transition: color 200ms;
 }
 .navbar_title:hover {
   color: #00adb5;

@@ -19,6 +19,14 @@ export const members: Member[] = [
     bilibili: 'https://space.bilibili.com/18844857'
   },
   {
+    name: 'Gezi',
+    description: '搞点有意思的玩意才有意思',
+    github: 'https://github.com/Gezi-lzq',
+    githubUserName: 'Gezi-lzq',
+    blog: 'https://gezi-lzq.github.io',
+    bilibili: 'https://space.bilibili.com/153258889',
+  },
+  {
     name: '楚西文',
     description: '积极向上的菜鸡',
     github: 'https://github.com/chuxiwen-forever',
@@ -26,12 +34,11 @@ export const members: Member[] = [
     blog: 'https://www.chuxiwen.top'
   },
   {
-    name: 'Gezi',
-    description: '搞点有意思的玩意才有意思',
-    github: 'https://github.com/Gezi-lzq',
-    githubUserName: 'Gezi-lzq',
-    blog: 'https://gezi-lzq.github.io/',
-    bilibili: 'https://space.bilibili.com/153258889',
+    name: 'Thousand_Star',
+    description: 'Under the starry sky.',
+    github: 'https://github.com/QianChenJun',
+    githubUserName: 'QianChenJun',
+    blog: 'https://www.qianchen.xyz',
   },
   {
     name: '胥天昊',

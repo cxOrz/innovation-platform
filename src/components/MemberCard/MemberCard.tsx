@@ -12,7 +12,7 @@ interface Props {
 const MemberCard = ({ member }: Props) => {
   return (
     <div className={styles.card}>
-      <img className={styles.avatar} src={`https://avatars.githubusercontent.com/${member.githubUserName}?s=256`} />
+      <img className={styles.avatar} alt='user-avatar' src={`https://avatars.githubusercontent.com/${member.githubUserName}?s=256`} />
       <h3 className={styles.card_title}>{member.name}</h3>
       <p className={styles.card_description}>{member.description}</p>
       <hr className={styles.hr} />
@@ -42,7 +42,7 @@ const MemberCard = ({ member }: Props) => {
           member.bilibili &&
           <IconButton sx={{ width: '2.5rem', height: '2.5rem', backgroundColor: '#f4f5fa', marginX: 1 }}
             target='_blank' href={member.bilibili}>
-            <img width='16' src={Bilibili} />
+            <img alt='bilibili-icon' width='16' src={Bilibili} />
           </IconButton>
         }
       </div>
