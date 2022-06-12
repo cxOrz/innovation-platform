@@ -3,6 +3,7 @@ import { Button, Tooltip } from '@mui/material'
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import styles from './ApplyApp.module.css'
 import { QRCodeCanvas } from 'qrcode.react'
+import { TargetName } from '../../configs/global';
 
 interface Props { }
 
@@ -22,7 +23,7 @@ const ApplyApp = (props: Props) => {
           <div className={styles.button_group}>
             <Button variant='contained' disableElevation
               onClick={() => {
-                window.open('https://github.com/cxOrz/innovation-platform/edit/main/src/configs/apps.ts', '_blanked')
+                window.open(`https://github.com/${TargetName}/innovation-platform/edit/main/src/configs/apps.ts`, '_blanked')
               }}
               sx={{
                 mr: '1rem',
@@ -35,7 +36,7 @@ const ApplyApp = (props: Props) => {
                 }
               }}>前往提交</Button>
             <Tooltip arrow title={
-              <QRCodeCanvas value='https://github.com/cxOrz/innovation-platform/edit/main/src/configs/apps.ts' />
+              <QRCodeCanvas value={`https://github.com/${TargetName}/innovation-platform/edit/main/src/configs/apps.ts`} />
             }>
               <Button variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
             </Tooltip>

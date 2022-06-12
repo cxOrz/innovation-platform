@@ -1,0 +1,1 @@
+export const TargetName = 'RC-Fishing'

@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import AppCard from '../../components/AppCard/AppCard'
 import { apps } from '../../configs/apps'
+import { TargetName } from '../../configs/global'
 import styles from './Applications.module.css'
 
 type Props = {}
@@ -17,7 +18,7 @@ const Applications = (props: Props) => {
           note: '将你开发的应用提交至此',
           description: '你可以提交你开发的应用，审核过后会添加到应用页面，供大家使用。',
           picture: 'apply-my-app.webp',
-          url: 'https://github.com/cxOrz/innovation-platform/edit/main/src/configs/apps.ts',
+          url: `https://github.com/${TargetName}/innovation-platform/edit/main/src/configs/apps.ts`,
           category: 'base'
         }} />
       </section >
