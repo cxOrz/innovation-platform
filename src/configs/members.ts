@@ -8,6 +8,10 @@ export interface Member {
   bilibili?: string
 }
 
+/**
+ * 在这个数组中填写你的信息，请从末尾添加。注意代码格式，请勿改动他人信息。
+ * blog，twitter，bilibili 为可选内容，其他是必填字段。
+ */
 export const members: Member[] = [
   {
     name: 'cxOrz',
