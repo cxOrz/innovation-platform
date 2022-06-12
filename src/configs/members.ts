@@ -27,7 +27,7 @@ export const members: Member[] = [
     description: '搞点有意思的玩意才有意思',
     github: 'https://github.com/Gezi-lzq',
     githubUserName: 'Gezi-lzq',
-    blog: 'https://gezi-lzq.github.io',
+    blog: 'https://gezi-lzq.github.io/wiki',
     bilibili: 'https://space.bilibili.com/153258889',
   },
   {
