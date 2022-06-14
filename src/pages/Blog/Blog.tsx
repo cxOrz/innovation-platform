@@ -1,10 +1,15 @@
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import styles from './Blog.module.css'
 
-interface Props {}
+interface Props { }
 
 const Blog = (props: Props) => {
   return (
-    <div>Blog</div>
+    <div className={styles.blog_content}>
+      <ReactMarkdown children={''} remarkPlugins={[remarkGfm]} />
+    </div>
   )
 }
 

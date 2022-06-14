@@ -1,0 +1,22 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  padding: 2rem;
+  border-radius: 16px;
+  background-color: #f9fafd;
+  box-shadow: 0 0 16px -10px #cccccc;
+}
+.clickable_text {
+  font-size: 0.875rem;
+}
+.clickable_text:hover {
+  cursor: pointer;
+}
+.hr {
+  width: 85%;
+  border: none;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-color: #e7e7e7;
+}
