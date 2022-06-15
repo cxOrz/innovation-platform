@@ -1,6 +1,4 @@
 import React from 'react'
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import styles from './UserProfile.module.css'
 import { Box, Button, TextField } from '@mui/material';
 import { tcb_auth } from '../../configs/global';

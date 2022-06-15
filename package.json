@@ -2,7 +2,7 @@
   "name": "innovation-platform",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "/",
   "dependencies": {
     "@cloudbase/js-sdk": "^1.7.2",
     "@emotion/react": "^11.9.0",

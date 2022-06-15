@@ -8,7 +8,6 @@ type Props = {}
 
 const User = (props: Props) => {
   const loginState = tcb_auth.hasLoginState()
-  console.log(loginState)
   return (
     <div className={styles.container}>
       {
