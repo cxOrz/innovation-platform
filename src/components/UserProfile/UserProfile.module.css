@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 1rem 5rem;
+}
+.title {
+  color: #393e46;
+}
+.hero_paragraph {
+  margin: 0;
+  line-height: 1.75rem;
+  max-width: 600px;
+  color: #5e6678;
+}
+.content {
+  padding: 2rem 0;
+}
+.avatar_section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.info_section {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem 0;
+}

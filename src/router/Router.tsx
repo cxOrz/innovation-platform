@@ -8,6 +8,8 @@ import Blog from '../pages/Blog/Blog'
 import Home from '../pages/Home/Home'
 import Members from '../pages/Members/Members'
 import User from '../pages/User/User'
+import UserProfile from '../components/UserProfile/UserProfile'
+import JoinUs from '../components/JoinUs/JoinUs'
 
 const AppRouter = () => {
   return (
@@ -20,7 +22,10 @@ const AppRouter = () => {
           <Route path='apps/:category/:id' element={<AppDetail />} />
           <Route path='blog' element={<Blog />} />
           <Route path='members' element={<Members />} />
-          <Route path='user' element={<User />} />
+          <Route path='user' element={<User />} >
+            <Route path='profile' element={<UserProfile />} />
+            <Route path='join-us' element={<JoinUs />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter >

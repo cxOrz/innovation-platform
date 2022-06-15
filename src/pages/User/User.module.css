@@ -2,22 +2,3 @@
   display: flex;
   flex-direction: column;
 }
-.hero_title {
-  color: #393e46;
-}
-.hero_paragraph {
-  margin: 0 auto;
-  line-height: 1.75rem;
-  text-align: center;
-  max-width: 600px;
-  color: #5e6678;
-}
-.head_section {
-  margin: 3rem 0 2rem;
-  background-color: #f4f5fa;
-}
-.main_content {
-  padding: 0 1rem 3rem;
-  display: flex;
-  justify-content: center;
-}
