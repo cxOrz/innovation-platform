@@ -19,6 +19,7 @@ const UserProfile = (props: Props) => {
   const userState = useAppSelector(selectUser)
   const [nickNameError, setNickNameError] = useErrorMsg([' ', '昵称长度为0-14个字符，包括汉字、字母、数字'])
   const [uploadProgress, setUploadProgress] = useState(false)
+  const [nickName, setNickName] = useState('')
   const refs = useRef<InputRefs>({
     nickName: null,
     file: null,
@@ -31,7 +32,7 @@ const UserProfile = (props: Props) => {
     setUploadProgress(true)
     // 上传头像文件
     tcb_app.uploadFile({
-      cloudPath: `inno/user-avatars/${refs.current.file?.files![0].name.replace("image/", (userState as any).phone)}`,
+      cloudPath: `inno/user-avatars/${refs.current.file?.files![0].name.replace("image/", userState.data!.phone as string)}`,
       filePath: refs.current.file!.files![0] as unknown as string
     }).then((result: any) => {
       // 更新远程头像地址
@@ -54,6 +55,10 @@ const UserProfile = (props: Props) => {
     }
   }
 
+  useEffect(() => {
+    setNickName(userState.data!.nickName as string)
+  }, [userState.data?.nickName])
+
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>我的资料</h1>
@@ -73,10 +78,10 @@ const UserProfile = (props: Props) => {
             my: 1
           }
         }}>
-          <TextField size='small' label="手机号码" value={(userState as any).phone} disabled
+          <TextField size='small' label="手机号码" value={userState.data?.phone} disabled
             sx={{ width: '290px' }} />
           <TextField inputRef={ref => refs.current.nickName = ref} error={nickNameError.status} helperText={nickNameError.msg}
-            size='small' label="昵称" sx={{ width: '290px' }} defaultValue={userState.data?.nickName} />
+            size='small' label="昵称" sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
         </Box>
         <Button variant='contained' disableElevation onClick={updateProfile}>更新资料</Button>
       </div>
