@@ -5,12 +5,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { tcb_app, tcb_auth } from '../../configs/global';
 import useErrorMsg from '../../hooks/useErrorMsg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { selectUser, updateAvatar } from '../../stores/user/userSlice';
+import { selectUser, updateAvatar, updateUser } from '../../stores/user/userSlice';
 
 interface Props { }
 
 interface InputRefs {
-  nickName: HTMLInputElement | null,
   file: HTMLInputElement | null,
   uploadBtn: HTMLButtonElement | null
 }
@@ -21,7 +20,6 @@ const UserProfile = (props: Props) => {
   const [uploadProgress, setUploadProgress] = useState(false)
   const [nickName, setNickName] = useState('')
   const refs = useRef<InputRefs>({
-    nickName: null,
     file: null,
     uploadBtn: null
   })
@@ -47,9 +45,10 @@ const UserProfile = (props: Props) => {
   }
 
   function updateProfile() {
-    if (refs.current.nickName?.value.match(/^(?!-)[a-zA-Z0-9_\u4e00-\u9fa5]{0,14}$/g)) {
-      tcb_auth.currentUser?.update({ nickName: refs.current.nickName.value })
+    if (nickName.match(/^(?!-)[a-zA-Z0-9_\u4e00-\u9fa5]{0,14}$/g)) {
+      tcb_auth.currentUser?.update({ nickName: nickName })
       setNickNameError(0, false)
+      dispatch(updateUser({ ...userState.data, nickName }))
     } else {
       setNickNameError(1, true)
     }
@@ -80,8 +79,8 @@ const UserProfile = (props: Props) => {
         }}>
           <TextField size='small' label="手机号码" value={userState.data?.phone} disabled
             sx={{ width: '290px' }} />
-          <TextField inputRef={ref => refs.current.nickName = ref} error={nickNameError.status} helperText={nickNameError.msg}
-            size='small' label="昵称" sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
+          <TextField error={nickNameError.status} helperText={nickNameError.msg} size='small' label="昵称"
+            sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
         </Box>
         <Button variant='contained' disableElevation onClick={updateProfile}>更新资料</Button>
       </div>

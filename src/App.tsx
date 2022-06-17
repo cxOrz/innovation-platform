@@ -9,17 +9,19 @@ import { updateUser } from './stores/user/userSlice';
 
 function App() {
   const dispatch = useAppDispatch()
-  const userState = tcb_auth.currentUser
+  const userState = tcb_auth.hasLoginState()?.user
 
   useEffect(() => {
     // 将用户信息更新到redux全局状态
-    dispatch(updateUser({
-      phone: (userState as any).phone,
-      uid: userState?.uid,
-      avatarUrl: userState?.avatarUrl,
-      nickName: userState?.nickName,
-      gender: userState?.gender
-    }))
+    if (userState) {
+      dispatch(updateUser({
+        phone: (userState as any).phone,
+        uid: userState?.uid,
+        avatarUrl: userState?.avatarUrl,
+        nickName: userState?.nickName,
+        gender: userState?.gender
+      }))
+    }
   }, [])
 
   return (
