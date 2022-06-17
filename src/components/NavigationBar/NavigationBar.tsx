@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AccountCircle } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import NavLinks, { LinkProps } from '../NavLinks/NavLinks'
 import styles from './NavigationBar.module.css'
+import { useAppSelector } from '../../hooks/redux'
+import { selectUser } from '../../stores/user/userSlice'
 
 interface Props { }
 
@@ -15,6 +17,7 @@ const NavigationBar = (props: Props) => {
     { to: '/blog', label: '博客', isActive: location.pathname.match(/^\/blog/) ? true : false },
     { to: '/members', label: '成员概览', isActive: location.pathname === '/members' ? true : false }
   ]
+  const user = useAppSelector(selectUser)
 
   return (
     <nav className={styles.navbar}>
@@ -35,7 +38,10 @@ const NavigationBar = (props: Props) => {
         <IconButton onClick={() => {
           navigate('user/profile')
         }}>
-          <AccountCircle />
+          {
+            user.data!.avatarUrl === '' ?
+              <AccountCircle /> : <img width='24' height='24' src={user.data?.avatarUrl} />
+          }
         </IconButton>
       </div>
     </nav>
