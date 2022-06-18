@@ -23,7 +23,8 @@ const initialState: UserSlice = {
     unionId: "",
     username: "",
     wxOpenId: "",
-    wxPublicId: ""
+    wxPublicId: "",
+    role: 1
   }
 }
 

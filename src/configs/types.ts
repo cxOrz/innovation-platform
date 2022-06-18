@@ -14,5 +14,6 @@ export interface TCBUser {
   unionId?: string,
   username?: string,
   wxOpenId?: string,
-  wxPublicId?: string
+  wxPublicId?: string,
+  role?: number
 }

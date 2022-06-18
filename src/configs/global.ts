@@ -7,3 +7,5 @@ export const tcb_app = tcb.init({
 })
 
 export const tcb_auth = tcb_app.auth({ persistence: 'local' })
+
+export const tcb_db = tcb_app.database()

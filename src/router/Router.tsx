@@ -10,6 +10,7 @@ import Members from '../pages/Members/Members'
 import User from '../pages/User/User'
 import UserProfile from '../components/UserProfile/UserProfile'
 import JoinUs from '../components/JoinUs/JoinUs'
+import BlogWriting from '../pages/BlogWriting/BlogWriting'
 
 const AppRouter = () => {
   return (
@@ -21,6 +22,7 @@ const AppRouter = () => {
           <Route path='apps/apply-app' element={<ApplyApp />} />
           <Route path='apps/:category/:id' element={<AppDetail />} />
           <Route path='blog' element={<Blog />} />
+          <Route path='blog-write' element={<BlogWriting />} />
           <Route path='members' element={<Members />} />
           <Route path='user' element={<User />} >
             <Route path='profile' element={<UserProfile />} />

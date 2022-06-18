@@ -48,7 +48,7 @@ const SideMenu = () => {
         <ListItemIcon>
           <GroupsIcon />
         </ListItemIcon>
-        <ListItemText primary="身份申请" />
+        <ListItemText primary="加入我们" />
       </ListItemButton>
       <ListItemButton
         onClick={logout}>

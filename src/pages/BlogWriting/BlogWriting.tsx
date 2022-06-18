@@ -1,0 +1,56 @@
+import React, { useEffect } from 'react'
+import { tcb_db } from '../../configs/global'
+
+interface Props { }
+
+const BlogWriting = (props: Props) => {
+  function submit() {
+    tcb_db.collection('inno-blog').add({
+      title: 'React 测试文档',
+      author_gh: 'cxOrz',
+      author_discription: 'An unknown student',
+      tag: ['技术'],
+      date: new Date(),
+      markdown:
+        `生产模式构建静态网页时，默认会生成 .map 文件，比较大，并且部署后通过浏览器访问可以在控制台看到开发时的源代码，虽说是方便调试，但是都构建 Production Build 了还能被查看代码总让人心里不太舒服。
+
+## 配置
+
+可以通过配置 .env 文件，将 GENERATE_SOURCEMAP 设为 false 即可不生成 sourcemap 文件。
+
+创建 \`.env\` 文件，并在文件中添加这行代码
+\`\`\`javascript
+import ReactMarkdown from 'react-markdown'
+const GENERATE_SOURCEMAP = false
+\`\`\`
+<!--truncate-->
+## 更多
+
+列几个常用的，见下表
+
+|变量|生效的模式|描述|
+|-|-|-|
+|BROWSER|开发|设置启动的浏览器，其值请查看 [这里](https://github.com/sindresorhus/open#app)|
+|HOST|开发|自定义开发服务器的主机地址，例如 HOST=127.0.0.1|
+|PORT|开发|设置开发服务器运行的端口，例如 PORT=8080|
+|HTTPS|开发|当 HTTPS=true 时，开发服务器将以https模式运行|
+|BUILD_PATH|生产|设置build文件夹路径，相对于项目根目录|
+`
+    }).then((res) => {
+      console.log(res)
+    })
+  }
+  function fetchBlog() {
+    tcb_db.collection('inno-blog').where({}).get().then((res) => {
+      console.log(res.data)
+    })
+  }
+  useEffect(() => {
+    submit()
+  }, [])
+  return (
+    <div>BlogWriting</div>
+  )
+}
+
+export default BlogWriting

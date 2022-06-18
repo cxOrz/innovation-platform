@@ -24,7 +24,7 @@
   font-weight: 500;
   text-decoration: none;
   vertical-align: middle;
-  transition: color 200ms;
+  transition: color 200ms cubic-bezier(0.08,0.52,0.52,1);
 }
 .exlink:hover {
   color: #00adb5;
