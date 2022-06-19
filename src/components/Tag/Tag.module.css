@@ -1,0 +1,15 @@
+.tag {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #00adb5;
+  text-decoration: none;
+  border: solid 1px;
+  border-color: #dadde1;
+  border-radius: 0.5rem;
+  padding: 4.8px 8px;
+  margin: 0 0.4rem 0.5rem 0;
+}
+.tag:hover {
+  cursor: pointer;
+  border-color: #00adb5;
+}

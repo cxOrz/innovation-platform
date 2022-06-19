@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import { tcb_db } from '../../configs/global'
 import styles from './Blog.module.css'
 import 'github-markdown-css/github-markdown-light.css'
@@ -22,9 +20,15 @@ export interface Blog {
   _openid: string
 }
 
+interface RecentBlog {
+  title: string
+  _id: string
+}
+
 const Blog = (props: Props) => {
   const params = useParams()
   const [markdown, setMarkdown] = useState('')
+  const [recent, setRecent] = useState<RecentBlog[]>([])
   const [blogs, setBlogs] = useState<Blog[]>([])
 
   function fetchBlog() {
@@ -36,11 +40,21 @@ const Blog = (props: Props) => {
       })
   }
 
+  function fetchRecent() {
+    tcb_db.collection('inno-blog').limit(5)
+      .field({ title: true })
+      .get().then((res) => {
+        console.log(res.data)
+        setRecent(res.data)
+      })
+  }
+
   useEffect(() => {
     hljs.configure({
       ignoreUnescapedHTML: true
     })
     fetchBlog()
+    fetchRecent()
   }, [])
 
   return (
@@ -49,15 +63,15 @@ const Blog = (props: Props) => {
         <h3 style={{ marginTop: 0, fontSize: '1.25rem' }}>近期博文</h3>
         <nav>
           <ul>
-            <li><Link to=''>React 如何不生成 sourceMap 文件啊</Link></li>
-            <li><Link to=''>使用 Webp 减少流量消耗</Link></li>
-            <li><Link to=''>Git 基本使用教程</Link></li>
-            <li><Link to=''>Innovation 门户系统</Link></li>
-            <li><Link to=''>C 语言学生成绩管理系统</Link></li>
+            {
+              recent.map((e) => {
+                return (<li key={e._id}><Link to=''>{e.title}</Link></li>)
+              })
+            }
           </ul>
         </nav>
       </aside>
-      <div>
+      <div className={styles.preview_section}>
         {
           blogs.map((e) => {
             return <BlogPreview key={e._id} blog={e} />
