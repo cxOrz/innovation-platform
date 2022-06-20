@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { tcb_db } from '../../configs/global'
 import styles from './Blog.module.css'
 import 'github-markdown-css/github-markdown-light.css'
-import { Link, useParams } from 'react-router-dom'
+import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/idea.css'
 import BlogPreview from '../../components/BlogPreview/BlogPreview'
@@ -12,7 +12,7 @@ interface Props { }
 export interface Blog {
   author_description: string
   author_gh: string
-  date: Date
+  date: number
   markdown: string
   tag: string[]
   title: string
@@ -27,15 +27,12 @@ interface RecentBlog {
 
 const Blog = (props: Props) => {
   const params = useParams()
-  const [markdown, setMarkdown] = useState('')
   const [recent, setRecent] = useState<RecentBlog[]>([])
   const [blogs, setBlogs] = useState<Blog[]>([])
 
   function fetchBlog() {
-    tcb_db.collection('inno-blog').where({})
-      .skip(params.page ? Number(params.page) * 5 : 0).limit(5)
-      .get().then((res) => {
-        console.log(res.data)
+    tcb_db.collection('inno-blog')
+      .limit(5).get().then((res) => {
         setBlogs(res.data)
       })
   }
@@ -44,7 +41,6 @@ const Blog = (props: Props) => {
     tcb_db.collection('inno-blog').limit(5)
       .field({ title: true })
       .get().then((res) => {
-        console.log(res.data)
         setRecent(res.data)
       })
   }
@@ -65,20 +61,20 @@ const Blog = (props: Props) => {
           <ul>
             {
               recent.map((e) => {
-                return (<li key={e._id}><Link to=''>{e.title}</Link></li>)
+                return (<li key={e._id}><Link to={`/blog/${e._id}`}>{e.title}</Link></li>)
               })
             }
           </ul>
         </nav>
       </aside>
       <div className={styles.preview_section}>
-        {
-          blogs.map((e) => {
-            return <BlogPreview key={e._id} blog={e} />
-          })
+        { // 显示指定博客或处于指定页数,则渲染子路由内容;否则渲染首页5篇博客
+          params.id || params.page ? <Outlet /> :
+            blogs.map((e) => {
+              return <BlogPreview key={e._id} blog={e} />
+            })
         }
       </div>
-      {/* <ReactMarkdown className={styles.markdown_body + ' markdown-body'} children={markdown} remarkPlugins={[remarkGfm]} /> */}
     </div>
   )
 }
