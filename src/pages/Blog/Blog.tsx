@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { tcb_db } from '../../configs/global'
-import styles from './Blog.module.css'
-import 'github-markdown-css/github-markdown-light.css'
-import { Link, Outlet, useLocation, useParams } from 'react-router-dom'
+import { Link, Outlet, useParams } from 'react-router-dom'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/idea.css'
 import BlogPreview from '../../components/BlogPreview/BlogPreview'
+import styles from './Blog.module.css'
 
 interface Props { }
 

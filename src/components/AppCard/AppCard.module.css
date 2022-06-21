@@ -1,5 +1,5 @@
 .app_card {
-  display: flex;
+  display: inline-flex;
   position: relative;
   top: 0;
   box-sizing: border-box;

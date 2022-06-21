@@ -41,7 +41,7 @@ const AppDetail = (props: Props) => {
                 }
               }}>访问</Button>
             <Tooltip arrow title={
-              <QRCodeCanvas value={data.url} />
+              <QRCodeCanvas value={data.url.charAt(0) === '/' ? window.location.host + data.url : data.url} />
             }>
               <Button variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
             </Tooltip>

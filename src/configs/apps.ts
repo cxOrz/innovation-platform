@@ -23,7 +23,16 @@ export type Category = 'base' | 'frontend' | 'backend' | 'tools' | 'learn' | 'ot
  * 请勿修改其他内容！注意代码格式！
  */
 export const apps: Applications = {
-  base: [],
+  base: [
+    {
+      title: '撰写博文',
+      note: '写一篇博客',
+      description: '将博客添加到博客页面，供所有人阅览。',
+      picture: 'write-blog.webp',
+      url: `/blog-write`,
+      category: 'base'
+    }
+  ],
   frontend: [
     {
       title: 'Dribbble',
