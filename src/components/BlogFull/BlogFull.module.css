@@ -57,3 +57,25 @@
 .article_footer > a:hover {
   text-decoration: underline;
 }
+.edit {
+  color: #00adb5;
+}
+.edit span {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 0.5rem;
+}
+.edit span:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+.delete {
+  color: #d32f2f;
+}
+.delete span {
+  vertical-align: top;
+}
+.delete span:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

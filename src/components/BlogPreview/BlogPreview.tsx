@@ -22,7 +22,7 @@ const BlogPreview = ({ blog }: Props) => {
 
   // 设置当前博客到redux全局变量，不用再次请求博客
   function setCurrentBlog() {
-    dispatch(updateBlog({ ...blog, markdown: pieces[0] + (pieces[1] ? pieces[1] : '') }))
+    dispatch(updateBlog(blog))
   }
 
   useEffect(() => {

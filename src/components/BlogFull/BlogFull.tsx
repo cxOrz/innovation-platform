@@ -1,17 +1,21 @@
 import React, { useEffect } from 'react'
+import EditIcon from '@mui/icons-material/Edit'
+import DeleteIcon from '@mui/icons-material/Delete'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/idea.css'
 import styles from './BlogFull.module.css'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import Tag from '../Tag/Tag'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
 import { selectBlog, updateBlog } from '../../stores/blog/blogSlice'
 import { tcb_db } from '../../configs/global'
+import { selectUser } from '../../stores/user/userSlice'
 
 const BlogFull = () => {
   const blog = useAppSelector(selectBlog).data
+  const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const params = useParams()
   const date = new Date(blog.date)
@@ -23,6 +27,10 @@ const BlogFull = () => {
         temp.markdown = temp.markdown.replace('<!--truncate-->', '')
         dispatch(updateBlog(temp))
       })
+  }
+
+  function doDelete() {
+
   }
 
   useEffect(() => {
@@ -67,6 +75,12 @@ const BlogFull = () => {
             </>
           }
         </div>
+        {user.data?.role === 0 &&
+          <div>
+            <Link to='/blog-write?edit=true' className={styles.edit}><EditIcon fontSize='small' /><span>编辑此页</span></Link>
+            <a className={styles.delete}><DeleteIcon fontSize='small' /><span>删除</span></a>
+          </div>
+        }
       </div>
     </div>
   )
