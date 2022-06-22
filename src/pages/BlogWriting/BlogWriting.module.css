@@ -14,7 +14,7 @@
   padding: 45px;
 }
 .left textarea::-webkit-scrollbar {
-  width: 10px;
+  width: 7px;
   background-color: #f1f1f1;
 }
 .left textarea::-webkit-scrollbar-thumb {
@@ -47,7 +47,8 @@
   cursor: col-resize;
 }
 .right {
-  flex: 1;
+  flex: 1 1 0;
+  width: 0px;
   height: 100%;
   box-sizing: border-box;
 }
@@ -56,4 +57,24 @@
   text-align: left;
   box-sizing: border-box;
   padding: 45px;
+}
+
+.markdown_body pre {
+  display: block;
+  overflow-x: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  --scrollbar: #f1f1f1;
+  --thumb: #c0c0c0;
+}
+
+.markdown_body pre::-webkit-scrollbar {
+  height: 5px;
+}
+.markdown_body pre::-webkit-scrollbar-track {
+  background-color: var(--scrollbar);
+}
+.markdown_body pre::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+  background-color: var(--thumb);
 }

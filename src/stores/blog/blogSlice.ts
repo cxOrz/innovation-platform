@@ -5,13 +5,13 @@ import { RootState } from '../../store'
 interface BlogSlice {
   data: Blog
 }
-const initialState: BlogSlice = {
+export const initialBlogState: BlogSlice = {
   data: {
     author_description: '',
     author_gh: '',
     date: 0,
     markdown: '',
-    tag: [],
+    tag: [""],
     title: '',
     _id: '',
     _openid: ''
@@ -20,15 +20,18 @@ const initialState: BlogSlice = {
 
 export const blogSlice = createSlice({
   name: 'blog',
-  initialState: initialState,
+  initialState: initialBlogState,
   reducers: {
     updateBlog: (state: BlogSlice, action: PayloadAction<Blog>) => {
       state.data = action.payload
     },
+    resetBlog: (state: BlogSlice) => {
+      state.data = initialBlogState.data
+    }
   }
 })
 
-export const { updateBlog } = blogSlice.actions
+export const { updateBlog, resetBlog } = blogSlice.actions
 
 export const selectBlog = (state: RootState) => state.blog
 

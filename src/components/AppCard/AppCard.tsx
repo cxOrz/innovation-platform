@@ -1,15 +1,18 @@
 import { ArrowForwardIos } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Application } from '../../configs/apps'
 import styles from './AppCard.module.css'
 
 interface Props {
   data: Application
   click?: React.MouseEventHandler
+  newTab?: boolean
 }
 
-const AppCard = ({ data, click }: Props) => {
+const AppCard = ({ data, click, newTab }: Props) => {
+  const navigate = useNavigate()
   return (
     <div className={styles.app_card} onClick={(e) => {
       click ? click(e) : (() => { })()
@@ -23,8 +26,13 @@ const AppCard = ({ data, click }: Props) => {
       </div>
       <IconButton
         onClick={(e) => {
-          e.stopPropagation()
-          window.open(data.url, '_blanked')
+          if (newTab) {
+            e.stopPropagation()
+            window.open(data.url, '_blanked')
+          } else {
+            e.stopPropagation()
+            navigate(data.url)
+          }
         }}
         sx={{
           position: 'absolute',

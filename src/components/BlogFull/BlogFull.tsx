@@ -29,36 +29,45 @@ const BlogFull = (props: Props) => {
   }
 
   useEffect(() => {
-    if (blog._id == '') fetchBlog()
+    if (blog._id !== params.id) fetchBlog()
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
         hljs.highlightElement(el)
         el.style.padding = 0
       })
     }, 200)
-  }, [])
+  }, [params.id])
 
   return (
     <div className={styles.preview}>
       <h1>{blog.title}</h1>
       <p className={styles.est}>{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 · 预计阅读时间 {Math.round(blog.markdown.length / 200)} min</p>
-      <div className={styles.author}>
-        <img width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
-        <div>
-          <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
-            {blog.author_gh}
+      {
+        blog.author_gh !== '' &&
+        <div className={styles.author}>
+          <a href={`https://github.com/${blog.author_gh}`} target="_blank">
+            <img width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
           </a>
-          <small>{blog.author_description}</small>
+          <div>
+            <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
+              {blog.author_gh}
+            </a>
+            <small>{blog.author_description}</small>
+          </div>
         </div>
-      </div>
+      }
       <ReactMarkdown className={styles.markdown_body + ' markdown-body'} children={blog.markdown} remarkPlugins={[remarkGfm]} />
       <div className={styles.article_footer}>
         <div>
-          <strong>标签：</strong>
-          {
-            blog.tag.map((t, i) => {
-              return <Tag key={i} to=''>{t}</Tag>
-            })
+          {blog.tag[0] !== '' &&
+            <>
+              <strong>标签：</strong>
+              {
+                blog.tag.map((t, i) => {
+                  return <Tag key={i} to=''>{t}</Tag>
+                })
+              }
+            </>
           }
         </div>
       </div>

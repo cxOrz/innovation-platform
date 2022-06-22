@@ -4,6 +4,8 @@ import { Link, Outlet, useParams } from 'react-router-dom'
 import hljs from 'highlight.js'
 import BlogPreview from '../../components/BlogPreview/BlogPreview'
 import styles from './Blog.module.css'
+import { updateBlog } from '../../stores/blog/blogSlice'
+import { useAppDispatch } from '../../hooks/redux'
 
 interface Props { }
 
@@ -25,22 +27,31 @@ interface RecentBlog {
 
 const Blog = (props: Props) => {
   const params = useParams()
+  const dispatch = useAppDispatch()
   const [recent, setRecent] = useState<RecentBlog[]>([])
   const [blogs, setBlogs] = useState<Blog[]>([])
 
   function fetchBlog() {
     tcb_db.collection('inno-blog')
-      .limit(5).get().then((res) => {
+      .limit(5).orderBy('date', 'desc').get().then((res) => {
         setBlogs(res.data)
       })
   }
 
   function fetchRecent() {
     tcb_db.collection('inno-blog').limit(5)
-      .field({ title: true })
+      .orderBy('date', 'desc').field({ title: true })
       .get().then((res) => {
         setRecent(res.data)
       })
+  }
+
+  function setCurrentBlog(id: string) {
+    blogs.slice(0, 5).forEach((blog) => {
+      if (blog._id === id) {
+        dispatch(updateBlog({ ...blog, markdown: blog.markdown.replace('<!--truncate-->', '') }))
+      }
+    })
   }
 
   useEffect(() => {
@@ -59,7 +70,7 @@ const Blog = (props: Props) => {
           <ul>
             {
               recent.map((e) => {
-                return (<li key={e._id}><Link to={`/blog/${e._id}`}>{e.title}</Link></li>)
+                return (<li key={e._id}><Link to={`/blog/${e._id}`} onClick={() => { setCurrentBlog(e._id) }}>{e.title}</Link></li>)
               })
             }
           </ul>
