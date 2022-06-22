@@ -7,9 +7,7 @@ import styles from './Blog.module.css'
 import { updateBlog } from '../../stores/blog/blogSlice'
 import { useAppDispatch } from '../../hooks/redux'
 
-interface Props { }
-
-export interface Blog {
+export interface BlogType {
   author_description: string
   author_gh: string
   date: number
@@ -25,11 +23,11 @@ interface RecentBlog {
   _id: string
 }
 
-const Blog = (props: Props) => {
+const Blog = () => {
   const params = useParams()
   const dispatch = useAppDispatch()
   const [recent, setRecent] = useState<RecentBlog[]>([])
-  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [blogs, setBlogs] = useState<BlogType[]>([])
 
   function fetchBlog() {
     tcb_db.collection('inno-blog')

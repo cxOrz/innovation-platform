@@ -4,14 +4,14 @@ import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/idea.css'
 import styles from './BlogPreview.module.css'
-import type { Blog } from '../../pages/Blog/Blog'
+import type { BlogType } from '../../pages/Blog/Blog'
 import { Link } from 'react-router-dom'
 import Tag from '../Tag/Tag'
 import { useAppDispatch } from '../../hooks/redux'
 import { updateBlog } from '../../stores/blog/blogSlice'
 
 interface Props {
-  blog: Blog
+  blog: BlogType
 }
 
 const BlogPreview = ({ blog }: Props) => {
@@ -45,8 +45,8 @@ const BlogPreview = ({ blog }: Props) => {
       {
         blog.author_gh !== '' &&
         <div className={styles.author}>
-          <a href={`https://github.com/${blog.author_gh}`} target="_blank">
-            <img width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
+          <a href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
+            <img alt='avatar' width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
           </a>
           <div>
             <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">

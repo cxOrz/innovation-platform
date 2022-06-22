@@ -9,9 +9,9 @@
 }
 .left {
   flex: 1;
-  height: 100%;
+  height: calc(100% - 50px);
   box-sizing: border-box;
-  padding: 45px;
+  padding: 45px 45px 0 45px;
 }
 .left textarea::-webkit-scrollbar {
   width: 7px;
@@ -49,8 +49,20 @@
 .right {
   flex: 1 1 0;
   width: 0px;
-  height: 100%;
+  height: calc(100% - 50px);
   box-sizing: border-box;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+.right::-webkit-scrollbar {
+  width: 7px;
+}
+.right::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #c0c0c0;
+}
+.right::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }
 
 .markdown_body {

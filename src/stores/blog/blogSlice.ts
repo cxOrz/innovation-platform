@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Blog } from "../../pages/Blog/Blog";
+import { BlogType } from "../../pages/Blog/Blog";
 import { RootState } from '../../store'
 
 interface BlogSlice {
-  data: Blog
+  data: BlogType
 }
 export const initialBlogState: BlogSlice = {
   data: {
@@ -22,7 +22,7 @@ export const blogSlice = createSlice({
   name: 'blog',
   initialState: initialBlogState,
   reducers: {
-    updateBlog: (state: BlogSlice, action: PayloadAction<Blog>) => {
+    updateBlog: (state: BlogSlice, action: PayloadAction<BlogType>) => {
       state.data = action.payload
     },
     resetBlog: (state: BlogSlice) => {

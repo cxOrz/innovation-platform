@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { tcb_db } from '../../configs/global'
-import type { Blog } from '../../pages/Blog/Blog'
+import type { BlogType } from '../../pages/Blog/Blog'
 import BlogPreview from '../BlogPreview/BlogPreview'
 
 interface Props { }
 
 const BlogPage = (props: Props) => {
   const params = useParams()
-  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [blogs, setBlogs] = useState<BlogType[]>([])
 
   function fetchBlog() {
     tcb_db.collection('inno-blog')

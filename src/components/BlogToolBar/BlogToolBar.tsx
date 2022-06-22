@@ -2,7 +2,6 @@ import { Button } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { useEffect, useRef } from 'react'
 import { useAppSelector } from '../../hooks/redux'
-import type { Blog } from '../../pages/Blog/Blog'
 import { selectBlog } from '../../stores/blog/blogSlice'
 import styles from './BlogToolBar.module.css'
 

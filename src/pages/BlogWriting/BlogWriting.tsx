@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import BlogToolBar from '../../components/BlogToolBar/BlogToolBar'
@@ -8,9 +8,7 @@ import { selectBlog } from '../../stores/blog/blogSlice'
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
 import styles from './BlogWriting.module.css'
 
-interface Props { }
-
-const BlogWriting = (props: Props) => {
+const BlogWriting = () => {
   const params = new URLSearchParams(window.location.search)
   const [markdown, setMarkdown] = useState('')
   const blog = useAppSelector(selectBlog)
@@ -36,12 +34,6 @@ const BlogWriting = (props: Props) => {
     } else {
       dispatch(updateSnackBar({ open: true, severity: 'warning', message: '至少标题、用户名、内容不能为空！' }))
     }
-  }
-
-  function fetchBlog() {
-    tcb_db.collection('inno-blog').where({}).get().then((res) => {
-      console.log(res.data)
-    })
   }
 
   function handleInput(event: React.ChangeEvent<HTMLTextAreaElement>) {

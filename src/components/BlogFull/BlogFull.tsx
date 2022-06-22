@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
@@ -10,10 +10,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux'
 import { selectBlog, updateBlog } from '../../stores/blog/blogSlice'
 import { tcb_db } from '../../configs/global'
 
-interface Props {
-}
-
-const BlogFull = (props: Props) => {
+const BlogFull = () => {
   const blog = useAppSelector(selectBlog).data
   const dispatch = useAppDispatch()
   const params = useParams()
@@ -45,8 +42,8 @@ const BlogFull = (props: Props) => {
       {
         blog.author_gh !== '' &&
         <div className={styles.author}>
-          <a href={`https://github.com/${blog.author_gh}`} target="_blank">
-            <img width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
+          <a href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
+            <img alt='avatar' width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
           </a>
           <div>
             <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
