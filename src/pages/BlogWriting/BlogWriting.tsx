@@ -33,7 +33,7 @@ const BlogWriting = () => {
             dispatch(updateSnackBar({ open: true, severity: 'success', message: '修改成功，即将跳转！' }))
             setTimeout(() => {
               window.open(`/blog/${blog.data._id}`, '_self')
-            }, 3000)
+            }, 2000)
           })
       } else {
         // 新增博客
@@ -51,7 +51,7 @@ const BlogWriting = () => {
             dispatch(updateSnackBar({ open: true, severity: 'success', message: '发布成功，即将跳转！' }))
             setTimeout(() => {
               window.open('/blog', '_self')
-            }, 3000)
+            }, 2000)
           }
         })
       }

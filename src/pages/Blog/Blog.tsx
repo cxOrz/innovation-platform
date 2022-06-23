@@ -47,7 +47,7 @@ const Blog = () => {
   function setCurrentBlog(id: string) {
     blogs.slice(0, 5).forEach((blog) => {
       if (blog._id === id) {
-        dispatch(updateBlog({ ...blog, markdown: blog.markdown.replace('<!--truncate-->', '') }))
+        dispatch(updateBlog(blog))
       }
     })
   }

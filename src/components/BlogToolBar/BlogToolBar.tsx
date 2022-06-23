@@ -44,7 +44,7 @@ const BlogToolBar = ({ submit, markdown }: Props) => {
       <Button variant='contained' onClick={() => {
         submit(refs.current.title!.value, refs.current.gh_username!.value,
           refs.current.description!.value, refs.current.tag!.value.split(' '),
-          blog.date === 0 ? new Date().getTime() : blog.date, markdown)
+          window.location.search === '?edit=true' ? blog.date : new Date().getTime(), markdown)
       }} disableElevation>发布文章</Button>
     </div>
   )

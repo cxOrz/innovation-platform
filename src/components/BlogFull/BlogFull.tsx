@@ -1,6 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
@@ -18,23 +24,43 @@ const BlogFull = () => {
   const user = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
   const params = useParams()
+  const [open, setOpen] = useState(false)
+  const [markdown, setMarkdown] = useState(blog.markdown)
   const date = new Date(blog.date)
 
   function fetchBlog() {
     tcb_db.collection('inno-blog')
       .doc(params.id as string).get().then((res) => {
-        const temp = res.data[0]
-        temp.markdown = temp.markdown.replace('<!--truncate-->', '')
-        dispatch(updateBlog(temp))
+        setMarkdown(res.data[0].markdown.replace('<!--truncate-->', ''))
+        dispatch(updateBlog(res.data[0]))
       })
   }
 
-  function doDelete() {
+  function handleClose() {
+    setOpen(false)
+  }
 
+  function handleAgree() {
+    tcb_db.collection('inno-blog').doc(params.id as string)
+      .remove().then((res) => {
+        if (res.deleted === 1) {
+          window.open('/blog', '_self')
+        }
+      })
+    setOpen(false)
+  }
+
+  function doDelete() {
+    setOpen(true)
   }
 
   useEffect(() => {
+    // 侧栏跳转或直接用链接访问到此则请求博客
     if (blog._id !== params.id) fetchBlog()
+    else {
+      // 从预览来的无需请求，在预览页已经设置当前博客到全局变量
+      setMarkdown(blog.markdown.replace('<!--truncate-->', ''))
+    }
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
         hljs.highlightElement(el)
@@ -61,7 +87,7 @@ const BlogFull = () => {
           </div>
         </div>
       }
-      <ReactMarkdown className={styles.markdown_body + ' markdown-body'} children={blog.markdown} remarkPlugins={[remarkGfm]} />
+      <ReactMarkdown className={styles.markdown_body + ' markdown-body'} children={markdown} remarkPlugins={[remarkGfm]} />
       <div className={styles.article_footer}>
         <div>
           {blog.tag[0] !== '' &&
@@ -78,10 +104,30 @@ const BlogFull = () => {
         {user.data?.role === 0 &&
           <div>
             <Link to='/blog-write?edit=true' className={styles.edit}><EditIcon fontSize='small' /><span>编辑此页</span></Link>
-            <a className={styles.delete}><DeleteIcon fontSize='small' /><span>删除</span></a>
+            <a className={styles.delete} onClick={doDelete}><DeleteIcon fontSize='small' /><span>删除</span></a>
           </div>
         }
       </div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description">
+        <DialogTitle id="alert-dialog-title">
+          删除确认
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            删除后此文将从数据库抹去，不再出现在页面中。你确定要删除这篇博客吗？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>取消</Button>
+          <Button onClick={handleAgree} autoFocus>
+            确认删除
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }
