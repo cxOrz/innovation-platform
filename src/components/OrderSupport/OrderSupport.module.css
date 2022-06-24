@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  height: 100%;
+}
+.listSide {
+  flex: 1;
+  background-color: gray;
+}
+.orderSide {
+  flex: 2;
+  background-color: cadetblue;
+}

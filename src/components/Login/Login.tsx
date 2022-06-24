@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import React, { useRef, useState } from 'react'
 import styles from './Login.module.css'
-import { tcb_auth } from '../../configs/global';
+import { tcb_auth, tcb_db } from '../../configs/global';
 
 interface Props { }
 
@@ -71,12 +71,18 @@ const Login = (props: Props) => {
       flag = 1
     }
     if (flag === 0) {
+      // 验证码登录
       tcb_auth.signInWithPhoneCodeOrPassword({
         phoneNumber: refs.current.phone!.value,
         phoneCode: refs.current.verifyCode!.value
-      }).then((loginState) => {
-        console.log(loginState)
-        window.location.reload()
+      }).then((userState) => {
+        // 将用户添加到数据库，并赋予最低角色权限
+        tcb_db.collection('inno-user').add({
+          uid: userState.user.uid,
+          role: 2
+        }).then(() => {
+          window.location.reload()
+        })
       }).catch(() => {
         setInputError((prev) => ({ ...prev, verifyCode: true }))
       })

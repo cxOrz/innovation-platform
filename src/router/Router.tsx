@@ -13,6 +13,7 @@ import JoinUs from '../components/JoinUs/JoinUs'
 import BlogWriting from '../pages/BlogWriting/BlogWriting'
 import BlogFull from '../components/BlogFull/BlogFull'
 import BlogPage from '../components/BlogPage/BlogPage'
+import OrderSupport from '../components/OrderSupport/OrderSupport'
 
 const AppRouter = () => {
   return (
@@ -31,6 +32,7 @@ const AppRouter = () => {
           <Route path='members' element={<Members />} />
           <Route path='user' element={<User />} >
             <Route path='profile' element={<UserProfile />} />
+            <Route path='support' element={<OrderSupport />} />
             <Route path='join-us' element={<JoinUs />} />
           </Route>
         </Route>

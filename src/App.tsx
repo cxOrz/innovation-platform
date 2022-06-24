@@ -34,7 +34,7 @@ function App() {
           avatarUrl: userState?.avatarUrl,
           nickName: userState?.nickName,
           gender: userState?.gender,
-          role: res.data[0].role
+          role: res.data[0]?.role
         }))
       })
     } else {

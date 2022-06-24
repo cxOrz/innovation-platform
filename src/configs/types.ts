@@ -17,3 +17,14 @@ export interface TCBUser {
   wxPublicId?: string,
   role?: number
 }
+
+export interface Order {
+  _id: string
+  from_uid: string
+  last_date: number
+  message: string
+  open_date: number
+  status: string
+  title: string
+  to_uid: string
+}
