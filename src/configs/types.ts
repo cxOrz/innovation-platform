@@ -27,4 +27,5 @@ export interface Order {
   status: string
   title: string
   to_uid: string
+  no: number
 }

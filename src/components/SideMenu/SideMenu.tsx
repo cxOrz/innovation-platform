@@ -35,7 +35,7 @@ const SideMenu = () => {
 
   return (
     <List sx={{
-      width: '100%', boxSizing: 'border-box', maxWidth: 250, bgcolor: 'background.paper',
+      width: '100%', boxSizing: 'border-box', maxWidth: 250, bgcolor: 'background.paper', border: '1px solid #e6e7ea',
       '& .MuiListItemText-primary': {
         fontSize: '1rem'
       },

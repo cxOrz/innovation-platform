@@ -1,0 +1,24 @@
+.msgArea {
+  display: flex;
+  flex-direction: column;
+}
+.msg_out {
+  align-self: flex-end;
+  width: fit-content;
+  text-align: left;
+  padding: 1.25rem 1.25rem;
+  color: #393e46;
+  font-size: 0.875rem;
+  background-color: aquamarine;
+  border-radius: 1rem 1rem 0 1rem;
+}
+.msg_in {
+  align-self: flex-start;
+  width: fit-content;
+  text-align: left;
+  padding: 1.25rem 1.25rem;
+  color: #393e46;
+  font-size: 0.875rem;
+  background-color: #f4f5fa;
+  border-radius: 0 1rem 1rem 1rem;
+}

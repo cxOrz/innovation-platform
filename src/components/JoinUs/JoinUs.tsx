@@ -38,12 +38,13 @@ const JoinUs = () => {
     tcb_db.collection('inno-orders').add({
       from_uid: tcb_auth.currentUser?.uid,
       last_date: date.getTime(),
-      message: `${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。
-想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`,
+      message: [`${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。
+想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`],
       open_date: date.getTime(),
       status: '已发起',
       title: '申请加入',
-      to_uid: await getAdmin()
+      to_uid: await getAdmin(),
+      no: (await tcb_db.collection('inno-orders').count()).total + 1
     }).then((res) => {
       console.log(res)
       dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }))
