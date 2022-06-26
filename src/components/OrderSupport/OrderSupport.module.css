@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  height: 100%;
+  height: calc(100vh - 110.4px);
 }
 .listSide {
   flex: 1;
@@ -9,6 +9,8 @@
 }
 .orderSide {
   flex: 2;
+  display: flex;
+  flex-direction: column;
   background-color: white;
   box-sizing: border-box;
   padding: 1rem 2rem;
@@ -32,5 +34,41 @@
   margin-top: 0.5rem;
 }
 .msgArea {
-  padding: 1rem 0;
+  flex: 1;
+  overflow-y: auto;
+  margin: 1rem 0;
+  padding: 0 0.5rem;
+}
+.msgArea::-webkit-scrollbar {
+  width: 7px;
+  background-color: #f1f1f1;
+}
+.msgArea::-webkit-scrollbar-thumb {
+  background-color: #e1e1e1;
+}
+.textarea {
+  display: flex;
+  height: 80px;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+.textarea button {
+  color: white;
+  min-width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 14px;
+  background-color: #00adb5;
+}
+.textarea button:hover {
+  cursor: pointer;
+}
+.textarea button:active {
+  background-color: #0099a1;
+}
+.textinput textarea::-webkit-scrollbar {
+  width: 6px !important;
+}
+.textinput textarea::-webkit-scrollbar-thumb {
+  background-color: #e1e1e1;
 }

@@ -1,17 +1,18 @@
 import React from 'react'
+import { Message } from '../../configs/types'
 import styles from './ChatMsgArea.module.css'
 
 interface Props {
-  chat: string[]
+  chat: Message[]
 }
 
 const ChatMsgArea = ({ chat }: Props) => {
 
   return (
-    <div className={styles.msgArea}>
+    <div className={styles.area}>
       {
         chat.map((message, index) => {
-          return <ChatBubble key={index} direction={index % 2 === 0 ? 'out' : 'in'} message={message} />
+          return <ChatBubble key={index} message={message} />
         })
       }
     </div>
@@ -19,16 +20,15 @@ const ChatMsgArea = ({ chat }: Props) => {
 }
 
 interface ChatBubbleProps {
-  direction: 'in' | 'out'
-  message: string
+  message: Message
 }
 
-const ChatBubble = ({ direction, message }: ChatBubbleProps) => {
+const ChatBubble = ({ message }: ChatBubbleProps) => {
 
   return (
-    <div className={direction === 'out' ? styles.msg_out : styles.msg_in}>
-      {message}
-    </div>
+    <pre className={message.direction === 0 ? styles.msg_out : styles.msg_in}>
+      {message.data}
+    </pre>
   )
 }
 

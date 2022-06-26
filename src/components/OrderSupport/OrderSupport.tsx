@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './OrderSupport.module.css'
 import { tcb_app, tcb_auth, tcb_db } from '../../configs/global'
 import { Order } from '../../configs/types'
@@ -9,25 +9,56 @@ import ListItemText from '@mui/material/ListItemText'
 import ListItemButton from '@mui/material/ListItemButton'
 import List from '@mui/material/List'
 import Chip from '@mui/material/Chip'
-import Typography from '@mui/material/Typography'
+import TextField from '@mui/material/TextField'
+import SendIcon from '@mui/icons-material/Send'
 import ChatMsgArea from '../ChatMsgArea/ChatMsgArea'
+import Button from '@mui/material/Button'
+import AddIcon from '@mui/icons-material/Add'
+import FormDialog from '../FormDialog/FormDialog'
 
-interface Props { }
-
-const OrderSupport = (props: Props) => {
+const OrderSupport = () => {
   const user = tcb_auth.currentUser
-  const myOrders = useState<Order[]>([])
+  const [open, setOpen] = useState(false)
+  const textfield = useRef<HTMLInputElement>(null)
+  const msgarea = useRef<HTMLInputElement>(null)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [current, setCurrent] = useState(0)
 
   function getMyOrder() {
     tcb_db.collection('inno-orders').where({
       from_uid: user?.uid
     }).get().then((res) => {
       console.log(res.data)
+      setOrders(res.data)
+    })
+  }
+
+  function openAddDialog() {
+    setOpen(true)
+  }
+  function closeAddDialog() {
+    setOpen(false)
+  }
+
+  function sendMessage() {
+    tcb_db.collection('inno-orders').doc(orders[current]._id).update({
+      last_date: new Date().getTime(),
+      message: tcb_db.command.push({ data: textfield.current?.value, direction: 0 })
+    }).then(() => {
+      const message = orders[current].message
+      message.push({ data: textfield.current!.value, direction: 0 })
+      setOrders(orders.splice(current, 1, { ...orders[current], last_date: new Date().getTime(), message }))
+      textfield.current!.value = ''
     })
   }
 
   useEffect(() => {
+    getMyOrder()
   }, [])
+
+  useEffect(() => {
+    msgarea.current?.scroll({ top: msgarea.current.scrollHeight })
+  }, [orders[current]?.message.length])
 
   return (
     <div className={styles.container}>
@@ -41,40 +72,60 @@ const OrderSupport = (props: Props) => {
             verticalAlign: 'middle'
           }
         }}>
-          <ListItem sx={{
-            boxSizing: 'border-box', padding: '0',
-            '& .MuiListItemButton-root': {
-              padding: '0.75rem 1.5rem'
-            }
-          }}>
-            <ListItemButton selected>
-              <ListItemText primary={
-                <>
-                  <span className='primary-title'>#24 申请加入</span>
-                  <Chip label="已发起" sx={{}} size='small' color="primary" />
-                </>
-              } secondary={
-                <>
-                  <span style={{ display: 'block', margin: '0.5rem 0 0' }}>日期：2022-06-25 </span>
-                  <span style={{ wordBreak: 'break-all' }}>ID：f6e08a6462b5c766096fd2323bf1531c</span>
-                </>
-              } />
-            </ListItemButton>
-          </ListItem>
+          <Button onClick={openAddDialog} variant='outlined' disableElevation sx={{ width: '100%', my: '2px' }}><AddIcon /></Button>
+          {
+            orders.map((order, i) => {
+              const date = new Date(order.open_date)
+              return (
+                <ListItem key={i} sx={{
+                  boxSizing: 'border-box', padding: '0',
+                  '& .MuiListItemButton-root': {
+                    padding: '0.75rem 1.5rem'
+                  }
+                }}>
+                  <ListItemButton selected>
+                    <ListItemText primary={
+                      <>
+                        <span className='primary-title'>#{order.no} {order.title}</span>
+                        <Chip label="已发起" size='small' color="primary" />
+                      </>
+                    } secondary={
+                      <>
+                        <span style={{ display: 'block', margin: '0.5rem 0 0' }}>日期：{date.toLocaleString()} </span>
+                        <span style={{ wordBreak: 'break-all' }}>序号：{order._id}</span>
+                      </>
+                    } />
+                  </ListItemButton>
+                </ListItem>
+              )
+            })
+          }
         </List>
       </div>
       <div className={styles.orderSide}>
-        <div className={styles.head}>
-          <h1>#24 申请加入组织</h1>
-          <p>ID: f6e08a6462b5c766096fd2323bf1531c</p>
-          <span>创建时间：2022-06-25</span>
-          <span>最近消息：2022-06-26</span>
-          <span>分派对象：Gezi</span>
-        </div>
-        <div className={styles.msgArea}>
-          <ChatMsgArea chat={['你好啊Gezi！', '您好！请问有什么可以帮到你的？', '帮我冲1000个Q币吧。']} />
-        </div>
+        {
+          orders[current] &&
+          <>
+            <div className={styles.head}>
+              <h1>#{orders[current].no} {orders[current].title}</h1>
+              <p>ID: {orders[current]._id}</p>
+              <span>分派对象：{orders[current].to_uid.slice(-4)}</span>
+              <span>创建时间：{new Date(orders[current].open_date).toLocaleString()}</span>
+              <span>最近消息：{new Date(orders[current].last_date).toLocaleString()}</span>
+            </div>
+            <div ref={msgarea} className={styles.msgArea}>
+              <ChatMsgArea chat={orders[current].message} />
+            </div>
+            <div className={styles.textarea}>
+              <TextField inputRef={textfield} className={styles.textinput} sx={{ width: '100%', mr: 1 }} multiline maxRows='2' placeholder='在这里输入消息' />
+              <button onClick={sendMessage}>
+                <SendIcon />
+              </button>
+            </div>
+          </>
+        }
       </div>
+      <FormDialog open={open} handleClose={closeAddDialog} />
     </div >
   )
 }

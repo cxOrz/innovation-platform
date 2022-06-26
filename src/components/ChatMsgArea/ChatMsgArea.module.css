@@ -1,24 +1,27 @@
-.msgArea {
+.area {
   display: flex;
   flex-direction: column;
+  row-gap: 1rem;
+  font-weight: 600;
+}
+.area pre {
+  color: #393e46;
+  font-size: 0.875rem;
+  font-family: inherit;
+  padding: 1.25rem 1.25rem;
+  line-height: 1.25rem;
+  width: fit-content;
+  text-align: left;
+  white-space: pre-wrap;
+  margin: 0;
 }
 .msg_out {
   align-self: flex-end;
-  width: fit-content;
-  text-align: left;
-  padding: 1.25rem 1.25rem;
-  color: #393e46;
-  font-size: 0.875rem;
   background-color: aquamarine;
-  border-radius: 1rem 1rem 0 1rem;
+  border-radius: 1.25rem 1.25rem 0 1.25rem;
 }
 .msg_in {
   align-self: flex-start;
-  width: fit-content;
-  text-align: left;
-  padding: 1.25rem 1.25rem;
-  color: #393e46;
-  font-size: 0.875rem;
   background-color: #f4f5fa;
-  border-radius: 0 1rem 1rem 1rem;
+  border-radius: 0 1.25rem 1.25rem 1.25rem;
 }

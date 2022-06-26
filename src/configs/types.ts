@@ -18,11 +18,16 @@ export interface TCBUser {
   role?: number
 }
 
+export type Message = {
+  data: string
+  direction: number
+}
+
 export interface Order {
   _id: string
   from_uid: string
   last_date: number
-  message: string
+  message: Message[]
   open_date: number
   status: string
   title: string

@@ -28,11 +28,6 @@ const JoinUs = () => {
     reason: null
   })
 
-  async function getAdmin() {
-    const admins = (await tcb_db.collection('inno-roles').get()).data[0].admin
-    return admins[Math.floor(Math.random() * admins.length)]
-  }
-
   async function handleSubmit() {
     const date = new Date()
     tcb_db.collection('inno-orders').add({
@@ -44,7 +39,7 @@ const JoinUs = () => {
       status: '已发起',
       title: '申请加入',
       to_uid: await getAdmin(),
-      no: (await tcb_db.collection('inno-orders').count()).total + 1
+      no: await getOrderCount()
     }).then((res) => {
       console.log(res)
       dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }))
@@ -67,6 +62,14 @@ const JoinUs = () => {
       </div>
     </div>
   )
+}
+export async function getAdmin() {
+  const admins = (await tcb_db.collection('inno-roles').get()).data[0].admin
+  return admins[Math.floor(Math.random() * admins.length)]
+}
+
+export async function getOrderCount() {
+  return (await tcb_db.collection('inno-orders').count()).total + 1
 }
 
 export default JoinUs

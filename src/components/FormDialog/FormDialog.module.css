@@ -1,0 +1,6 @@
+.textinput textarea::-webkit-scrollbar {
+  width: 6px !important;
+}
+.textinput textarea::-webkit-scrollbar-thumb {
+  background-color: #e1e1e1;
+}
