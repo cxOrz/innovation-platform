@@ -24,7 +24,7 @@ const initialState: UserSlice = {
     username: "",
     wxOpenId: "",
     wxPublicId: "",
-    role: 1
+    role: 2
   }
 }
 

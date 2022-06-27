@@ -31,6 +31,14 @@ export const apps: Applications = {
       picture: 'write-blog.webp',
       url: `/blog-write`,
       category: 'base'
+    },
+    {
+      title: '工单管理',
+      note: '处理分配到的工单',
+      description: '用户分派给你的工单，在这里进行处理。',
+      picture: 'order-manage.webp',
+      url: `/order-manage`,
+      category: 'base'
     }
   ],
   frontend: [

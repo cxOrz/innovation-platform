@@ -14,6 +14,7 @@ import BlogWriting from '../pages/BlogWriting/BlogWriting'
 import BlogFull from '../components/BlogFull/BlogFull'
 import BlogPage from '../components/BlogPage/BlogPage'
 import OrderSupport from '../components/OrderSupport/OrderSupport'
+import OrderManage from '../pages/OrderManage/OrderManage'
 
 const AppRouter = () => {
   return (
@@ -30,6 +31,7 @@ const AppRouter = () => {
           </Route>
           <Route path='blog-write' element={<BlogWriting />} />
           <Route path='members' element={<Members />} />
+          <Route path='order-manage' element={<OrderManage />} />
           <Route path='user' element={<User />} >
             <Route path='profile' element={<UserProfile />} />
             <Route path='support' element={<OrderSupport />} />

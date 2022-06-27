@@ -29,13 +29,13 @@ export default function FormDialog({ open, handleClose }: Props) {
 
   async function submit() {
     let flag = 0
-    if (!refs.current.title?.value.match(/^[.*]{4,20}$/g)) {
+    if (refs.current.title!.value.length < 4) {
       flag = 1
       dispatchTitleErr(1, true)
     } else {
       dispatchTitleErr(0, false)
     }
-    if (!refs.current.reason?.value.match(/^(.*){5,250}$/g)) {
+    if (refs.current.reason!.value.length < 5) {
       flag = 1
       dispatchReasonErr(1, true)
     } else {

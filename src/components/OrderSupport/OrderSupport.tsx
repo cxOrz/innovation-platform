@@ -27,10 +27,14 @@ const OrderSupport = () => {
   function getMyOrder() {
     tcb_db.collection('inno-orders').where({
       from_uid: user?.uid
-    }).get().then((res) => {
+    }).orderBy('open_date', 'desc').get().then((res) => {
       console.log(res.data)
       setOrders(res.data)
     })
+  }
+
+  function switchOrder(index: number) {
+    setCurrent(index)
   }
 
   function openAddDialog() {
@@ -83,7 +87,7 @@ const OrderSupport = () => {
                     padding: '0.75rem 1.5rem'
                   }
                 }}>
-                  <ListItemButton selected>
+                  <ListItemButton onClick={() => { switchOrder(i) }} selected={i === current}>
                     <ListItemText primary={
                       <>
                         <span className='primary-title'>#{order.no} {order.title}</span>

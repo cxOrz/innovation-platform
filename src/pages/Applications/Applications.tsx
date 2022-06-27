@@ -18,7 +18,7 @@ const Applications = (props: Props) => {
       <section className={styles.section}>
         <h3 className={styles.category_name}># 基地应用</h3>
         <div className={styles.category}>
-          <AppCard click={() => { navigate('/apps/apply-app') }} data={{
+          <AppCard click={() => { navigate('/apps/apply-app') }} newTab data={{
             title: '应用提交',
             note: '将你开发的应用提交至此',
             description: '你可以提交你开发的应用，审核过后会添加到应用页面，供大家使用。',
@@ -28,10 +28,13 @@ const Applications = (props: Props) => {
           }} />
           {
             user?.role === 0 &&
-            <AppCard click={() => { navigate('/apps/base/' + 0) }} data={apps.base[0]} />
+            <>
+              <AppCard click={() => { navigate('/apps/base/' + 0) }} data={apps.base[0]} />
+              <AppCard click={() => { navigate('/apps/base/' + 1) }} data={apps.base[1]} />
+            </>
           }
           {
-            apps.base.slice(1).map((app, i) => {
+            apps.base.slice(2).map((app, i) => {
               return <AppCard key={i} click={() => { navigate('/apps/base/' + i) }} data={app} />
             })
           }
