@@ -12,14 +12,15 @@ import useErrorMsg from '../../hooks/useErrorMsg';
 
 interface Props {
   open: boolean
-  handleClose: () => void
+  handleClose: () => void,
+  callback: () => void
 }
 interface InputRefs {
   title: HTMLInputElement | null
   reason: HTMLInputElement | null
 }
 
-export default function FormDialog({ open, handleClose }: Props) {
+export default function FormDialog({ open, handleClose, callback }: Props) {
   const [titleErr, dispatchTitleErr] = useErrorMsg(['', '请起一个合适的标题'])
   const [reasonErr, dispatchReasonErr] = useErrorMsg(['', '字数限制在5-250之间'])
   const refs = useRef<InputRefs>({
@@ -48,13 +49,13 @@ export default function FormDialog({ open, handleClose }: Props) {
         last_date: date,
         message: [{ data: refs.current.reason?.value, direction: 0 }],
         open_date: date,
-        status: '已发起',
+        status: '尚未受理',
         title: refs.current.title?.value,
         to_uid: await getAdmin(),
-        no: await getOrderCount()
+        id: await getOrderCount()
       }).then(() => {
         handleClose()
-        window.location.reload()
+        callback()
       })
     }
   }

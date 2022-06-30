@@ -39,7 +39,7 @@ const JoinUs = () => {
       status: '已发起',
       title: '申请加入',
       to_uid: await getAdmin(),
-      no: await getOrderCount()
+      id: await getOrderCount()
     }).then((res) => {
       console.log(res)
       dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }))

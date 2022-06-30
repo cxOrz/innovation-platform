@@ -50,8 +50,10 @@ const OrderSupport = () => {
       message: tcb_db.command.push({ data: textfield.current?.value, direction: 0 })
     }).then(() => {
       const message = orders[current].message
+      const temp = orders
       message.push({ data: textfield.current!.value, direction: 0 })
-      setOrders(orders.splice(current, 1, { ...orders[current], last_date: new Date().getTime(), message }))
+      temp.splice(current, 1, { ...orders[current], last_date: new Date().getTime(), message })
+      setOrders([...temp])
       textfield.current!.value = ''
     })
   }
@@ -90,7 +92,7 @@ const OrderSupport = () => {
                   <ListItemButton onClick={() => { switchOrder(i) }} selected={i === current}>
                     <ListItemText primary={
                       <>
-                        <span className='primary-title'>#{order.no} {order.title}</span>
+                        <span className='primary-title'>#{order.id} {order.title}</span>
                         <Chip label="已发起" size='small' color="primary" />
                       </>
                     } secondary={
@@ -111,14 +113,14 @@ const OrderSupport = () => {
           orders[current] &&
           <>
             <div className={styles.head}>
-              <h1>#{orders[current].no} {orders[current].title}</h1>
+              <h1>#{orders[current].id} {orders[current].title}</h1>
               <p>ID: {orders[current]._id}</p>
               <span>分派对象：{orders[current].to_uid.slice(-4)}</span>
               <span>创建时间：{new Date(orders[current].open_date).toLocaleString()}</span>
               <span>最近消息：{new Date(orders[current].last_date).toLocaleString()}</span>
             </div>
             <div ref={msgarea} className={styles.msgArea}>
-              <ChatMsgArea chat={orders[current].message} />
+              <ChatMsgArea direction={0} chat={orders[current].message} />
             </div>
             <div className={styles.textarea}>
               <TextField inputRef={textfield} className={styles.textinput} sx={{ width: '100%', mr: 1 }} multiline maxRows='2' placeholder='在这里输入消息' />
@@ -129,7 +131,7 @@ const OrderSupport = () => {
           </>
         }
       </div>
-      <FormDialog open={open} handleClose={closeAddDialog} />
+      <FormDialog open={open} handleClose={closeAddDialog} callback={getMyOrder} />
     </div >
   )
 }

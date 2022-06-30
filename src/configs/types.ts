@@ -23,14 +23,16 @@ export type Message = {
   direction: number
 }
 
+export type OrderStatus = '尚未受理' | '受理中' | '已解决' | '已关闭'
+
 export interface Order {
   _id: string
   from_uid: string
   last_date: number
   message: Message[]
   open_date: number
-  status: string
+  status: OrderStatus
   title: string
   to_uid: string
-  no: number
+  id: number
 }
