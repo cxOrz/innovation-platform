@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { tcb_auth, tcb_db } from '../../configs/global';
 import { Order, OrderStatus, Message } from '../../configs/types';
 import styles from './OrderManage.module.css'
 import Box from '@mui/material/Box';
-import { DataGrid, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarExport, GridRenderCellParams } from '@mui/x-data-grid';
+import { DataGrid, zhCN, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarExport, GridRenderCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Dialog from '@mui/material/Dialog';
@@ -13,23 +13,64 @@ import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import ChatMsgArea from '../../components/ChatMsgArea/ChatMsgArea';
 import TextField from '@mui/material/TextField';
+import LinearProgress from '@mui/material/LinearProgress';
 import SendIcon from '@mui/icons-material/Send';
 
-const Toolbar = () => {
+interface ToolBarProps {
+  getOrders: (range?: 'all' | 'my') => void
+}
+
+const Toolbar = (props: ToolBarProps) => {
+  const [torch, setTorch] = useState(false)
+
+  // 更新或渲染后读取工单获取范围，并设置；若无范围，则写入“my”作为范围；
+  useEffect(() => {
+    const range = localStorage.getItem('getOrdersRange')
+    setTorch(true)
+    if (range === 'all') {
+      setTorch(true)
+    } else if (range === 'my') {
+      setTorch(false)
+    } else {
+      localStorage.setItem('getOrdersRange', 'my')
+    }
+  }, [])
+
+  /**
+   * 
+   * 切换时，将当前值写入localstorage
+   */
+  function handleSwitchChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setTorch(e.currentTarget.checked)
+    if (e.currentTarget.checked) {
+      props.getOrders('all')
+      localStorage.setItem('getOrdersRange', 'all')
+    } else {
+      props.getOrders('my')
+      localStorage.setItem('getOrdersRange', 'my')
+    }
+  }
+
   return (
     <GridToolbarContainer>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-      <GridToolbarExport />
+      <GridToolbarExport csvOptions={{
+        utf8WithBom: true
+      }} />
+      <FormControlLabel control={<Switch checked={torch} onChange={handleSwitchChange} />} label="全部工单" />
     </GridToolbarContainer>
   );
 }
 
 export default function OrderManage() {
   const user = tcb_auth.currentUser
+  const [loading, setLoading] = useState(false)
   const [orders, setOrders] = useState<Order[]>([])
   const [order, setOrder] = useState<Order>()
   const [status, setStatus] = React.useState('')
@@ -104,7 +145,7 @@ export default function OrderManage() {
       renderCell: (params) => {
         return <>
           <Button sx={{ mr: 1 }} onClick={() => { handleReplyClick(params) }} variant="outlined" size='small'>答复</Button>
-          <Button variant="outlined" size='small'>关闭</Button>
+          <Button onClick={() => { handleOrderOnOff(params) }} variant="outlined" size='small'>{params.row.status === '已关闭' ? '开启' : '关闭'}</Button>
         </>
       }
     }
@@ -131,7 +172,7 @@ export default function OrderManage() {
       tcb_db.collection('inno-orders').doc(order?._id as string).update({
         status: status
       }).then((res) => {
-        getMyOrder()
+        fetchOrders()
       })
     }
     setDialogProps((prev) => {
@@ -144,7 +185,17 @@ export default function OrderManage() {
     setDialogProps({ title: '答复用户', type: 'reply', confirmLabel: '完成', open: true })
   }
 
+  function handleOrderOnOff(params: GridRenderCellParams<React.ReactNode>) {
+    tcb_db.collection('inno-orders').doc(params.row._id).update({
+      status: params.row.status === '已关闭' ? '受理中' : '已关闭'
+    }).then(() => {
+      fetchOrders()
+    })
+  }
 
+  /**
+   * 发送完成后，更新工单
+   */
   function sendMessage() {
     tcb_db.collection('inno-orders').doc(order?._id as string).update({
       last_date: new Date().getTime(),
@@ -156,22 +207,36 @@ export default function OrderManage() {
         return ({ ...prev, message: message }) as Order
       })
       textfield.current!.value = ''
-      getMyOrder()
+      fetchOrders()
     })
   }
 
-  function getMyOrder() {
-    tcb_db.collection('inno-orders').where({
-      from_uid: user?.uid
-    }).orderBy('open_date', 'desc').get().then((res) => {
-      setOrders(res.data)
+  /**
+   * 
+   * @param range 传入，则通过该参数判断获取范围；不传入，则通过localstorage储存的属性来判断获取范围
+   */
+  function fetchOrders(range?: 'all' | 'my') {
+    setLoading(true)
+    let temp: any = tcb_db.collection('inno-orders')
+    if (range === undefined) {
+      range = localStorage.getItem('getOrdersRange') as ('all' | 'my')
+    }
+    if (range === 'my') {
+      temp = temp.where({
+        to_uid: user?.uid
+      })
+    }
+    temp.orderBy('open_date', 'desc').get().then(({ data }: { data: Order[] }) => {
+      setOrders([...data])
+      setLoading(false)
     })
   }
 
   useEffect(() => {
-    getMyOrder()
+    fetchOrders()
   }, [])
 
+  // 当前工单消息变化时、聊天对话框状态变更时，滚动聊天消息至底部
   useEffect(() => {
     setTimeout(() => {
       msgarea.current?.scroll({ top: msgarea.current.scrollHeight })
@@ -182,11 +247,18 @@ export default function OrderManage() {
     <div className={styles.container}>
       <Box flex='1' sx={{ height: '100%' }}>
         <DataGrid
+          loading={loading}
           rows={orders}
           columns={columns}
-          components={{ Toolbar: Toolbar }}
+          components={{ Toolbar: Toolbar, LoadingOverlay: LinearProgress }}
+          componentsProps={{
+            toolbar: {
+              getOrders: fetchOrders
+            }
+          }}
           pageSize={10}
           rowsPerPageOptions={[10]}
+          localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
           disableSelectionOnClick
         />
       </Box>
