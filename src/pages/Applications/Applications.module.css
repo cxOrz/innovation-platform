@@ -18,3 +18,12 @@
   width: 100%;
   margin: 0 2rem;
 }
+
+@media screen and (max-width: 765px) {
+  .container{
+    justify-content: center;
+  }
+  .section{
+    width: min-content;
+  }
+}

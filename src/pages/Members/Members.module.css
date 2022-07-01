@@ -24,3 +24,9 @@
   padding: 2rem 5rem;
   background-color: #eff0f5;
 }
+
+@media (max-width: 767px) {
+  .hero_paragraph {
+    padding: 0 1.5rem;
+  }
+}

@@ -1,3 +1,7 @@
+.container {
+  height: calc(100vh - 110.4px);
+  overflow: auto;
+}
 .content {
   display: flex;
   justify-content: center;
@@ -82,4 +86,27 @@ ul li {
 .readlist strong {
   display: block;
   margin-bottom: 0.5rem;
+}
+@media screen and (max-width: 600px) {
+  .container {
+    height: calc(100vh - 109.4px);
+    overflow: auto;
+  }
+  .content {
+    flex-wrap: wrap;
+    padding: 2rem 2rem 0;
+  }
+  .content_info {
+    align-items: center;
+  }
+  .secondary_content p {
+    width: 85%;
+    padding: 0;
+  }
+  .button_group > button {
+    margin-right: 0;
+  }
+  .scanQrcode {
+    display: none !important;
+  }
 }

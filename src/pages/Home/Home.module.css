@@ -6,6 +6,7 @@
 }
 .head_section img {
   width: 192px;
+  height: 192px;
   border-radius: 20%;
 }
 
@@ -28,4 +29,19 @@
   box-sizing: border-box;
   padding: 2rem 5rem;
   background-color: #eff0f5;
+}
+
+@media screen and (max-width: 996px) {
+  .head_section img {
+    height: 160px;
+    width: 160px;
+  }
+  .home_title {
+    padding: 0 2rem;
+    font-size: 2.25rem;
+  }
+  .home_paragraph {
+    font-size: 1.25rem;
+    max-width: 320px;
+  }
 }

@@ -18,7 +18,6 @@ const BlogPreview = ({ blog }: Props) => {
   const [preview, setPreview] = useState('')
   const dispatch = useAppDispatch()
   const date = new Date(blog.date)
-  const [pieces, setPieces] = useState<string[]>([])
 
   // 设置当前博客到redux全局变量，不用再次请求博客
   function setCurrentBlog() {
@@ -29,7 +28,6 @@ const BlogPreview = ({ blog }: Props) => {
     // 分开文档，一半预览一半隐藏
     const temp = blog.markdown.split('<!--truncate-->')
     setPreview(temp[0])
-    setPieces(temp)
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
         hljs.highlightElement(el)

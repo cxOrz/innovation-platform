@@ -51,10 +51,12 @@
   .markdown_body {
     padding: 15px;
   }
+  .sidebar {
+    display: none;
+  }
 }
 
-.preview_section{
+.preview_section {
   display: flex;
   flex-direction: column;
-  /* align-items: flex-start; */
 }

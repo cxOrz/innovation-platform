@@ -1,7 +1,8 @@
 .container {
   display: flex;
   min-height: calc(100vh - 110.4px);
+  overflow: auto;
 }
-.render{
+.render {
   width: 100%;
 }

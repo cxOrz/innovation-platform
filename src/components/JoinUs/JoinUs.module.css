@@ -5,6 +5,7 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  min-width: 600px;
 }
 .card {
   text-align: left;

@@ -52,7 +52,6 @@ function App() {
       <div className={styles.outlet}>
         <Outlet />
       </div>
-      {/* <hr className={styles.hr} /> */}
       <footer>
         Copyright © 2022 miaochenxi | Apache License
       </footer>

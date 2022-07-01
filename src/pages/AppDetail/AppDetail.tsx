@@ -14,7 +14,7 @@ const AppDetail = (props: Props) => {
   const data = apps[category as Category][id ? Number(id) : 0]
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.image_wrapper}>
           <img className={styles.background_blur} alt='background' src={`/assets/app/logos/${data.picture}`} />
@@ -43,7 +43,7 @@ const AppDetail = (props: Props) => {
             <Tooltip arrow title={
               <QRCodeCanvas value={data.url.charAt(0) === '/' ? window.location.host + data.url : data.url} />
             }>
-              <Button variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
+              <Button className={styles.scanQrcode} variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
             </Tooltip>
           </div>
         </div>

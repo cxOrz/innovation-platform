@@ -9,7 +9,7 @@ interface Props { }
 
 const ApplyApp = (props: Props) => {
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.image_wrapper}>
           <img className={styles.background_blur} alt='background' src='/assets/app/logos/apply-my-app.webp' />
@@ -38,7 +38,7 @@ const ApplyApp = (props: Props) => {
             <Tooltip arrow title={
               <QRCodeCanvas value={`https://github.com/${TargetName}/innovation-platform/edit/main/src/configs/apps.ts`} />
             }>
-              <Button variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
+              <Button className={styles.scanQrcode} variant='contained' disableElevation>手机扫码<QrCodeIcon fontSize='small' /></Button>
             </Tooltip>
           </div>
         </div>
