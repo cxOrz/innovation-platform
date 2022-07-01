@@ -61,7 +61,7 @@ const Blog = () => {
   }, [])
 
   return (
-    <div className={styles.blog_content}>
+    <div className={styles.main}>
       <aside className={styles.sidebar}>
         <h3 style={{ marginTop: 0, fontSize: '1.25rem' }}>近期博文</h3>
         <nav>
@@ -74,7 +74,7 @@ const Blog = () => {
           </ul>
         </nav>
       </aside>
-      <div className={styles.preview_section}>
+      <div className={styles.content}>
         { // 显示指定博客或处于指定页数,则渲染子路由内容;否则渲染首页5篇博客
           params.id || params.page ? <Outlet /> :
             blogs.map((e) => {

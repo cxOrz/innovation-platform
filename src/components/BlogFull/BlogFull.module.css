@@ -12,14 +12,14 @@
   }
 }
 
-.preview {
+.full {
   padding: 0 45px 45px 0;
 }
-.preview h1 {
+.full h1 {
   color: #222831;
   margin: 1rem 0;
 }
-.preview .est {
+.full .est {
   margin: 1rem 0;
   font-size: 0.9rem;
 }
@@ -78,4 +78,9 @@
 .delete span:hover {
   cursor: pointer;
   text-decoration: underline;
+}
+@media screen and (max-width: 767px) {
+  .full {
+    padding: 0 15px 15px 15px;
+  }
 }

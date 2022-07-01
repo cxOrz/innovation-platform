@@ -75,7 +75,7 @@ const NavigationBar = (props: Props) => {
       <Divider />
       <List>
         <ListItem disablePadding>
-          <ListItemButton>
+          <ListItemButton href='https://github.com/cxOrz/innovation-platform' target='_blank' rel='noreferrer'>
             <ListItemIcon sx={{ minWidth: 32 }}>
               <GitHub />
             </ListItemIcon>

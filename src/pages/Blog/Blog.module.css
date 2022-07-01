@@ -1,4 +1,4 @@
-.blog_content {
+.main {
   display: flex;
   text-align: left;
   background-color: white;
@@ -56,7 +56,8 @@
   }
 }
 
-.preview_section {
+.content {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }

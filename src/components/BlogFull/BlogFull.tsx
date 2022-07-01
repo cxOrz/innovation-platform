@@ -70,7 +70,7 @@ const BlogFull = () => {
   }, [params.id])
 
   return (
-    <div className={styles.preview}>
+    <div className={styles.full}>
       <h1>{blog.title}</h1>
       <p className={styles.est}>{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 · 预计阅读时间 {Math.round(blog.markdown.length / 200)} min</p>
       {
