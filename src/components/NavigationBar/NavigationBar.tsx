@@ -40,7 +40,7 @@ const NavigationBar = (props: Props) => {
         }}>
           {
             user.data!.avatarUrl === '' ?
-              <AccountCircle /> : <img width='24' height='24' src={user.data?.avatarUrl} />
+              <AccountCircle /> : <img width='24' height='24' style={{ borderRadius: '50%' }} src={user.data?.avatarUrl} />
           }
         </IconButton>
       </div>

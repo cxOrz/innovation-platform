@@ -20,6 +20,7 @@ export type Category = 'base' | 'frontend' | 'backend' | 'tools' | 'learn' | 'ot
 
 /**
  * 在这里填写你的应用信息，请在你应用对应分类数组的末尾新增，例如添加一个基地应用，则在 base 数组末尾，填写一个信息对象。
+ * 图标请存放在 public\assets\app\logos 目录下， picture 属性填写图标文件名称。
  * 请勿修改其他内容！注意代码格式！
  */
 export const apps: Applications = {

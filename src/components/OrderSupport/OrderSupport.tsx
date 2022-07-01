@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import styles from './OrderSupport.module.css'
 import { tcb_app, tcb_auth, tcb_db } from '../../configs/global'
-import { Order } from '../../configs/types'
+import { Order, OrderStatus } from '../../configs/types'
 import { useAppSelector } from '../../hooks/redux'
 import { selectUser } from '../../stores/user/userSlice'
 import ListItem from '@mui/material/ListItem'
@@ -23,6 +23,14 @@ const OrderSupport = () => {
   const msgarea = useRef<HTMLInputElement>(null)
   const [orders, setOrders] = useState<Order[]>([])
   const [current, setCurrent] = useState(0)
+  const computedChipColor = useCallback((color: OrderStatus) => {
+    switch (color) {
+      case '尚未受理': return 'error';
+      case '受理中': return 'secondary';
+      case '已解决': return 'success';
+      case '已关闭': return 'default';
+    }
+  }, [])
 
   function getMyOrder() {
     tcb_db.collection('inno-orders').where({
@@ -93,7 +101,7 @@ const OrderSupport = () => {
                     <ListItemText primary={
                       <>
                         <span className='primary-title'>#{order.id} {order.title}</span>
-                        <Chip label="已发起" size='small' color="primary" />
+                        <Chip label={order.status} size='small' color={computedChipColor(order.status)} />
                       </>
                     } secondary={
                       <>
