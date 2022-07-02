@@ -6,6 +6,7 @@ import { tcb_app, tcb_auth } from '../../configs/global';
 import useErrorMsg from '../../hooks/useErrorMsg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { selectUser, updateAvatar, updateUser } from '../../stores/user/userSlice';
+import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 
 interface Props { }
 
@@ -16,7 +17,7 @@ interface InputRefs {
 
 const UserProfile = (props: Props) => {
   const userState = useAppSelector(selectUser)
-  const [nickNameError, setNickNameError] = useErrorMsg([' ', '昵称长度为0-14个字符，包括汉字、字母、数字'])
+  const [nickNameError, setNickNameError] = useErrorMsg(['', '昵称长度为0-14个字符，包括汉字、字母、数字'])
   const [uploadProgress, setUploadProgress] = useState(false)
   const [nickName, setNickName] = useState('')
   const refs = useRef<InputRefs>({
@@ -49,6 +50,7 @@ const UserProfile = (props: Props) => {
       tcb_auth.currentUser?.update({ nickName: nickName })
       setNickNameError(0, false)
       dispatch(updateUser({ ...userState.data, nickName }))
+      dispatch(updateSnackBar({ severity: 'success', open: true, message: '修改成功' }))
     } else {
       setNickNameError(1, true)
     }
