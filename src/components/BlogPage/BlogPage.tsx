@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { tcb_db } from '../../configs/global'
-import type { BlogType } from '../../pages/Blog/Blog'
+import { BlogType } from '../../configs/types'
 import BlogPreview from '../BlogPreview/BlogPreview'
 
-interface Props { }
-
-const BlogPage = (props: Props) => {
+/**
+ * 博客二级页面，根据路由页码显示对应页内容。嵌在 /blog 页面中。
+ */
+const BlogPage = () => {
   const params = useParams()
   const [blogs, setBlogs] = useState<BlogType[]>([])
 
   function fetchBlog() {
     tcb_db.collection('inno-blog')
-      .skip((Number(params.page) - 1) * 5).limit(5)
+      .skip((Number(params.page) - 1) * 5)
+      .limit(5).orderBy('date', 'desc')
       .get().then((res) => {
-        console.log(res.data)
         setBlogs(res.data)
       })
   }
 
   useEffect(() => {
     fetchBlog()
-  }, [])
+  }, [params.page])
 
   return (
     <div>

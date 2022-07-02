@@ -19,6 +19,9 @@ import { selectBlog, updateBlog } from '../../stores/blog/blogSlice'
 import { tcb_db } from '../../configs/global'
 import { selectUser } from '../../stores/user/userSlice'
 
+/**
+ * 博客完整阅读页，根据路由 id 展示整篇博文
+ */
 const BlogFull = () => {
   const blog = useAppSelector(selectBlog).data
   const user = useAppSelector(selectUser)

@@ -16,6 +16,10 @@ interface InputRefs {
   description: HTMLInputElement | null
 }
 
+/**
+ * 博客撰写页面工具栏，填写博客信息，提交。
+ * @param submit 回调函数，用于提交或更新博客
+ */
 const BlogToolBar = ({ submit, markdown }: Props) => {
   const blog = useAppSelector(selectBlog).data
   const refs = useRef<InputRefs>({

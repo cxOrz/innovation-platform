@@ -36,7 +36,6 @@ const OrderSupport = () => {
     tcb_db.collection('inno-orders').where({
       from_uid: user?.uid
     }).orderBy('open_date', 'desc').get().then((res) => {
-      console.log(res.data)
       setOrders(res.data)
     })
   }

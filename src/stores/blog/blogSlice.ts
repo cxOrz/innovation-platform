@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BlogType } from "../../pages/Blog/Blog";
+import { BlogType } from "../../configs/types";
 import { RootState } from '../../store'
 
 interface BlogSlice {

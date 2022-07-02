@@ -4,7 +4,7 @@ import remarkGfm from 'remark-gfm'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/idea.css'
 import styles from './BlogPreview.module.css'
-import type { BlogType } from '../../pages/Blog/Blog'
+import type { BlogType } from '../../configs/types'
 import { Link } from 'react-router-dom'
 import Tag from '../Tag/Tag'
 import { useAppDispatch } from '../../hooks/redux'
@@ -14,6 +14,11 @@ interface Props {
   blog: BlogType
 }
 
+/**
+ * 
+ * @param blog 传入博客，进行分割，展示一部分，称之为预览。 
+ * @returns 返回的是本预览组件。
+ */
 const BlogPreview = ({ blog }: Props) => {
   const [preview, setPreview] = useState('')
   const dispatch = useAppDispatch()
@@ -37,7 +42,7 @@ const BlogPreview = ({ blog }: Props) => {
   }, [])
 
   return (
-    <div className={styles.preview}>
+    <article className={styles.preview}>
       <h1><Link to={`/blog/${blog._id}`} onClick={setCurrentBlog}>{blog.title}</Link></h1>
       <p className={styles.est}>{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 · 预计阅读时间 {Math.round(blog.markdown.length / 200)} min</p>
       {
@@ -69,7 +74,7 @@ const BlogPreview = ({ blog }: Props) => {
         }
         <Link to={`/blog/${blog._id}`} onClick={setCurrentBlog}>阅读全文</Link>
       </div>
-    </div >
+    </article >
   )
 }
 

@@ -47,6 +47,38 @@
   padding: 45px;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  padding-right: 45px;
+}
+.content nav {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.prev {
+  grid-column: 1 /2;
+}
+.next {
+  grid-column: 2 /3;
+}
+.switchPage {
+  display: inline-block;
+  color: #00adb5;
+  text-decoration: none;
+  border: solid 1px;
+  border-color: #dadde1;
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+.switchPage:hover {
+  cursor: pointer;
+  border-color: #00adb5;
+}
+
 @media (max-width: 767px) {
   .markdown_body {
     padding: 15px;
@@ -54,10 +86,7 @@
   .sidebar {
     display: none;
   }
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
+  .content {
+    padding: 0 16px;
+  }
 }

@@ -18,6 +18,17 @@ export interface TCBUser {
   role?: number
 }
 
+export interface BlogType {
+  author_description: string
+  author_gh: string
+  date: number
+  markdown: string
+  tag: string[]
+  title: string
+  _id: string
+  _openid: string
+}
+
 export type Message = {
   data: string
   direction: number

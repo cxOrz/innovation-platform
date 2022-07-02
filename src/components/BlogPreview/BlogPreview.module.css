@@ -6,16 +6,11 @@
   padding-bottom: 45px;
 }
 
-@media (max-width: 767px) {
-  .markdown_body {
-    padding: 15px;
-  }
-}
-
 .preview {
-  padding: 0 45px 45px 0;
+  padding: 0 0 45px;
 }
 .preview h1 {
+  font-size: 2rem;
   margin: 1rem 0;
 }
 .preview h1 > a {
@@ -65,7 +60,10 @@
 }
 
 @media screen and (max-width: 767px) {
+  .markdown_body {
+    padding: 15px;
+  }
   .preview {
-    padding: 0 16px 45px 16px;
+    padding: 0 0 45px;
   }
 }

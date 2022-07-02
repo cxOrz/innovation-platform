@@ -8,6 +8,9 @@ import { selectBlog } from '../../stores/blog/blogSlice'
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
 import styles from './BlogWriting.module.css'
 
+/**
+ * 博客撰写、更新页面
+ */
 const BlogWriting = () => {
   const params = new URLSearchParams(window.location.search)
   const [markdown, setMarkdown] = useState('')

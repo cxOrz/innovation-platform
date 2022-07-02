@@ -6,23 +6,20 @@ import BlogPreview from '../../components/BlogPreview/BlogPreview'
 import styles from './Blog.module.css'
 import { updateBlog } from '../../stores/blog/blogSlice'
 import { useAppDispatch } from '../../hooks/redux'
-
-export interface BlogType {
-  author_description: string
-  author_gh: string
-  date: number
-  markdown: string
-  tag: string[]
-  title: string
-  _id: string
-  _openid: string
-}
+import { BlogType } from '../../configs/types'
+import DoubleRightArrowIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
+import DoubleLeftArrowIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
 
 interface RecentBlog {
   title: string
   _id: string
 }
 
+/**
+ * 博客功能页面，两栏设计，左侧菜单栏，右侧内容区域
+ * 
+ * 功能：获取近期5条博文标题，放在左侧菜单栏；根据页号获取5条博客，在右侧区域进行简短的预览
+ */
 const Blog = () => {
   const params = useParams()
   const dispatch = useAppDispatch()
@@ -37,10 +34,10 @@ const Blog = () => {
   }
 
   function fetchRecent() {
-    tcb_db.collection('inno-blog').limit(5)
+    tcb_db.collection('inno-blog')
       .orderBy('date', 'desc').field({ title: true })
       .get().then((res) => {
-        setRecent(res.data)
+        setRecent(res.data.slice(0, 5))
       })
   }
 
@@ -56,7 +53,10 @@ const Blog = () => {
     hljs.configure({
       ignoreUnescapedHTML: true
     })
-    fetchBlog()
+    // 若不在特定页码，说明在首页，获取博客；若在特定页码，该页组件会自动获取，不需要在这里重复获取。
+    if (!(params.id || params.page)) {
+      fetchBlog()
+    }
     fetchRecent()
   }, [])
 
@@ -74,14 +74,29 @@ const Blog = () => {
           </ul>
         </nav>
       </aside>
-      <div className={styles.content}>
+      <main className={styles.content}>
         { // 显示指定博客或处于指定页数,则渲染子路由内容;否则渲染首页5篇博客
-          params.id || params.page ? <Outlet /> :
+          params.id || params.page ?
+            <Outlet />
+            :
             blogs.map((e) => {
               return <BlogPreview key={e._id} blog={e} />
             })
         }
-      </div>
+        {
+          (!params.id || window.location.pathname == '/blog') &&
+          <nav>
+            {
+              params.page && params.page !== '1' &&
+              <Link className={`${styles.switchPage} ${styles.prev}`} to={`page/${Number(params.page) - 1}`}><DoubleLeftArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} />上一页</Link>
+            }
+            {
+              Math.floor(recent.length / 5) + 1 !== Number(params.page) &&
+              <Link className={`${styles.switchPage} ${styles.next}`} to={`page/${(Number(params.page) ? Number(params.page) : 1) + 1}`}>下一页<DoubleRightArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} /></Link>
+            }
+          </nav>
+        }
+      </main>
     </div>
   )
 }
