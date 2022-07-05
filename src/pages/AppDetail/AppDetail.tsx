@@ -1,5 +1,6 @@
 import React from 'react'
-import { Button, Tooltip } from '@mui/material'
+import Button from '@mui/material/Button'
+import Tooltip from '@mui/material/Tooltip'
 import QrCodeIcon from '@mui/icons-material/QrCode';
 import { useParams } from 'react-router-dom'
 import { apps } from '../../configs/apps'

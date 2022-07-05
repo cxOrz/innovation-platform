@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { tcb_db } from '../../configs/global'
 import { Link, Outlet, useParams } from 'react-router-dom'
-import hljs from 'highlight.js'
+import { hljs } from '../../configs/global'
 import BlogPreview from '../../components/BlogPreview/BlogPreview'
 import styles from './Blog.module.css'
 import { updateBlog } from '../../stores/blog/blogSlice'

@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import styles from './JoinUs.module.css'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 import { tcb_auth, tcb_db } from '../../configs/global'
-import { useAppDispatch, useAppSelector } from '../../hooks/redux'
+import { useAppDispatch } from '../../hooks/redux'
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
 
 interface InputRefs {

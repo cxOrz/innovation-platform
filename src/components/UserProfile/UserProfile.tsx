@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './UserProfile.module.css'
-import { Box, Button, TextField } from '@mui/material';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import { tcb_app, tcb_auth } from '../../configs/global';
 import useErrorMsg from '../../hooks/useErrorMsg';

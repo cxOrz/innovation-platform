@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import hljs from 'highlight.js'
+import { hljs } from '../../configs/global'
 import 'highlight.js/styles/idea.css'
 import styles from './BlogPreview.module.css'
 import type { BlogType } from '../../configs/types'

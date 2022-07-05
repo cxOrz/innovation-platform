@@ -1,5 +1,5 @@
-import { ArrowForwardIos } from '@mui/icons-material'
-import { IconButton } from '@mui/material'
+import ArrowForwardIos from '@mui/icons-material/ArrowForwardIos'
+import IconButton from '@mui/material/IconButton'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Application } from '../../configs/apps'
