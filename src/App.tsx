@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import './App.css';
 import NavigationBar from './components/NavigationBar/NavigationBar';
 import styles from './App.module.css'
