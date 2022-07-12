@@ -15,7 +15,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer'
+import Drawer from '@mui/material/Drawer'
 import Toolbar from '@mui/material/Toolbar'
 import AppBar from '@mui/material/AppBar'
 
@@ -65,7 +65,10 @@ const NavigationBar = (props: Props) => {
         {[['应用', '/apps'], ['博客', '/blog'], ['成员概览', '/members']].map((text, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton onClick={() => {
-              navigate(text[1])
+              setDrawerOpen(false)
+              setTimeout(() => {
+                navigate(text[1])
+              }, 0)
             }}>
               <ListItemText primary={text[0]} />
             </ListItemButton>
@@ -146,17 +149,15 @@ const NavigationBar = (props: Props) => {
           </div>
         </Toolbar>
       </AppBar>
-      <SwipeableDrawer
+      <Drawer
         className={styles.AppBar}
         anchor='left'
         open={drawerOpen}
         onClose={toggleDrawer(false)}
-        onOpen={toggleDrawer(true)}
         keepMounted
-        disableSwipeToOpen
       >
         {list}
-      </SwipeableDrawer>
+      </Drawer>
     </Box>
   )
 }
