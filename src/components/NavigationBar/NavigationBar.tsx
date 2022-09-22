@@ -8,7 +8,7 @@ import styles from './NavigationBar.module.css'
 import { useAppSelector } from '../../hooks/redux'
 import { selectUser } from '../../stores/user/userSlice'
 import MenuIcon from '@mui/icons-material/Menu';
-import Box from '@mui/system/Box'
+import Box from '@mui/material/Box'
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -53,12 +53,14 @@ const NavigationBar = (props: Props) => {
       onKeyDown={toggleDrawer(false)}
     >
       <Toolbar>
-        <Link to='/' className={styles.navbar_title}>
+        <h3
+          onClick={() => { setTimeout(() => { navigate('/'); }, 0) }}
+          className={styles.navbar_title}>
           <div className={styles.navbar_logo}>
             <img alt='nav_logo' src='https://avatars.githubusercontent.com/u/69074203?s=64' />
           </div>
           <b>软件创新实践基地</b>
-        </Link>
+        </h3>
       </Toolbar>
       <Divider />
       <List>
@@ -150,7 +152,6 @@ const NavigationBar = (props: Props) => {
         </Toolbar>
       </AppBar>
       <Drawer
-        className={styles.AppBar}
         anchor='left'
         open={drawerOpen}
         onClose={toggleDrawer(false)}
