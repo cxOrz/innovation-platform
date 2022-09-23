@@ -6,7 +6,7 @@ interface Props {
 
 const GlobalLoader = ({ loading }: Props) => {
   return (
-    <div>
+    <div className={styles.container}>
       {
         loading &&
         <div className={styles.loader}></div>

@@ -1,9 +1,13 @@
+.container {
+  height: calc(100vh - 109px);
+}
+
 .loader {
   position: fixed;
   background-color: #00adb5;
   height: 3px;
   width: 0;
-  top: 0;
+  top: 50%;
   left: 0;
   z-index: 100;
   animation: fakeLoading 1s ease-in-out infinite both;
@@ -14,9 +18,11 @@
     width: 0;
     left: 0;
   }
+
   50% {
     width: 100%;
   }
+
   100% {
     left: 100%;
     width: 0%;
