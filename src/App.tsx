@@ -53,7 +53,7 @@ function App() {
         <Outlet />
       </div>
       <footer>
-        Copyright © 2022 miaochenxi | Apache License
+        Copyright © 2022 cxOrz | Apache License
       </footer>
       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={handleAlertClose}>
         <Alert onClose={handleAlertClose} severity={snackbar.severity} sx={{ width: '100%' }}>
