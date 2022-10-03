@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { tcb_db } from '../../configs/global'
 import { BlogType } from '../../configs/types'
+import { blog_ } from '../../configs/api'
+import axios from 'axios'
 import BlogPreview from '../BlogPreview/BlogPreview'
 
 /**
@@ -12,12 +13,9 @@ const BlogPage = () => {
   const [blogs, setBlogs] = useState<BlogType[]>([])
 
   function fetchBlog() {
-    tcb_db.collection('inno-blog')
-      .skip((Number(params.page) - 1) * 5)
-      .limit(5).orderBy('date', 'desc')
-      .get().then((res) => {
-        setBlogs(res.data)
-      })
+    axios.get(blog_ + `?size=${5}&skip=${(Number(params.page) - 1) * 5}`).then((res) => {
+      setBlogs(res.data.data);
+    });
   }
 
   useEffect(() => {

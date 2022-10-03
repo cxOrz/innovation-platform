@@ -4,11 +4,12 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-import { tcb_app, tcb_auth } from '../../configs/global';
 import useErrorMsg from '../../hooks/useErrorMsg';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { selectUser, updateAvatar, updateUser } from '../../stores/user/userSlice';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
+import axios from 'axios';
+import { user_update, user_upload } from '../../configs/api';
 
 interface Props { }
 
@@ -18,49 +19,54 @@ interface InputRefs {
 }
 
 const UserProfile = (props: Props) => {
-  const userState = useAppSelector(selectUser)
-  const [nickNameError, setNickNameError] = useErrorMsg(['', '昵称长度为0-14个字符，包括汉字、字母、数字'])
-  const [uploadProgress, setUploadProgress] = useState(false)
-  const [nickName, setNickName] = useState('')
+  const userState = useAppSelector(selectUser);
+  const [nickNameError, setNickNameError] = useErrorMsg(['', '昵称长度为0-14个字符，包括汉字、字母、数字']);
+  const [uploadProgress, setUploadProgress] = useState(false);
+  const [nickName, setNickName] = useState('');
   const refs = useRef<InputRefs>({
     file: null,
     uploadBtn: null
   })
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   function uploadAvatar() {
-    refs.current.uploadBtn!.disabled = true
-    setUploadProgress(true)
+    refs.current.uploadBtn!.disabled = true;
+    setUploadProgress(true);
     // 上传头像文件
-    tcb_app.uploadFile({
-      cloudPath: `inno/user-avatars/${refs.current.file?.files![0].name.replace("image/", userState.data!.phone as string)}`,
-      filePath: refs.current.file!.files![0] as unknown as string
-    }).then((result: any) => {
-      // 更新远程头像地址
-      tcb_auth.currentUser?.update({ avatarUrl: result.download_url }).then(() => {
-        // 更新本地头像状态，触发渲染新头像
-        dispatch(updateAvatar(result.download_url))
-        // 启用按钮
-        setUploadProgress(false)
-        refs.current.uploadBtn!.disabled = false
-      })
-    })
+    const formdata = new FormData();
+    formdata.append('type', '0');
+    formdata.append('file', refs.current.file!.files![0]);
+    axios.post(user_upload, formdata, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': userState.data?.token || ""
+      }
+    }).then((res) => {
+      dispatch(updateAvatar(res.data.data));
+      localStorage.setItem('avatarUrl', res.data.data);
+      setUploadProgress(false);
+      refs.current.uploadBtn!.disabled = false;
+    });
   }
 
   function updateProfile() {
     if (nickName.match(/^(?!-)[a-zA-Z0-9_\u4e00-\u9fa5]{0,14}$/g)) {
-      tcb_auth.currentUser?.update({ nickName: nickName })
-      setNickNameError(0, false)
-      dispatch(updateUser({ ...userState.data, nickName }))
-      dispatch(updateSnackBar({ severity: 'success', open: true, message: '修改成功' }))
+      axios.post(user_update, {
+        nickName: nickName
+      }, {
+        headers: { 'Authorization': userState.data?.token ? userState.data?.token : "" }
+      });
+      setNickNameError(0, false);
+      dispatch(updateUser({ ...(userState.data) as any, nickName }));
+      dispatch(updateSnackBar({ severity: 'success', open: true, message: '修改成功' }));
     } else {
-      setNickNameError(1, true)
+      setNickNameError(1, true);
     }
   }
 
   useEffect(() => {
-    setNickName(userState.data!.nickName as string)
-  }, [userState.data?.nickName])
+    setNickName(userState.data!.nickName as string);
+  }, [userState.data?.nickName]);
 
   return (
     <div className={styles.container}>
@@ -69,7 +75,7 @@ const UserProfile = (props: Props) => {
       <div className={styles.content}>
         <h3>用户头像</h3>
         <div className={styles.avatar_section}>
-          <img className={styles.avatar} width='128' height='128' src={userState.data?.avatarUrl !== '' ? userState.data?.avatarUrl : '/assets/icons/avatar.webp'} />
+          <img className={styles.avatar} src={userState.data?.avatarUrl} />
           <Button ref={ref => refs.current.uploadBtn = ref} sx={{ ml: '1rem' }} onClick={() => { refs.current.file!.click() }} variant='outlined' disableElevation>
             {uploadProgress && <CircularProgress size='16px' />}上传图片
           </Button>
@@ -81,8 +87,7 @@ const UserProfile = (props: Props) => {
             my: 1
           }
         }}>
-          <TextField size='small' label="手机号码" value={userState.data?.phone} disabled
-            sx={{ width: '290px' }} />
+          <TextField size='small' label="手机号码" value={userState.data?.phone} sx={{ width: '290px' }} />
           <TextField error={nickNameError.status} helperText={nickNameError.msg} size='small' label="昵称"
             sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
         </Box>

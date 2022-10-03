@@ -6,9 +6,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import styles from './FormDialog.module.css'
-import { tcb_auth, tcb_db } from '../../configs/global';
-import { getAdmin, getOrderCount } from '../JoinUs/JoinUs';
 import useErrorMsg from '../../hooks/useErrorMsg';
+import useUserState from '../../hooks/useUserstate';
+import axios from 'axios';
+import { order_create } from '../../configs/api';
 
 interface Props {
   open: boolean
@@ -22,6 +23,7 @@ interface InputRefs {
 
 export default function FormDialog({ open, handleClose, callback }: Props) {
   const [titleErr, dispatchTitleErr] = useErrorMsg(['', '请起一个合适的标题'])
+  const [userState] = useUserState()
   const [reasonErr, dispatchReasonErr] = useErrorMsg(['', '字数限制在5-250之间'])
   const refs = useRef<InputRefs>({
     title: null,
@@ -43,20 +45,17 @@ export default function FormDialog({ open, handleClose, callback }: Props) {
       dispatchReasonErr(0, false)
     }
     if (flag === 0) {
-      const date = new Date().getTime()
-      tcb_db.collection('inno-orders').add({
-        from_uid: tcb_auth.currentUser?.uid,
-        last_date: date,
-        message: [{ data: refs.current.reason?.value, direction: 0 }],
-        open_date: date,
-        status: '尚未受理',
+      axios.post(order_create, {
         title: refs.current.title?.value,
-        to_uid: await getAdmin(),
-        id: await getOrderCount()
+        message: refs.current.reason?.value
+      }, {
+        headers: {
+          'Authorization': userState?.token ? userState.token : ""
+        }
       }).then(() => {
         handleClose()
         callback()
-      })
+      });
     }
   }
 

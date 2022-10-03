@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
+import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogContentText from '@mui/material/DialogContentText'
-import DialogActions from '@mui/material/DialogActions'
-import Button from '@mui/material/Button'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { hljs } from '../../configs/global'
+import DialogTitle from '@mui/material/DialogTitle'
+import axios from 'axios'
 import 'highlight.js/styles/idea.css'
-import styles from './BlogFull.module.css'
+import { useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import { Link, useParams } from 'react-router-dom'
-import Tag from '../Tag/Tag'
+import remarkGfm from 'remark-gfm'
+import { blog_delete_, blog_get_ } from '../../configs/api'
+import { hljs } from '../../configs/global'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
 import { selectBlog, updateBlog } from '../../stores/blog/blogSlice'
-import { tcb_db } from '../../configs/global'
 import { selectUser } from '../../stores/user/userSlice'
+import Tag from '../Tag/Tag'
+import styles from './BlogFull.module.css'
 
 /**
  * 博客完整阅读页，根据路由 id 展示整篇博文
@@ -32,11 +33,10 @@ const BlogFull = () => {
   const date = new Date(blog.date)
 
   function fetchBlog() {
-    tcb_db.collection('inno-blog')
-      .doc(params.id as string).get().then((res) => {
-        setMarkdown(res.data[0].markdown.replace('<!--truncate-->', ''))
-        dispatch(updateBlog(res.data[0]))
-      })
+    axios.get(blog_get_ + params.id).then((res) => {
+      setMarkdown(res.data.data.markdown.replace('<!--truncate-->', ''))
+      dispatch(updateBlog(res.data.data))
+    })
   }
 
   function handleClose() {
@@ -44,13 +44,16 @@ const BlogFull = () => {
   }
 
   function handleAgree() {
-    tcb_db.collection('inno-blog').doc(params.id as string)
-      .remove().then((res) => {
-        if (res.deleted === 1) {
-          window.open('/blog', '_self')
-        }
-      })
-    setOpen(false)
+    axios.delete(blog_delete_ + params.id, {
+      headers: {
+        'Authorization': user.data?.token ? user.data?.token : ""
+      }
+    }).then((res) => {
+      if (res.data.code === 204) {
+        window.open('/blog/page/1', '_self');
+      }
+    });
+    setOpen(false);
   }
 
   function doDelete() {
@@ -64,6 +67,7 @@ const BlogFull = () => {
       // 从预览来的无需请求，在预览页已经设置当前博客到全局变量
       setMarkdown(blog.markdown.replace('<!--truncate-->', ''))
     }
+    // 延迟设置代码高亮
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
         hljs.highlightElement(el)
@@ -77,16 +81,16 @@ const BlogFull = () => {
       <h1>{blog.title}</h1>
       <p className={styles.est}>{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 · 预计阅读时间 {Math.round(blog.markdown.length / 200)} min</p>
       {
-        blog.author_gh !== '' &&
+        blog.author !== '' &&
         <div className={styles.author}>
-          <a href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
-            <img alt='avatar' width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
+          <a href="" target="_blank" rel="noopener noreferrer">
+            <img alt='avatar' width='48' height='48' src={blog.avatarUrl} />
           </a>
           <div>
-            <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
-              {blog.author_gh}
+            <a className={styles.avatar_name} href="" target="_blank" rel="noopener noreferrer">
+              {blog.author}
             </a>
-            <small>{blog.author_description}</small>
+            <small>{blog.description}</small>
           </div>
         </div>
       }

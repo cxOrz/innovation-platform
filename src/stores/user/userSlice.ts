@@ -1,30 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import type { TCBUser } from '../../configs/types'
+import type { User } from '../../configs/types'
 import { RootState } from '../../store'
 
 interface UserSlice {
-  data: TCBUser | null
+  data: User | null
 }
 
 const initialState: UserSlice = {
   data: {
     avatarUrl: "",
-    customUserId: "",
     email: "",
-    gender: "",
-    hasPassword: false,
-    location: { country: '', province: '', city: '' },
-    loginType: "PHONE",
     nickName: "",
     openid: "",
     phone: "",
-    qqMiniOpenId: "",
     uid: "",
-    unionId: "",
-    username: "",
-    wxOpenId: "",
-    wxPublicId: "",
-    role: 2
+    role: 2,
+    token: ""
   }
 }
 
@@ -32,7 +23,7 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    updateUser: (state: UserSlice, action: PayloadAction<TCBUser>) => {
+    updateUser: (state: UserSlice, action: PayloadAction<User>) => {
       state.data = action.payload
     },
     updateAvatar: (state: UserSlice, action: PayloadAction<string>) => {

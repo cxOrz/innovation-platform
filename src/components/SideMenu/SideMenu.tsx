@@ -8,7 +8,6 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { useNavigate } from 'react-router-dom';
-import { tcb_auth } from '../../configs/global';
 
 const SideMenu = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1)
@@ -20,9 +19,8 @@ const SideMenu = () => {
   }
 
   const logout = () => {
-    tcb_auth.signOut().then(() => {
-      window.location.reload()
-    })
+    localStorage.clear()
+    window.location.reload()
   }
 
   useEffect(() => {

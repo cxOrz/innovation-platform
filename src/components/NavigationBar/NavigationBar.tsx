@@ -26,7 +26,7 @@ const NavigationBar = (props: Props) => {
   const navigate = useNavigate()
   const links: LinkProps[] = [
     { to: '/apps', label: '应用', isActive: location.pathname.match(/^\/apps/) ? true : false },
-    { to: '/blog', label: '博客', isActive: location.pathname.match(/^\/blog/) ? true : false },
+    { to: '/blog/page/1', label: '博客', isActive: location.pathname.match(/^\/blog/) ? true : false },
     { to: '/members', label: '成员概览', isActive: location.pathname === '/members' ? true : false }
   ]
   const user = useAppSelector(selectUser)
@@ -64,7 +64,7 @@ const NavigationBar = (props: Props) => {
       </Toolbar>
       <Divider />
       <List>
-        {[['应用', '/apps'], ['博客', '/blog'], ['成员概览', '/members']].map((text, index) => (
+        {[['应用', '/apps'], ['博客', '/blog/page/1'], ['成员概览', '/members']].map((text, index) => (
           <ListItem key={index} disablePadding>
             <ListItemButton onClick={() => {
               setDrawerOpen(false)

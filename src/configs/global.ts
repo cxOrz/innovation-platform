@@ -8,18 +8,7 @@ import hljs_xml from 'highlight.js/lib/languages/xml';
 import hljs_typescript from 'highlight.js/lib/languages/typescript';
 import hljs_yaml from 'highlight.js/lib/languages/yaml';
 
-import tcb from '@cloudbase/js-sdk'
-
-export const TargetName = 'RC-Fishing'
-
-// tencent clousebase
-export const tcb_app = tcb.init({
-  env: 'cloudbase-1a4211'
-})
-
-export const tcb_auth = tcb_app.auth({ persistence: 'local' })
-
-export const tcb_db = tcb_app.database()
+export const TargetName = 'cxOrz'
 
 // highlight.js
 highlight.registerLanguage('javascript', hljs_javascript);

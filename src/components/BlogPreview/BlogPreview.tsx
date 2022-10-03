@@ -46,16 +46,16 @@ const BlogPreview = ({ blog }: Props) => {
       <h1><Link to={`/blog/${blog._id}`} onClick={setCurrentBlog}>{blog.title}</Link></h1>
       <p className={styles.est}>{date.getFullYear()}年{date.getMonth() + 1}月{date.getDate()}日 · 预计阅读时间 {Math.round(blog.markdown.length / 200)} min</p>
       {
-        blog.author_gh !== '' &&
+        blog.author !== '' &&
         <div className={styles.author}>
-          <a href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
-            <img alt='avatar' width='48' height='48' src={`https://avatars.githubusercontent.com/${blog.author_gh}?s=256`} />
+          <a href="" target="_blank" rel="noopener noreferrer">
+            <img alt='avatar' width='48' height='48' src={blog.avatarUrl} />
           </a>
           <div>
-            <a className={styles.avatar_name} href={`https://github.com/${blog.author_gh}`} target="_blank" rel="noopener noreferrer">
-              {blog.author_gh}
+            <a className={styles.avatar_name} href="" target="_blank" rel="noopener noreferrer">
+              {blog.author}
             </a>
-            <small>{blog.author_description}</small>
+            <small>{blog.description}</small>
           </div>
         </div>
       }

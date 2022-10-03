@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { tcb_db } from '../../configs/global'
 import { Link, Outlet, useParams } from 'react-router-dom'
 import { hljs } from '../../configs/global'
 import BlogPreview from '../../components/BlogPreview/BlogPreview'
@@ -9,6 +8,8 @@ import { useAppDispatch } from '../../hooks/redux'
 import { BlogType } from '../../configs/types'
 import DoubleRightArrowIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
 import DoubleLeftArrowIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
+import axios from 'axios'
+import { blog_list_ } from '../../configs/api'
 
 interface RecentBlog {
   title: string
@@ -16,7 +17,7 @@ interface RecentBlog {
 }
 
 /**
- * 博客功能页面，两栏设计，左侧菜单栏，右侧内容区域
+ * 博客功能页面，左侧菜单栏，右侧内容区域
  * 
  * 功能：获取近期5条博文标题，放在左侧菜单栏；根据页号获取5条博客，在右侧区域进行简短的预览
  */
@@ -26,21 +27,14 @@ const Blog = () => {
   const [recent, setRecent] = useState<RecentBlog[]>([])
   const [blogs, setBlogs] = useState<BlogType[]>([])
 
-  function fetchBlog() {
-    tcb_db.collection('inno-blog')
-      .limit(5).orderBy('date', 'desc').get().then((res) => {
-        setBlogs(res.data)
-      })
-  }
-
+  // 博客近期列表
   function fetchRecent() {
-    tcb_db.collection('inno-blog')
-      .orderBy('date', 'desc').field({ title: true })
-      .get().then((res) => {
-        setRecent(res.data.slice(0, 5))
-      })
+    axios.get(blog_list_).then((res) => {
+      setRecent(res.data.data);
+    });
   }
 
+  // 近期列表中点击的博客，设置到全局状态
   function setCurrentBlog(id: string) {
     blogs.slice(0, 5).forEach((blog) => {
       if (blog._id === id) {
@@ -53,10 +47,6 @@ const Blog = () => {
     hljs.configure({
       ignoreUnescapedHTML: true
     })
-    // 若不在特定页码，说明在首页，获取博客；若在特定页码，该页组件会自动获取，不需要在这里重复获取。
-    if (!(params.id || params.page)) {
-      fetchBlog()
-    }
     fetchRecent()
   }, [])
 
@@ -67,7 +57,7 @@ const Blog = () => {
         <nav>
           <ul>
             {
-              recent.map((e) => {
+              recent.slice(0, 5).map((e) => {
                 return (<li key={e._id}><Link to={`/blog/${e._id}`} onClick={() => { setCurrentBlog(e._id) }}>{e.title}</Link></li>)
               })
             }
@@ -83,16 +73,26 @@ const Blog = () => {
               return <BlogPreview key={e._id} blog={e} />
             })
         }
-        {
-          (!params.id || window.location.pathname == '/blog') &&
+        { // 换页按钮
+          window.location.pathname.includes('blog/page') &&
           <nav>
             {
-              params.page && params.page !== '1' &&
-              <Link className={`${styles.switchPage} ${styles.prev}`} to={`page/${Number(params.page) - 1}`}><DoubleLeftArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} />上一页</Link>
+              Number(params?.page) > 1 &&
+              <Link
+                className={`${styles.switchPage} ${styles.prev}`}
+                to={`page/${Number(params.page) - 1}`}
+              >
+                <DoubleLeftArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} />上一页
+              </Link>
             }
             {
               Math.floor(recent.length / 5) + 1 !== Number(params.page) &&
-              <Link className={`${styles.switchPage} ${styles.next}`} to={`page/${(Number(params.page) ? Number(params.page) : 1) + 1}`}>下一页<DoubleRightArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} /></Link>
+              <Link
+                className={`${styles.switchPage} ${styles.next}`}
+                to={`page/${(Number(params.page) ? Number(params.page) : 1) + 1}`}
+              >
+                下一页<DoubleRightArrowIcon fontSize='small' sx={{ verticalAlign: '-20%' }} />
+              </Link>
             }
           </nav>
         }

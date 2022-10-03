@@ -2,9 +2,11 @@ import React, { useRef } from 'react'
 import TextField from '@mui/material/TextField'
 import styles from './JoinUs.module.css'
 import Button from '@mui/material/Button'
-import { tcb_auth, tcb_db } from '../../configs/global'
 import { useAppDispatch } from '../../hooks/redux'
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
+import useUserState from '../../hooks/useUserstate'
+import axios from 'axios'
+import { order_create } from '../../configs/api'
 
 interface InputRefs {
   name: HTMLInputElement | null,
@@ -17,6 +19,7 @@ interface InputRefs {
 }
 
 const JoinUs = () => {
+  const [userState] = useUserState()
   const dispatch = useAppDispatch()
   const refs = useRef<InputRefs>({
     name: null,
@@ -29,21 +32,14 @@ const JoinUs = () => {
   })
 
   async function handleSubmit() {
-    const date = new Date()
-    tcb_db.collection('inno-orders').add({
-      from_uid: tcb_auth.currentUser?.uid,
-      last_date: date.getTime(),
-      message: [`${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。
-想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`],
-      open_date: date.getTime(),
-      status: '已发起',
-      title: '申请加入',
-      to_uid: await getAdmin(),
-      id: await getOrderCount()
-    }).then((res) => {
-      console.log(res)
-      dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }))
-    })
+    axios.post(order_create, {
+      message: `${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`,
+      title: '申请加入'
+    }, {
+      headers: { 'Authorization': userState?.token ? userState.token : "" }
+    }).then(() => {
+      dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }));
+    });
   }
 
   return (
@@ -62,14 +58,6 @@ const JoinUs = () => {
       </div>
     </div>
   )
-}
-export async function getAdmin() {
-  const admins = (await tcb_db.collection('inno-roles').get()).data[0].admin
-  return admins[Math.floor(Math.random() * admins.length)]
-}
-
-export async function getOrderCount() {
-  return (await tcb_db.collection('inno-orders').count()).total + 1
 }
 
 export default JoinUs

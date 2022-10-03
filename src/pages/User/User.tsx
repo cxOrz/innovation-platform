@@ -1,13 +1,13 @@
 import React from 'react'
 import Login from '../../components/Login/Login'
 import UserCenter from '../../components/UserCenter/UserCenter'
-import { tcb_auth } from '../../configs/global'
+import useUserState from '../../hooks/useUserstate'
 import styles from './User.module.css'
 
 type Props = {}
 
 const User = (props: Props) => {
-  const loginState = tcb_auth.hasLoginState()
+  const [loginState] = useUserState()
   return (
     <div className={styles.container}>
       {

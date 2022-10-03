@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { tcb_auth, tcb_db } from '../../configs/global';
 import { Order, OrderStatus, Message } from '../../configs/types';
 import styles from './OrderManage.module.css'
 import Box from '@mui/material/Box';
@@ -20,6 +19,10 @@ import ChatMsgArea from '../../components/ChatMsgArea/ChatMsgArea';
 import TextField from '@mui/material/TextField';
 import LinearProgress from '@mui/material/LinearProgress';
 import SendIcon from '@mui/icons-material/Send';
+import axios from 'axios';
+import { order_, order_sendmsg, order_update } from '../../configs/api';
+import { useAppSelector } from '../../hooks/redux';
+import { selectUser } from '../../stores/user/userSlice';
 
 interface ToolBarProps {
   getOrders: (range?: 'all' | 'my') => void
@@ -69,19 +72,19 @@ const Toolbar = (props: ToolBarProps) => {
 }
 
 export default function OrderManage() {
-  const user = tcb_auth.currentUser
-  const [loading, setLoading] = useState(false)
-  const [orders, setOrders] = useState<Order[]>([])
-  const [order, setOrder] = useState<Order>()
-  const [status, setStatus] = React.useState('')
-  const textfield = useRef<HTMLInputElement>(null)
-  const msgarea = useRef<HTMLInputElement>(null)
+  const userState = useAppSelector(selectUser).data;
+  const [loading, setLoading] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [order, setOrder] = useState<Order>();
+  const [status, setStatus] = React.useState('');
+  const textfield = useRef<HTMLInputElement>(null);
+  const msgarea = useRef<HTMLInputElement>(null);
   const [dialogProps, setDialogProps] = useState({
     open: false,
     title: '',
     type: 'select',
     confirmLabel: '确认'
-  })
+  });
   const computedColor = useCallback((color: OrderStatus) => {
     switch (color) {
       case '尚未受理': return 'error';
@@ -89,7 +92,7 @@ export default function OrderManage() {
       case '已解决': return 'success';
       case '已关闭': return 'default';
     }
-  }, [])
+  }, []);
   const columns: GridColDef[] = [
     { field: 'id', headerName: '编号', width: 70, sortable: false },
     {
@@ -108,7 +111,7 @@ export default function OrderManage() {
       }
     },
     {
-      field: 'from_uid',
+      field: 'openid',
       headerName: '创建人',
       width: 150,
       sortable: false
@@ -169,11 +172,12 @@ export default function OrderManage() {
 
   function handleConfirm() {
     if (dialogProps.type === 'select') {
-      tcb_db.collection('inno-orders').doc(order?._id as string).update({
+      axios.post(order_update, {
+        id: order?._id,
         status: status
-      }).then((res) => {
-        fetchOrders()
-      })
+      }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then(() => {
+        fetchOrders();
+      });
     }
     setDialogProps((prev) => {
       return { ...prev, open: false }
@@ -186,29 +190,30 @@ export default function OrderManage() {
   }
 
   function handleOrderOnOff(params: GridRenderCellParams<React.ReactNode>) {
-    tcb_db.collection('inno-orders').doc(params.row._id).update({
+    axios.post(order_update, {
+      id: order?._id,
       status: params.row.status === '已关闭' ? '受理中' : '已关闭'
-    }).then(() => {
-      fetchOrders()
-    })
+    }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then(() => {
+      fetchOrders();
+    });
   }
 
   /**
    * 发送完成后，更新工单
    */
   function sendMessage() {
-    tcb_db.collection('inno-orders').doc(order?._id as string).update({
-      last_date: new Date().getTime(),
-      message: tcb_db.command.push({ data: textfield.current?.value, direction: 1 })
-    }).then(() => {
-      const message = order?.message as Message[]
-      message.push({ data: textfield.current!.value, direction: 1 })
+    axios.post(order_sendmsg, {
+      id: order?._id,
+      message: textfield.current?.value
+    }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then(() => {
+      const message = order?.message as Message[];
+      message.push({ data: textfield.current!.value, direction: 1 });
       setOrder((prev) => {
-        return ({ ...prev, message: message }) as Order
+        return ({ ...prev, message: message }) as Order;
       })
-      textfield.current!.value = ''
-      fetchOrders()
-    })
+      textfield.current!.value = '';
+      fetchOrders();
+    });
   }
 
   /**
@@ -216,20 +221,16 @@ export default function OrderManage() {
    * @param range 传入，则通过该参数判断获取范围；不传入，则通过localstorage储存的属性来判断获取范围
    */
   function fetchOrders(range?: 'all' | 'my') {
-    setLoading(true)
-    let temp: any = tcb_db.collection('inno-orders')
+    setLoading(true);
+    let query = '';
     if (range === undefined) {
       range = localStorage.getItem('getOrdersRange') as ('all' | 'my')
     }
-    if (range === 'my') {
-      temp = temp.where({
-        to_uid: user?.uid
-      })
-    }
-    temp.orderBy('open_date', 'desc').get().then(({ data }: { data: Order[] }) => {
-      setOrders([...data])
-      setLoading(false)
-    })
+    if (range === 'my') query = '?to_uid=' + userState?.uid;
+    axios.get(order_ + query, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then((res) => {
+      setOrders([...res.data.data]);
+      setLoading(false);
+    });
   }
 
   useEffect(() => {
@@ -247,6 +248,7 @@ export default function OrderManage() {
     <div className={styles.container}>
       <Box flex='1' sx={{ height: '100%' }}>
         <DataGrid
+          getRowId={(row) => row._id}
           loading={loading}
           rows={orders}
           columns={columns}

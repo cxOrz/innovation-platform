@@ -6,7 +6,7 @@ import { selectBlog } from '../../stores/blog/blogSlice'
 import styles from './BlogToolBar.module.css'
 
 interface Props {
-  submit: (title: string, author_gh: string, author_description: string, tag: string[], date: number, markdown: string) => void
+  submit: (title: string, author_gh: string, author_description: string, tag: string[], markdown: string) => void
   markdown: string
 }
 interface InputRefs {
@@ -34,8 +34,8 @@ const BlogToolBar = ({ submit, markdown }: Props) => {
     if (window.location.search === '?edit=true') {
       refs.current.title!.value = blog.title
       refs.current.tag!.value = blog.tag.join(' ')
-      refs.current.gh_username!.value = blog.author_gh
-      refs.current.description!.value = blog.author_description
+      refs.current.gh_username!.value = blog.author
+      refs.current.description!.value = blog.description
     }
   }, [])
 
@@ -48,7 +48,7 @@ const BlogToolBar = ({ submit, markdown }: Props) => {
       <Button variant='contained' onClick={() => {
         submit(refs.current.title!.value, refs.current.gh_username!.value,
           refs.current.description!.value, refs.current.tag!.value.split(' '),
-          window.location.search === '?edit=true' ? blog.date : new Date().getTime(), markdown)
+          markdown)
       }} disableElevation>发布文章</Button>
     </div>
   )

@@ -1,9 +1,11 @@
+import axios from 'axios'
 import React, { useCallback, useEffect, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import BlogToolBar from '../../components/BlogToolBar/BlogToolBar'
-import { tcb_db } from '../../configs/global'
+import { blog_create, blog_update } from '../../configs/api'
 import { useAppDispatch, useAppSelector } from '../../hooks/redux'
+import useUserState from '../../hooks/useUserstate'
 import { selectBlog } from '../../stores/blog/blogSlice'
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
 import styles from './BlogWriting.module.css'
@@ -17,50 +19,48 @@ const BlogWriting = () => {
   const [textArea, setTextArea] = useState('')
   const blog = useAppSelector(selectBlog)
   const dispatch = useAppDispatch()
+  const [userState] = useUserState()
 
-  function submit(title: string, author_gh: string, author_description: string, tag: string[], date: number, markdown: string) {
+  function submit(title: string, author: string, description: string, tag: string[], markdown: string) {
     // 字段判断
-    if (title !== '' && author_gh !== '' && markdown !== '') {
+    if (title !== '' && author !== '' && markdown !== '') {
       if (params.get('edit') === 'true') {
         // 修改博客
-        tcb_db.collection('inno-blog').where({ _id: blog.data._id })
-          .update({
-            title: title,
-            author_gh: author_gh,
-            author_description: author_description,
-            tag: tag,
-            date: date,
-            markdown: markdown
-          }).then((res) => {
-            console.log(res)
-            dispatch(updateSnackBar({ open: true, severity: 'success', message: '修改成功，即将跳转！' }))
-            setTimeout(() => {
-              window.open(`/blog/${blog.data._id}`, '_self')
-            }, 2000)
-          })
+        axios.post(blog_update, {
+          _id: blog.data._id,
+          title: title,
+          author: author,
+          description: description,
+          tag: tag,
+          markdown: markdown
+        }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then(() => {
+          dispatch(updateSnackBar({ open: true, severity: 'success', message: '修改成功，即将跳转！' }));
+          setTimeout(() => {
+            window.open(`/blog/${blog.data._id}`, '_self');
+          }, 2000);
+        });
       } else {
         // 新增博客
-        tcb_db.collection('inno-blog').add({
+        axios.post(blog_create, {
           title: title,
-          author_gh: author_gh,
-          author_description: author_description,
+          author: author,
+          description: description,
           tag: tag,
-          date: date,
           markdown: markdown
-        }).then((res) => {
-          if (res.code === 'DATABASE_PERMISSION_DENIED') {
-            dispatch(updateSnackBar({ open: true, severity: 'error', message: '无权进行发布！' }))
+        }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then((res) => {
+          if (res.data.code === 401) {
+            dispatch(updateSnackBar({ open: true, severity: 'error', message: '无权进行发布！' }));
           } else {
-            dispatch(updateSnackBar({ open: true, severity: 'success', message: '发布成功，即将跳转！' }))
+            dispatch(updateSnackBar({ open: true, severity: 'success', message: '发布成功，即将跳转！' }));
             setTimeout(() => {
-              window.open('/blog', '_self')
-            }, 2000)
+              window.open('/blog/page/1', '_self')
+            }, 2000);
           }
-        })
+        });
       }
     } else {
       // 错误提示
-      dispatch(updateSnackBar({ open: true, severity: 'warning', message: '至少标题、用户名、内容不能为空！' }))
+      dispatch(updateSnackBar({ open: true, severity: 'warning', message: '至少标题、用户名、内容不能为空！' }));
     }
   }
 

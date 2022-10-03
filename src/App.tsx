@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
-import './App.css';
+import { Outlet, useLocation } from 'react-router-dom';
 import NavigationBar from './components/NavigationBar/NavigationBar';
-import styles from './App.module.css'
+import styles from './App.module.css';
 import { useAppDispatch, useAppSelector } from './hooks/redux';
-import { tcb_auth, tcb_db } from './configs/global';
 import { updateUser } from './stores/user/userSlice';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { selectSnackBar, updateSnackBar } from './stores/snackbar/snackbarSlice';
+import useUserState from './hooks/useUserstate';
 
 function App() {
-  const dispatch = useAppDispatch()
-  const snackbar = useAppSelector(selectSnackBar)
-  const userState = tcb_auth.hasLoginState()?.user
+  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const snackbar = useAppSelector(selectSnackBar);
+  const [userState] = useUserState();
 
   function handleAlertClose(event?: React.SyntheticEvent | Event, reason?: string) {
     if (reason === 'clickaway') {
@@ -25,29 +25,25 @@ function App() {
   useEffect(() => {
     // 将用户信息更新到redux全局状态
     if (userState) {
-      tcb_db.collection('inno-user').where({
-        uid: userState.uid
-      }).get().then((res) => {
-        dispatch(updateUser({
-          phone: (userState as any).phone,
-          uid: userState?.uid,
-          avatarUrl: userState?.avatarUrl,
-          nickName: userState?.nickName,
-          gender: userState?.gender,
-          role: res.data[0]?.role
-        }))
-      })
-    } else {
-
+      dispatch(updateUser({
+        phone: userState.phone,
+        email: userState.email,
+        uid: userState.uid,
+        openid: userState.openid,
+        avatarUrl: userState.avatarUrl,
+        nickName: userState.nickName,
+        role: Number(userState.role),
+        token: userState.token
+      }));
     }
-  }, [])
+  }, [userState])
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [window.location.pathname])
+  }, [location.pathname]);
 
   return (
-    <div className="App">
+    <div className={styles.container}>
       <NavigationBar />
       <div className={styles.outlet}>
         <Outlet />
