@@ -7,14 +7,15 @@ interface BlogSlice {
 }
 export const initialBlogState: BlogSlice = {
   data: {
-    author_description: '',
-    author_gh: '',
-    date: 0,
+    _id: '',
+    openid: '',
+    title: '',
+    author: '',
+    description: '',
+    avatarUrl: '',
     markdown: '',
     tag: [""],
-    title: '',
-    _id: '',
-    _openid: ''
+    date: new Date()
   }
 }
 
