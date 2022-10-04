@@ -41,23 +41,28 @@ const Login = (props: Props) => {
   const dispatch = useDispatch();
   let interval: NodeJS.Timer
 
-  function SendVerifyCode() {
+  async function SendVerifyCode() {
     if (refs.current.email!.value.match(/^[\w.]{2,25}\@[\w]{0,20}\.[\w]{0,10}$/g)) {
-      axios.get(user_verification_email_ + encodeURIComponent(refs.current.email!.value)).then(() => {
-        setCountDown(60);
-      });
       setInputError((prev) => {
         return { ...prev, email: false };
       });
-      interval = setInterval(() => {
-        setCountDown(prev => {
-          if (prev === 0) {
-            clearInterval(interval);
-            return '发送';
-          }
-          return (prev as number - 1);
-        })
-      }, 1000);
+      const result = (await axios.get(user_verification_email_ + encodeURIComponent(refs.current.email!.value))).data;
+      if (result.code === 201) {
+        // 发送成功
+        setCountDown(60);
+        interval = setInterval(() => {
+          setCountDown(prev => {
+            if (prev === 0) {
+              clearInterval(interval);
+              return '发送';
+            }
+            return (prev as number - 1);
+          })
+        }, 1000);
+      } else {
+        // 发送失败
+        dispatch(updateSnackBar({ message: result.data, severity: 'warning', open: true }));
+      }
     } else {
       setInputError((prev) => {
         return { ...prev, email: true };
