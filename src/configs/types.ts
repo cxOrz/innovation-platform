@@ -36,6 +36,6 @@ export interface Order {
   message: Message[];
   count: number;
   status: OrderStatus;
-  last_date: number;
-  open_date: number;
+  last_time: Date;
+  open_date: Date;
 }

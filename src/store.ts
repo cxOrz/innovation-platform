@@ -9,6 +9,7 @@ export const store = configureStore({
     blog: blogReducer,
     snackbar: snackbarReducer
   },
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false })
 });
 
 export type AppDispatch = typeof store.dispatch;

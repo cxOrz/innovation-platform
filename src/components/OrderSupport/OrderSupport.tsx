@@ -62,7 +62,7 @@ const OrderSupport = () => {
       const message = orders[current].message;
       const temp = orders;
       message.push({ data: textfield.current!.value, direction: 0 });
-      temp.splice(current, 1, { ...orders[current], last_date: new Date().getTime(), message });
+      temp.splice(current, 1, { ...orders[current], last_time: new Date(), message });
       setOrders([...temp]);
       textfield.current!.value = '';
     });
@@ -94,7 +94,8 @@ const OrderSupport = () => {
               const date = new Date(order.open_date)
               return (
                 <ListItem key={i} sx={{
-                  boxSizing: 'border-box', padding: '0',
+                  padding: '0',
+                  boxSizing: 'border-box',
                   '& .MuiListItemButton-root': {
                     padding: '0.75rem 1.5rem'
                   }
@@ -127,7 +128,7 @@ const OrderSupport = () => {
               <p>ID: {orders[current]._id}</p>
               <span>分派对象：{orders[current].to_uid.slice(-4)}</span>
               <span>创建时间：{new Date(orders[current].open_date).toLocaleString()}</span>
-              <span>最近消息：{new Date(orders[current].last_date).toLocaleString()}</span>
+              <span>最近消息：{new Date(orders[current].last_time).toLocaleString()}</span>
             </div>
             <div ref={msgarea} className={styles.msgArea}>
               <ChatMsgArea direction={0} chat={orders[current].message} />

@@ -132,7 +132,7 @@ export default function OrderManage() {
       }
     },
     {
-      field: 'last_date',
+      field: 'last_time',
       headerName: '更新时间',
       width: 150,
       sortable: true,
@@ -191,7 +191,7 @@ export default function OrderManage() {
 
   function handleOrderOnOff(params: GridRenderCellParams<React.ReactNode>) {
     axios.post(order_update, {
-      id: order?._id,
+      id: params.row._id,
       status: params.row.status === '已关闭' ? '受理中' : '已关闭'
     }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then(() => {
       fetchOrders();
