@@ -108,7 +108,7 @@ const Login = (props: Props) => {
         break;
       }
       case 0: {
-        if (!refs.current.email!.value.match(/^[0-9]{11}$/g)) {
+        if (!refs.current.email!.value.match(/^[\w.]{2,25}\@[\w]{0,20}\.[\w]{0,10}$/g)) {
           setInputError((prev) => { return { ...prev, email: true } });
           error = 1;
         }
@@ -173,7 +173,7 @@ const Login = (props: Props) => {
                   />
                   <FormHelperText>{inputError.verifyCode ? '请输入正确的验证码' : ' '}</FormHelperText>
                 </FormControl>
-                <TextField inputRef={ref => { refs.current.password = ref }} id="password" error={inputError.password}
+                <TextField inputRef={ref => { refs.current.password = ref }} id="password" type='password' error={inputError.password}
                   helperText={inputError.password ? '密码为长度6-20的字母、数字和符号组合' : ' '} label="设置密码" variant="outlined" />
               </>
               :
