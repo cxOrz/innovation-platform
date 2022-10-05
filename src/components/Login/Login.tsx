@@ -129,7 +129,7 @@ const Login = (props: Props) => {
             if (res.data.code === 201) {
               dispatch(updateSnackBar({ message: '注册成功，现在可以登录', severity: 'success', open: true }));
               setLoginFormStatus((prev) => {
-                return { ...prev, login: 1 };
+                return { login: 1, labelText: '新用户注册', btnText: '登录' };
               });
               setInputError({ email: false, verifyCode: false, password: false });
             } else {
