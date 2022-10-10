@@ -94,7 +94,7 @@ export default function OrderManage() {
     }
   }, []);
   const columns: GridColDef[] = [
-    { field: 'id', headerName: '编号', width: 70, sortable: false },
+    { field: 'count', headerName: '编号', width: 70, sortable: false },
     {
       field: 'title',
       headerName: '标题',
