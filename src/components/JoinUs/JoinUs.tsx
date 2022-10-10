@@ -32,21 +32,31 @@ const JoinUs = () => {
   });
 
   async function handleSubmit() {
-    axios.post(order_create, {
-      message: `${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`,
-      title: '申请加入'
-    }, {
-      headers: { 'Authorization': userState?.token ? userState.token : "" }
-    }).then(() => {
-      dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }));
-      refs.current.academy!.value = '';
-      refs.current.gendor!.value = '';
-      refs.current.major!.value = '';
-      refs.current.name!.value = '';
-      refs.current.phone!.value = '';
-      refs.current.reason!.value = '';
-      refs.current.studenID!.value = '';
-    });
+    let error = false;
+    if (refs.current.phone!.value === '') error = true;
+    if (refs.current.name!.value === '') error = true;
+    if (refs.current.reason!.value === '') error = true;
+    if (refs.current.studenID!.value === '') error = true;
+
+    if (error) {
+      dispatch(updateSnackBar({ severity: 'error', message: '表单未填完整', open: true }));
+    } else {
+      axios.post(order_create, {
+        message: `${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`,
+        title: '申请加入'
+      }, {
+        headers: { 'Authorization': userState?.token ? userState.token : "" }
+      }).then(() => {
+        dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }));
+        refs.current.academy!.value = '';
+        refs.current.gendor!.value = '';
+        refs.current.major!.value = '';
+        refs.current.name!.value = '';
+        refs.current.phone!.value = '';
+        refs.current.reason!.value = '';
+        refs.current.studenID!.value = '';
+      });
+    }
   }
 
   return (
