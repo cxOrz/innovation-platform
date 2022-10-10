@@ -1,12 +1,12 @@
-import React, { useRef } from 'react'
-import TextField from '@mui/material/TextField'
-import styles from './JoinUs.module.css'
-import Button from '@mui/material/Button'
-import { useAppDispatch } from '../../hooks/redux'
-import { updateSnackBar } from '../../stores/snackbar/snackbarSlice'
-import useUserState from '../../hooks/useUserstate'
-import axios from 'axios'
-import { order_create } from '../../configs/api'
+import React, { useRef } from 'react';
+import TextField from '@mui/material/TextField';
+import styles from './JoinUs.module.css';
+import Button from '@mui/material/Button';
+import { useAppDispatch } from '../../hooks/redux';
+import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
+import useUserState from '../../hooks/useUserstate';
+import axios from 'axios';
+import { order_create } from '../../configs/api';
 
 interface InputRefs {
   name: HTMLInputElement | null,
@@ -15,12 +15,12 @@ interface InputRefs {
   major: HTMLInputElement | null,
   gendor: HTMLInputElement | null,
   phone: HTMLInputElement | null,
-  reason: HTMLInputElement | null
+  reason: HTMLInputElement | null;
 }
 
 const JoinUs = () => {
-  const [userState] = useUserState()
-  const dispatch = useAppDispatch()
+  const [userState] = useUserState();
+  const dispatch = useAppDispatch();
   const refs = useRef<InputRefs>({
     name: null,
     studenID: null,
@@ -29,7 +29,7 @@ const JoinUs = () => {
     gendor: null,
     phone: null,
     reason: null
-  })
+  });
 
   async function handleSubmit() {
     axios.post(order_create, {
@@ -39,6 +39,13 @@ const JoinUs = () => {
       headers: { 'Authorization': userState?.token ? userState.token : "" }
     }).then(() => {
       dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }));
+      refs.current.academy!.value = '';
+      refs.current.gendor!.value = '';
+      refs.current.major!.value = '';
+      refs.current.name!.value = '';
+      refs.current.phone!.value = '';
+      refs.current.reason!.value = '';
+      refs.current.studenID!.value = '';
     });
   }
 
@@ -57,7 +64,7 @@ const JoinUs = () => {
         <Button onClick={handleSubmit} sx={{ mt: 2, width: '6rem' }} variant='contained' disableElevation>提交</Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default JoinUs
+export default JoinUs;
