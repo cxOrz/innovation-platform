@@ -87,7 +87,7 @@ const UserProfile = (props: Props) => {
             my: 1
           }
         }}>
-          <TextField size='small' label="手机号码" value={userState.data?.phone} sx={{ width: '290px' }} />
+          <TextField size='small' label="手机号码" value={userState.data?.phone} sx={{ width: '290px' }} disabled />
           <TextField error={nickNameError.status} helperText={nickNameError.msg} size='small' label="昵称"
             sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
         </Box>
