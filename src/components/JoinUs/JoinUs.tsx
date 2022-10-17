@@ -16,6 +16,7 @@ interface InputRefs {
   gendor: HTMLInputElement | null,
   phone: HTMLInputElement | null,
   reason: HTMLInputElement | null;
+  submitBtn: HTMLButtonElement | null;
 }
 
 const JoinUs = () => {
@@ -28,7 +29,8 @@ const JoinUs = () => {
     major: null,
     gendor: null,
     phone: null,
-    reason: null
+    reason: null,
+    submitBtn: null
   });
 
   async function handleSubmit() {
@@ -41,6 +43,7 @@ const JoinUs = () => {
     if (error) {
       dispatch(updateSnackBar({ severity: 'error', message: '表单未填完整', open: true }));
     } else {
+      refs.current.submitBtn!.disabled = true;
       axios.post(order_create, {
         message: `${refs.current.name?.value}，${refs.current.gendor?.value}，学号 ${refs.current.studenID?.value}，${refs.current.academy?.value}-${refs.current.major?.value}专业。想要申请加入组织，理由如下: ${refs.current.reason?.value}\n联系方式 ${refs.current.phone?.value}，期待得到您的反馈。`,
         title: '申请加入'
@@ -48,6 +51,7 @@ const JoinUs = () => {
         headers: { 'Authorization': userState?.token ? userState.token : "" }
       }).then(() => {
         dispatch(updateSnackBar({ severity: 'success', message: '已提交，请在工单支持页面查看', open: true }));
+        refs.current.submitBtn!.disabled = false;
         refs.current.academy!.value = '';
         refs.current.gendor!.value = '';
         refs.current.major!.value = '';
@@ -71,7 +75,7 @@ const JoinUs = () => {
           <TextField id='phone-num' inputRef={ref => refs.current.phone = ref} label='手机号码' variant='filled' />
           <TextField id='reason' inputRef={ref => refs.current.reason = ref} label='申请理由' className={styles._col_1_4} minRows='5' multiline variant='filled' />
         </form>
-        <Button onClick={handleSubmit} sx={{ mt: 2, width: '6rem' }} variant='contained' disableElevation>提交</Button>
+        <Button ref={ref => refs.current.submitBtn = ref} onClick={handleSubmit} sx={{ mt: 2, width: '6rem' }} variant='contained' disableElevation>提交</Button>
       </div>
     </div>
   );
