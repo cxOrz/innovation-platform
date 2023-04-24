@@ -27,7 +27,7 @@ const SideMenu = () => {
     switch (window.location.pathname) {
       case '/user/profile': setSelectedIndex(0); break;
       case '/user/support': setSelectedIndex(1); break;
-      case '/user/join-us': setSelectedIndex(2); break;
+      case '/user/submit-order': setSelectedIndex(2); break;
     }
   }, [])
 
@@ -59,11 +59,11 @@ const SideMenu = () => {
       </ListItemButton>
       <ListItemButton
         selected={selectedIndex === 2}
-        onClick={() => handleListItemClick(2, 'join-us')}>
+        onClick={() => handleListItemClick(2, 'submit-order')}>
         <ListItemIcon>
           <GroupsIcon />
         </ListItemIcon>
-        <ListItemText primary="加入我们" />
+        <ListItemText primary="发起工单" />
       </ListItemButton>
       <ListItemButton
         onClick={logout}>

@@ -19,3 +19,6 @@ export const order_get_ = BaseUrl + '/order/';
 export const order_create = BaseUrl + '/order/create';
 export const order_update = BaseUrl + '/order/update';
 export const order_sendmsg = BaseUrl + '/order/sendmsg';
+
+export const joinus_status = BaseUrl + '/joinus/status';
+export const joinus_create = BaseUrl + '/joinus/create';

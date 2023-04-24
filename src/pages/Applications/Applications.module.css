@@ -1,29 +1,36 @@
 .container {
+  height: calc(100vh - 142.4px);
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
+  overflow: auto;
   padding: 1rem;
 }
+
 .category {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
 }
+
 .category_name {
   color: #393e46;
   margin: 0.5rem 0;
   padding: 0 1rem;
   text-align: left;
 }
+
 .section {
   width: 100%;
   margin: 0 2rem;
 }
 
 @media screen and (max-width: 765px) {
-  .container{
+  .container {
     justify-content: center;
   }
-  .section{
+
+  .section {
     width: min-content;
   }
 }

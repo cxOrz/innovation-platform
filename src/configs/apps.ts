@@ -30,7 +30,7 @@ export const apps: Applications = {
       note: '写一篇博客',
       description: '将博客添加到博客页面，供所有人阅览。',
       picture: 'write-blog.webp',
-      url: `/blog-write`,
+      url: `/apps/blog-write`,
       category: 'base'
     },
     {
@@ -38,9 +38,17 @@ export const apps: Applications = {
       note: '处理分配到的工单',
       description: '用户分派给你的工单，在这里进行处理。',
       picture: 'order-manage.webp',
-      url: `/order-manage`,
+      url: `/apps/order-manage`,
       category: 'base'
-    }
+    },
+    {
+      title: '成员招新',
+      note: '快来加入我们吧',
+      description: '在每年的各种比赛中，披荆斩棘，力争第一。我们不断磨炼自己，勤奋学习，寻找机会磨炼自己，我们历经坎坷，遇到过低谷，也到达过高峰，经过一代代的传承接力，每个人都拥有了更加充足的资源，收获更多的知识与经历。',
+      picture: 'join-us.webp',
+      url: `/apps/join-us`,
+      category: 'base'
+    },
   ],
   frontend: [
     {
