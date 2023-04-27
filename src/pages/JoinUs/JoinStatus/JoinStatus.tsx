@@ -22,16 +22,39 @@ const steps = [
 export default function JoinStatus({ status = 0 }: JoinStatusProps) {
   return (
     <Box sx={{ maxWidth: 1000 }}>
-      <Stepper activeStep={status} orientation='vertical'>
-        {steps.map((step) =>
-          <Step key={step.label}>
-            <StepLabel>{step.label}</StepLabel>
-            <StepContent>
-              <Typography variant="subtitle2">{step.description}</Typography>
-            </StepContent>
-          </Step>
-        )}
-      </Stepper>
+      {
+        status >= 0 ?
+          <Stepper activeStep={status} orientation='vertical'>
+            {steps.map((step) =>
+              <Step key={step.label}>
+                <StepLabel>{step.label}</StepLabel>
+                <StepContent>
+                  <Typography variant="subtitle2">{step.description}</Typography>
+                </StepContent>
+              </Step>
+            )}
+          </Stepper>
+          :
+          <Terminated />
+      }
     </Box>
+  );
+}
+
+function Terminated() {
+  return (
+    <div>
+      <Typography variant="h5" textAlign="center">感谢信</Typography>
+      <p>亲爱的同学：</p>
+      <p>
+        你好！非常感谢你对软创实验室的信任，并抽出宝贵时间参与我们的招新活动。你的申请已进入软创人才库，我们会持续保持关注，期望有再次合作的机会。
+      </p>
+      <p>
+        最后，衷心祝愿追逐梦想的你梦想成真！再次感谢!
+      </p>
+      <p style={{ textAlign: 'end', marginTop: '2rem' }}>
+        软创招新
+      </p>
+    </div>
   );
 }

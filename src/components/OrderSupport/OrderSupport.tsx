@@ -1,21 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import styles from './OrderSupport.module.css'
-import { Order, OrderStatus } from '../../configs/types'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
-import ListItemButton from '@mui/material/ListItemButton'
-import List from '@mui/material/List'
-import Chip from '@mui/material/Chip'
-import TextField from '@mui/material/TextField'
-import SendIcon from '@mui/icons-material/Send'
-import ChatMsgArea from '../ChatMsgArea/ChatMsgArea'
-import Button from '@mui/material/Button'
-import AddIcon from '@mui/icons-material/Add'
-import FormDialog from '../FormDialog/FormDialog'
-import axios from 'axios'
-import { order_, order_sendmsg } from '../../configs/api'
-import { useAppSelector } from '../../hooks/redux'
-import { selectUser } from '../../stores/user/userSlice'
+import AddIcon from '@mui/icons-material/Add';
+import SendIcon from '@mui/icons-material/Send';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { order_, order_sendmsg } from '../../configs/api';
+import { useAppSelector } from '../../hooks/redux';
+import { selectUser } from '../../stores/user/userSlice';
+import ChatMsgArea from '../ChatMsgArea/ChatMsgArea';
+import FormDialog from '../FormDialog/FormDialog';
+import styles from './OrderSupport.module.css';
 
 const OrderSupport = () => {
   const userState = useAppSelector(selectUser);

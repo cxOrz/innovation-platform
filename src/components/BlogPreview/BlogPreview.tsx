@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { hljs } from '../../configs/global'
-import 'highlight.js/styles/idea.css'
-import styles from './BlogPreview.module.css'
-import type { BlogType } from '../../configs/types'
-import { Link } from 'react-router-dom'
-import Tag from '../Tag/Tag'
-import { useAppDispatch } from '../../hooks/redux'
-import { updateBlog } from '../../stores/blog/blogSlice'
+import 'highlight.js/styles/idea.css';
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
+import { hljs } from '../../configs/global';
+import { useAppDispatch } from '../../hooks/redux';
+import { updateBlog } from '../../stores/blog/blogSlice';
+import Tag from '../Tag/Tag';
+import styles from './BlogPreview.module.css';
 
 interface Props {
   blog: BlogType

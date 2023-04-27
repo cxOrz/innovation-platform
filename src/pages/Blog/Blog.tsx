@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import { Link, Outlet, useParams } from 'react-router-dom'
-import { hljs } from '../../configs/global'
-import BlogPreview from '../../components/BlogPreview/BlogPreview'
-import styles from './Blog.module.css'
-import { updateBlog } from '../../stores/blog/blogSlice'
-import { useAppDispatch } from '../../hooks/redux'
-import { BlogType } from '../../configs/types'
-import DoubleRightArrowIcon from '@mui/icons-material/KeyboardDoubleArrowRight'
-import DoubleLeftArrowIcon from '@mui/icons-material/KeyboardDoubleArrowLeft'
-import axios from 'axios'
-import { blog_list_ } from '../../configs/api'
+import DoubleLeftArrowIcon from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import DoubleRightArrowIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import BlogPreview from '../../components/BlogPreview/BlogPreview';
+import { blog_list_ } from '../../configs/api';
+import { hljs } from '../../configs/global';
+import { useAppDispatch } from '../../hooks/redux';
+import { updateBlog } from '../../stores/blog/blogSlice';
+import styles from './Blog.module.css';
 
 interface RecentBlog {
   title: string

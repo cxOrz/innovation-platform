@@ -42,6 +42,14 @@ export const apps: Applications = {
       category: 'base'
     },
     {
+      title: '招新管理',
+      note: '管理员及时反馈招新状态',
+      description: '对用户提交的申请进行处理，可对每一阶段添加评价、打分，要及时修改流程状态，反馈给用户。',
+      picture: 'join-us-manage.webp',
+      url: `/apps/join-us-management`,
+      category: 'base'
+    },
+    {
       title: '成员招新',
       note: '快来加入我们吧',
       description: '在每年的各种比赛中，披荆斩棘，力争第一。我们不断磨炼自己，勤奋学习，寻找机会磨炼自己，我们历经坎坷，遇到过低谷，也到达过高峰，经过一代代的传承接力，每个人都拥有了更加充足的资源，收获更多的知识与经历。',

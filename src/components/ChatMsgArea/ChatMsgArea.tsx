@@ -1,6 +1,4 @@
-import React from 'react'
-import { Message } from '../../configs/types'
-import styles from './ChatMsgArea.module.css'
+import styles from './ChatMsgArea.module.css';
 
 interface Props {
   chat: Message[]

@@ -9,19 +9,7 @@ import TextField from '@mui/material/TextField';
 import JoinStatus from './JoinStatus/JoinStatus';
 import useUserState from '../../hooks/useUserstate';
 import axios from 'axios';
-import { joinus_create, joinus_status } from '../../configs/api';
-
-interface Application {
-  name: string;
-  gendor: string;
-  phone: string;
-  academy: string;
-  major: string;
-  idNo: string;
-  honors: string;
-  self_eval: string;
-  comments: string;
-}
+import { joinus_, joinus_status } from '../../configs/api';
 
 const defaultApplication: Application = {
   name: '',
@@ -50,13 +38,14 @@ const academyList = [
 
 const JoinUs = () => {
   const [userState] = useUserState();
-  const [activeStep, setActiveStep] = useState(-1);
+  const [activeStep, setActiveStep] = useState<null | number>(null);
   const [form, setForm] = useState<Application>(defaultApplication);
   const [formStatus, setFormStatus] = useState(false);
 
+  // 提交申请
   const submit = () => {
     setFormStatus(true);
-    axios.post(joinus_create, form, {
+    axios.post(joinus_, form, {
       headers: { 'Authorization': userState?.token ? userState?.token : "" }
     }).then(res => {
       switch (res.data.code) {
@@ -66,6 +55,7 @@ const JoinUs = () => {
     });
   };
 
+  // 获取状态
   useEffect(() => {
     if (userState) {
       axios.get(joinus_status, {
@@ -73,8 +63,8 @@ const JoinUs = () => {
       }).then((res) => {
         switch (res.data.code) {
           case 200: { setActiveStep(res.data.data); break; }
-          case 404: { setActiveStep(-1); break; }
-          default: setActiveStep(-1);
+          case 404: { setActiveStep(null); break; }
+          default: setActiveStep(null);
         }
       });
     }
@@ -83,10 +73,7 @@ const JoinUs = () => {
   return (
     <Box sx={{ my: 4 }} textAlign="left">
       {
-        activeStep >= 0 ?
-          <>
-            <JoinStatus status={activeStep} />
-          </> :
+        activeStep === null ?
           <Box maxWidth={500}>
             <Box mb={2}>
               <Typography sx={{ fontWeight: 600 }} variant='h4' gutterBottom>
@@ -255,6 +242,8 @@ const JoinUs = () => {
               <Button disabled={formStatus} onClick={submit} variant="outlined">提交</Button>
             </Box>
           </Box>
+          :
+          <JoinStatus status={activeStep} />
       }
     </Box>
   );

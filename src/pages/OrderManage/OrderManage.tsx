@@ -1,78 +1,28 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Order, OrderStatus, Message } from '../../configs/types';
-import styles from './OrderManage.module.css'
+import SendIcon from '@mui/icons-material/Send';
 import Box from '@mui/material/Box';
-import { DataGrid, zhCN, GridColDef, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarExport, GridRenderCellParams } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import ChatMsgArea from '../../components/ChatMsgArea/ChatMsgArea';
-import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
 import LinearProgress from '@mui/material/LinearProgress';
-import SendIcon from '@mui/icons-material/Send';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import { DataGrid, GridColDef, GridRenderCellParams, zhCN } from '@mui/x-data-grid';
 import axios from 'axios';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import ChatMsgArea from '../../components/ChatMsgArea/ChatMsgArea';
 import { order_, order_sendmsg, order_update } from '../../configs/api';
-import { useAppSelector } from '../../hooks/redux';
-import { selectUser } from '../../stores/user/userSlice';
-
-interface ToolBarProps {
-  getOrders: (range?: 'all' | 'my') => void
-}
-
-const Toolbar = (props: ToolBarProps) => {
-  const [torch, setTorch] = useState(false)
-
-  // 更新或渲染后读取工单获取范围，并设置；若无范围，则写入“my”作为范围；
-  useEffect(() => {
-    const range = localStorage.getItem('getOrdersRange')
-    setTorch(true)
-    if (range === 'all') {
-      setTorch(true)
-    } else if (range === 'my') {
-      setTorch(false)
-    } else {
-      localStorage.setItem('getOrdersRange', 'my')
-    }
-  }, [])
-
-  /**
-   * 
-   * 切换时，将当前值写入localstorage
-   */
-  function handleSwitchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setTorch(e.currentTarget.checked)
-    if (e.currentTarget.checked) {
-      props.getOrders('all')
-      localStorage.setItem('getOrdersRange', 'all')
-    } else {
-      props.getOrders('my')
-      localStorage.setItem('getOrdersRange', 'my')
-    }
-  }
-
-  return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      <GridToolbarExport csvOptions={{
-        utf8WithBom: true
-      }} />
-      <FormControlLabel control={<Switch checked={torch} onChange={handleSwitchChange} />} label="全部工单" />
-    </GridToolbarContainer>
-  );
-}
+import useUserState from '../../hooks/useUserstate';
+import styles from './OrderManage.module.css';
+import Toolbar from './ToolBar/ToolBar';
 
 export default function OrderManage() {
-  const userState = useAppSelector(selectUser).data;
+  const [userState] = useUserState();
   const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [order, setOrder] = useState<Order>();
@@ -107,7 +57,7 @@ export default function OrderManage() {
       width: 100,
       sortable: true,
       renderCell: (params) => {
-        return <Chip component='button' onClick={() => { handleChipClick(params) }} label={params.value} size="small" color={computedColor(params.value)} variant="filled" />
+        return <Chip component='button' onClick={() => { handleChipClick(params); }} label={params.value} size="small" color={computedColor(params.value)} variant="filled" />;
       }
     },
     {
@@ -128,7 +78,7 @@ export default function OrderManage() {
       width: 150,
       sortable: true,
       valueGetter: (params) => {
-        return new Date(params.value).toLocaleString()
+        return new Date(params.value).toLocaleString();
       }
     },
     {
@@ -137,7 +87,7 @@ export default function OrderManage() {
       width: 150,
       sortable: true,
       valueGetter: (params) => {
-        return new Date(params.value).toLocaleString()
+        return new Date(params.value).toLocaleString();
       }
     },
     {
@@ -147,27 +97,27 @@ export default function OrderManage() {
       width: 200,
       renderCell: (params) => {
         return <>
-          <Button sx={{ mr: 1 }} onClick={() => { handleReplyClick(params) }} variant="outlined" size='small'>答复</Button>
-          <Button onClick={() => { handleOrderOnOff(params) }} variant="outlined" size='small'>{params.row.status === '已关闭' ? '开启' : '关闭'}</Button>
-        </>
+          <Button sx={{ mr: 1 }} onClick={() => { handleReplyClick(params); }} variant="outlined" size='small'>答复</Button>
+          <Button onClick={() => { handleOrderOnOff(params); }} variant="outlined" size='small'>{params.row.status === '已关闭' ? '开启' : '关闭'}</Button>
+        </>;
       }
     }
-  ]
+  ];
 
-  function handleChipClick(val: GridRenderCellParams<string>) {
-    setStatus(val.value as string)
-    setOrder(val.row)
-    setDialogProps({ title: '更改状态', type: 'select', confirmLabel: '确认更改', open: true })
+  function handleChipClick(val: GridRenderCellParams) {
+    setStatus(val.value as string);
+    setOrder(val.row);
+    setDialogProps({ title: '更改状态', type: 'select', confirmLabel: '确认更改', open: true });
   }
 
   const handleStatusChange = (event: SelectChangeEvent) => {
-    setStatus(event.target.value as string)
-  }
+    setStatus(event.target.value as string);
+  };
 
   function handleClose() {
     setDialogProps((prev) => {
-      return { ...prev, open: false }
-    })
+      return { ...prev, open: false };
+    });
   }
 
   function handleConfirm() {
@@ -180,16 +130,16 @@ export default function OrderManage() {
       });
     }
     setDialogProps((prev) => {
-      return { ...prev, open: false }
-    })
+      return { ...prev, open: false };
+    });
   }
 
-  function handleReplyClick(params: GridRenderCellParams<React.ReactNode>) {
-    setOrder(params.row)
-    setDialogProps({ title: '答复用户', type: 'reply', confirmLabel: '完成', open: true })
+  function handleReplyClick(params: GridRenderCellParams) {
+    setOrder(params.row);
+    setDialogProps({ title: '答复用户', type: 'reply', confirmLabel: '完成', open: true });
   }
 
-  function handleOrderOnOff(params: GridRenderCellParams<React.ReactNode>) {
+  function handleOrderOnOff(params: GridRenderCellParams) {
     axios.post(order_update, {
       id: params.row._id,
       status: params.row.status === '已关闭' ? '受理中' : '已关闭'
@@ -210,7 +160,7 @@ export default function OrderManage() {
       message.push({ data: textfield.current!.value, direction: 1 });
       setOrder((prev) => {
         return ({ ...prev, message: message }) as Order;
-      })
+      });
       textfield.current!.value = '';
       fetchOrders();
     });
@@ -224,7 +174,7 @@ export default function OrderManage() {
     setLoading(true);
     let query = '';
     if (range === undefined) {
-      range = localStorage.getItem('getOrdersRange') as ('all' | 'my')
+      range = localStorage.getItem('getOrdersRange') as ('all' | 'my');
     }
     if (range === 'my') query = '?to_uid=' + userState?.uid;
     axios.get(order_ + query, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then((res) => {
@@ -234,15 +184,15 @@ export default function OrderManage() {
   }
 
   useEffect(() => {
-    fetchOrders()
-  }, [])
+    if (userState) fetchOrders();
+  }, [userState]);
 
   // 当前工单消息变化时、聊天对话框状态变更时，滚动聊天消息至底部
   useEffect(() => {
     setTimeout(() => {
-      msgarea.current?.scroll({ top: msgarea.current.scrollHeight })
+      msgarea.current?.scroll({ top: msgarea.current.scrollHeight });
     }, 0);
-  }, [order, dialogProps.open])
+  }, [order, dialogProps.open]);
 
   return (
     <div className={styles.container}>
@@ -258,10 +208,16 @@ export default function OrderManage() {
               getOrders: fetchOrders
             }
           }}
-          pageSize={10}
-          rowsPerPageOptions={[10]}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          pageSizeOptions={[5, 10, 25]}
           localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
-          disableSelectionOnClick
+          disableRowSelectionOnClick
         />
       </Box>
       <Dialog open={dialogProps.open} onClose={handleClose}>

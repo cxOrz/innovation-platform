@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react'
-import { User } from '../configs/types';
+import { useEffect, useState } from 'react';
 
 const useUserState = () => {
   const [userState, setUserState] = useState<User | null>(null);

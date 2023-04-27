@@ -34,17 +34,18 @@ const Applications = (props: Props) => {
                   <>
                     <AppCard click={() => { navigate('/apps/base/' + 0); }} data={apps.base[0]} />
                     <AppCard click={() => { navigate('/apps/base/' + 1); }} data={apps.base[1]} />
+                    <AppCard click={() => { navigate('/apps/base/' + 2); }} data={apps.base[2]} />
                   </>
                 }
                 {
                   user?.role !== undefined &&
                   <>
-                    <AppCard click={() => { navigate('/apps/base/' + 2); }} data={apps.base[2]} />
+                    <AppCard click={() => { navigate('/apps/base/' + 3); }} data={apps.base[3]} />
                   </>
                 }
                 {
-                  apps.base.slice(3).map((app, i) => {
-                    return <AppCard key={i} click={() => { navigate('/apps/base/' + i); }} data={app} />;
+                  apps.base.slice(4).map((app, i) => {
+                    return <AppCard key={i} click={() => { navigate('/apps/base/' + (i + 4)); }} data={app} />;
                   })
                 }
               </div>
