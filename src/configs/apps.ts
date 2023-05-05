@@ -1,22 +1,22 @@
 export interface Application {
-  title: string
-  note: string
-  description: string
-  picture: string
-  url: string
-  category: Category
+  title: string;
+  note: string;
+  description: string;
+  picture: string;
+  url: string;
+  category: Category;
 }
 
 export interface Applications {
-  base: Application[]
-  frontend: Application[]
-  backend: Application[]
-  tools: Application[]
-  learn: Application[]
-  others: Application[]
+  base: Application[];
+  frontend: Application[];
+  backend: Application[];
+  tools: Application[];
+  learn: Application[];
+  others: Application[];
 }
 
-export type Category = 'base' | 'frontend' | 'backend' | 'tools' | 'learn' | 'others'
+export type Category = 'base' | 'frontend' | 'backend' | 'tools' | 'learn' | 'others';
 
 /**
  * 在这里填写你的应用信息，请在你应用对应分类数组的末尾新增，例如添加一个基地应用，则在 base 数组末尾，填写一个信息对象。
@@ -26,11 +26,27 @@ export type Category = 'base' | 'frontend' | 'backend' | 'tools' | 'learn' | 'ot
 export const apps: Applications = {
   base: [
     {
+      title: '人员管理',
+      note: '管理用户信息',
+      description: '调整用户权限、修改用户信息。',
+      picture: 'personnel-manage.webp',
+      url: `/apps/personnel-manage`,
+      category: 'base'
+    },
+    {
       title: '撰写博文',
       note: '写一篇博客',
       description: '将博客添加到博客页面，供所有人阅览。',
       picture: 'write-blog.webp',
       url: `/apps/blog-write`,
+      category: 'base'
+    },
+    {
+      title: '设备管理',
+      note: '管理实验室设备',
+      description: '台式电脑、固态硬盘、移动开发箱、内存条等，任何购置的实验室资产、设备，都在这里统计。',
+      picture: 'device-manage.webp',
+      url: `/apps/device-manage`,
       category: 'base'
     },
     {
@@ -182,4 +198,4 @@ export const apps: Applications = {
     },
   ],
   others: []
-}
+};

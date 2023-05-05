@@ -233,7 +233,6 @@ export default function JoinUsManagement() {
 
   useEffect(() => {
     fetchData(paginationModel.page, paginationModel.pageSize);
-    console.log(paginationModel);
   }, [paginationModel.page, paginationModel.pageSize]);
 
   return (

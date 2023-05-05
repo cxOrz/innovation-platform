@@ -29,23 +29,31 @@ const Applications = (props: Props) => {
                   url: `https://github.com/${TargetName}/innovation-platform/edit/main/src/configs/apps.ts`,
                   category: 'base'
                 }} />
-                {
+                { // 超级管理
                   user?.role === 0 &&
                   <>
                     <AppCard click={() => { navigate('/apps/base/' + 0); }} data={apps.base[0]} />
+                  </>
+                }
+                { // 超级管理、普通管理
+                  Number(user?.role) <= 1 &&
+                  <>
                     <AppCard click={() => { navigate('/apps/base/' + 1); }} data={apps.base[1]} />
                     <AppCard click={() => { navigate('/apps/base/' + 2); }} data={apps.base[2]} />
+                    <AppCard click={() => { navigate('/apps/base/' + 3); }} data={apps.base[3]} />
+                    <AppCard click={() => { navigate('/apps/base/' + 4); }} data={apps.base[4]} />
                   </>
+
                 }
-                {
+                { // 超级管理、普通管理、普通用户
                   user?.role !== undefined &&
                   <>
-                    <AppCard click={() => { navigate('/apps/base/' + 3); }} data={apps.base[3]} />
+                    <AppCard click={() => { navigate('/apps/base/' + 5); }} data={apps.base[5]} />
                   </>
                 }
                 {
-                  apps.base.slice(4).map((app, i) => {
-                    return <AppCard key={i} click={() => { navigate('/apps/base/' + (i + 4)); }} data={app} />;
+                  apps.base.slice(6).map((app, i) => {
+                    return <AppCard key={i} click={() => { navigate('/apps/base/' + (i + 6)); }} data={app} />;
                   })
                 }
               </div>

@@ -20,6 +20,8 @@ const UserProfile = lazy(() => import('../components/UserProfile/UserProfile'));
 const OrderSupport = lazy(() => import('../components/OrderSupport/OrderSupport'));
 const OrderManage = lazy(() => import('../pages/OrderManage/OrderManage'));
 const JoinUsManagement = lazy(() => import('../pages/JoinUsManagement/JoinUsManagement'));
+const PersonnelManagement = lazy(() => import('../pages/PersonnelManagement/PersonnelManagement'));
+const DeviceManagement = lazy(() => import('../pages/DeviceManagement/DeviceManagement'));
 
 const AppRouter = () => {
   return (
@@ -34,6 +36,8 @@ const AppRouter = () => {
             <Route path='order-manage' element={<Suspense fallback={<GlobalLoader loading />}><OrderManage /></Suspense>} />
             <Route path='join-us' element={<Suspense fallback={<GlobalLoader loading />}><JoinUs /></Suspense>} />
             <Route path='join-us-management' element={<Suspense fallback={<GlobalLoader loading />}><JoinUsManagement /></Suspense>} />
+            <Route path='personnel-manage' element={<Suspense fallback={<GlobalLoader loading />}><PersonnelManagement /></Suspense>} />
+            <Route path='device-manage' element={<Suspense fallback={<GlobalLoader loading />}><DeviceManagement /></Suspense>} />
           </Route>
           <Route path='blog' element={<Suspense fallback={<GlobalLoader loading />}><Blog /></Suspense>} >
             <Route path='page/:page' element={<BlogPage />} />
