@@ -7,8 +7,9 @@
 }
 
 footer {
+  overflow: hidden;
+  height: 51px;
   font-size: 0.875rem;
-  padding: 1rem 2rem;
   color: white;
   background-color: #303846;
 }

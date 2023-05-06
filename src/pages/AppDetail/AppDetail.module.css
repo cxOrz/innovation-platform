@@ -70,7 +70,7 @@
 
 @media screen and (max-width: 600px) {
   .container {
-    height: calc(100vh - 109.4px);
+    height: calc(100vh - 111px);
     overflow: auto;
   }
   .content {

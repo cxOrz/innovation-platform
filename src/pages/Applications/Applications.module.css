@@ -1,5 +1,6 @@
 .container {
-  height: calc(100vh - 142.4px);
+  height: calc(100vh - 111px);
+  box-sizing: border-box;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

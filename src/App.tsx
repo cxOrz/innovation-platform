@@ -19,7 +19,7 @@ function App() {
     if (reason === 'clickaway') {
       return;
     }
-    dispatch(updateSnackBar({ ...snackbar, open: false }))
+    dispatch(updateSnackBar({ ...snackbar, open: false }));
   }
 
   useEffect(() => {
@@ -36,10 +36,10 @@ function App() {
         token: userState.token
       }));
     }
-  }, [userState])
+  }, [userState]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   return (
@@ -49,7 +49,9 @@ function App() {
         <Outlet />
       </div>
       <footer>
-        Copyright © 2023 cxOrz | Apache License
+        <p>
+          Copyright © 2023 cxOrz | Apache License
+        </p>
       </footer>
       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={handleAlertClose}>
         <Alert onClose={handleAlertClose} severity={snackbar.severity} sx={{ width: '100%' }}>

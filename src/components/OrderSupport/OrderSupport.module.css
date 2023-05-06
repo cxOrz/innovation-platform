@@ -1,6 +1,6 @@
 .container {
   display: flex;
-  height: calc(100vh - 110.4px);
+  height: calc(100vh - 111px);
 }
 .listSide {
   flex: 1;

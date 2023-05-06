@@ -2,7 +2,7 @@
   display: flex;
   text-align: left;
   background-color: white;
-  min-height: calc(100vh - 110.4px);
+  min-height: calc(100vh - 111px);
 }
 
 .sidebar {
