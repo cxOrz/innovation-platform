@@ -229,11 +229,7 @@ export default function JoinUsManagement() {
 
   useEffect(() => {
     fetchData(paginationModel.page, paginationModel.pageSize);
-  }, [userState]);
-
-  useEffect(() => {
-    fetchData(paginationModel.page, paginationModel.pageSize);
-  }, [paginationModel.page, paginationModel.pageSize]);
+  }, [userState, paginationModel.page, paginationModel.pageSize]);
 
   return (
     <Box sx={{ width: '100%' }}>

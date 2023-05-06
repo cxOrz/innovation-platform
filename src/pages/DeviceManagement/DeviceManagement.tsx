@@ -1,15 +1,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { DataGrid, GridColDef, zhCN } from '@mui/x-data-grid';
 import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import SkipNextIcon from '@mui/icons-material/SkipNext';
-import TextSnippetIcon from '@mui/icons-material/TextSnippet';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import useUserState from '../../hooks/useUserstate';
 import DeviceCard from './DeviceCard/DeviceCard';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import { equal } from '../../Helper/helper';
 import { device_ } from '../../configs/api';
@@ -21,12 +26,26 @@ interface Device {
   openid: string;
   name: string;
   type: string;
-  price?: number;
+  price: number | '';
   date: Date;
   note: string;
 }
 
-type Props = {};
+type DevicePayloadType = Omit<Device, '_id' | 'openid' | 'date'>;
+
+const defaultDevice: DevicePayloadType = {
+  name: '',
+  type: '',
+  price: '',
+  note: ''
+};
+
+const typeItems = [
+  { label: '电脑设备&配件', value: 'pc' },
+  { label: '书籍', value: 'book' },
+  { label: '实验器材', value: 'equipment' },
+  { label: '办公用品', value: 'office-supplies' }
+];
 
 const CardList = [
   {
@@ -51,14 +70,14 @@ const CardList = [
   },
 ];
 
-const DeviceManagement = (props: Props) => {
+const DeviceManagement = () => {
   const [type, setType] = useState('pc');
   const dispatch = useAppDispatch();
   const [userState] = useUserState();
   const [data, setData] = useState<Device[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const [detail, setDetail] = useState<Device | null>(null);
+  const [detail, setDetail] = useState<DevicePayloadType>(defaultDevice);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 5,
     page: 0,
@@ -77,8 +96,10 @@ const DeviceManagement = (props: Props) => {
         field: 'type',
         headerName: '类型',
         width: 130,
+        type: 'singleSelect',
+        valueOptions: typeItems,
         sortable: false,
-        editable: true,
+        editable: true
       },
       {
         field: 'price',
@@ -86,7 +107,6 @@ const DeviceManagement = (props: Props) => {
         type: 'number',
         width: 110,
         editable: true,
-        sortable: false
       },
       {
         field: 'date',
@@ -101,7 +121,8 @@ const DeviceManagement = (props: Props) => {
         field: 'note',
         headerName: '备注',
         width: 300,
-        editable: true
+        editable: true,
+        sortable: false
       },
       {
         field: 'operation',
@@ -110,33 +131,9 @@ const DeviceManagement = (props: Props) => {
         width: 160,
         renderCell: (params) => {
           return <>
-            <Tooltip title="详情">
-              <IconButton
-                size="small"
-                sx={{ mr: 1 }}
-                onClick={() => {
-                  setDetail(params.row);
-                  setOpen(true);
-                }}
-              >
-                <TextSnippetIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="下一流程">
-              <IconButton
-                size='small'
-                sx={{ mr: 1 }}
-                onClick={() => { processRowUpdate({ ...params.row, status: params.row.status + 1 }, params.row); }}
-              >
-                <SkipNextIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="终止">
-              <IconButton
-                size='small'
-                onClick={() => { processRowUpdate({ ...params.row, status: -1 }, params.row); }}
-              >
-                <HighlightOffIcon />
+            <Tooltip title="删除">
+              <IconButton size='small' onClick={() => { deleteRow(params.row._id); }}>
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
           </>;
@@ -144,17 +141,18 @@ const DeviceManagement = (props: Props) => {
       }
     ];
     return cols;
-  }, []);
+  }, [userState]);
 
   // 获取数据
-  const fetchData = (page = 0, pageSize = 0) => {
+  const fetchData = (page = 0, pageSize = 0, type = 'pc') => {
     if (userState) {
       setLoading(true);
       axios.get(device_, {
         headers: { 'Authorization': userState?.token ? userState?.token : "" },
         params: {
           page,
-          pageSize
+          pageSize,
+          type
         }
       }).then(res => {
         setLoading(false);
@@ -164,6 +162,20 @@ const DeviceManagement = (props: Props) => {
         }
       });
     }
+  };
+
+  const addRow = () => {
+    axios.post(device_, detail, {
+      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+    }).then(res => {
+      if (res.data.code === 200) {
+        fetchData(paginationModel.page, paginationModel.pageSize, type);
+        dispatch(updateSnackBar({ open: true, message: '添加成功', severity: 'success' }));
+      } else {
+        dispatch(updateSnackBar({ open: true, message: res.data.data, severity: 'error' }));
+      }
+      handleClose();
+    });
   };
 
   const processRowUpdate = useCallback(async (newRow: Device, oldRow: Device) => {
@@ -193,6 +205,19 @@ const DeviceManagement = (props: Props) => {
     } else throw Error('数据提交失败');
   }, []);
 
+  const deleteRow = async function (_id: string) {
+    axios.delete(`${device_}/${_id}`, {
+      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+    }).then(res => {
+      if (res.data.code === 204) {
+        fetchData(paginationModel.page, paginationModel.pageSize, type);
+        dispatch(updateSnackBar({ open: true, message: '删除成功', severity: 'success' }));
+      } else {
+        dispatch(updateSnackBar({ open: true, message: '删除失败', severity: 'error' }));
+      }
+    });
+  };
+
   const handleProcessRowUpdateError = useCallback((error: Error) => {
     dispatch(updateSnackBar({ open: true, message: error.message, severity: 'error' }));
   }, []);
@@ -201,55 +226,117 @@ const DeviceManagement = (props: Props) => {
     setPaginationModel(prev => ({ ...m, total: prev.total }));
   };
 
-  useEffect(() => {
-    fetchData(paginationModel.page, paginationModel.pageSize);
-  }, [userState]);
+  const handleClose = () => {
+    setOpen(false);
+    setDetail(defaultDevice);
+  };
 
   useEffect(() => {
-    fetchData(paginationModel.page, paginationModel.pageSize);
-  }, [paginationModel.page, paginationModel.pageSize]);
-
+    fetchData(paginationModel.page, paginationModel.pageSize, type);
+  }, [userState, paginationModel.page, paginationModel.pageSize, type]);
 
   return (
-    <div>
-      <Box display="flex" flexWrap="wrap" gap={2}>
+    <Box overflow="hidden" >
+      <Box display="flex" flexWrap="wrap" p={1} gap={2}>
         <DeviceCard type="pc" data={CardList[0]} onClick={setType} actived={type === 'pc'} style={{ backgroundPosition: '0% 10%' }} />
         <DeviceCard type="book" data={CardList[1]} onClick={setType} actived={type === 'book'} style={{ backgroundPosition: '60% 60%' }} />
         <DeviceCard type="equipment" data={CardList[2]} onClick={setType} actived={type === 'equipment'} style={{ backgroundPosition: '100% 100%' }} />
         <DeviceCard type="office-supplies" data={CardList[3]} onClick={setType} actived={type === 'office-supplies'} style={{ backgroundPosition: '80% 30%' }} />
       </Box>
-      <Box textAlign="left" mt={2} mb={1}>
-        <Button variant="outlined" startIcon={<AddIcon />}>添加</Button>
+      <Box textAlign="left" p={1} mt={2} mb={1}>
+        <Button onClick={() => { setOpen(true); }} variant="outlined" startIcon={<AddIcon />}>添加</Button>
       </Box>
-      <DataGrid
-        loading={loading}
-        getRowId={r => r._id}
-        rows={data}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 5,
+      <Box p={1}>
+        <DataGrid
+          sx={{ height: 400 }}
+          loading={loading}
+          getRowId={r => r._id}
+          rows={data}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              }
+            }
+          }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500 },
             },
-          }
-        }}
-        slotProps={{
-          toolbar: {
-            showQuickFilter: true,
-            quickFilterProps: { debounceMs: 500 },
-          },
-        }}
-        rowCount={paginationModel.total}
-        paginationMode="server"
-        paginationModel={paginationModel}
-        onPaginationModelChange={handlePaginationModelChange}
-        pageSizeOptions={[5, 10, 25]}
-        processRowUpdate={processRowUpdate}
-        onProcessRowUpdateError={handleProcessRowUpdateError}
-        localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
-        disableRowSelectionOnClick
-      />
-    </div>
+          }}
+          rowCount={paginationModel.total}
+          paginationMode="server"
+          paginationModel={paginationModel}
+          onPaginationModelChange={handlePaginationModelChange}
+          pageSizeOptions={[5, 10, 25]}
+          processRowUpdate={processRowUpdate}
+          onProcessRowUpdateError={handleProcessRowUpdateError}
+          localeText={zhCN.components.MuiDataGrid.defaultProps.localeText}
+          disableRowSelectionOnClick
+        />
+      </Box>
+      <Dialog
+        fullWidth
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          添加
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+          <Box display="flex" flexDirection="column">
+            <TextField
+              label="名称"
+              margin="dense"
+              type='text'
+              value={detail?.name}
+              onChange={(e) => {
+                setDetail(prev => ({ ...prev, name: e.target.value }));
+              }}
+            />
+            <TextField
+              select
+              label="类型"
+              margin="dense"
+              value={detail?.type}
+              onChange={(e) => {
+                setDetail(prev => ({ ...prev, type: e.target.value }));
+              }}
+            >
+              {typeItems.map(option =>
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              )}
+            </TextField>
+            <TextField
+              label="价格"
+              margin="dense"
+              type="number"
+              value={detail?.price}
+              onChange={(e) => {
+                setDetail(prev => ({ ...prev, price: Number(e.target.value) }));
+              }}
+            />
+            <TextField
+              label="备注"
+              margin="dense"
+              value={detail?.note}
+              onChange={(e) => {
+                setDetail(prev => ({ ...prev, note: e.target.value }));
+              }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleClose}>取消</Button>
+          <Button variant="outlined" onClick={addRow}>添加</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
