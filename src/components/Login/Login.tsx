@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import InputLabel from '@mui/material/InputLabel'
-import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import styles from './Login.module.css'
+import styles from './Login.module.css';
 import { user_create, user_login, user_verification_email_ } from '../../configs/api';
 import { useDispatch } from 'react-redux';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
@@ -18,7 +18,7 @@ interface Props { }
 interface InputRefs {
   email: HTMLInputElement | null,
   verifyCode: HTMLInputElement | null,
-  password: HTMLInputElement | null
+  password: HTMLInputElement | null;
 }
 
 const Login = (props: Props) => {
@@ -26,20 +26,20 @@ const Login = (props: Props) => {
     login: 1,
     labelText: '新用户注册',
     btnText: '登录'
-  })
+  });
   const [inputError, setInputError] = useState({
     email: false,
     verifyCode: false,
     password: false
-  })
-  const [countDown, setCountDown] = useState<string | number>('发送')
+  });
+  const [countDown, setCountDown] = useState<string | number>('发送');
   const refs = useRef<InputRefs>({
     email: null,
     verifyCode: null,
     password: null
-  })
+  });
   const dispatch = useDispatch();
-  let interval: NodeJS.Timer
+  let interval: any;
 
   async function SendVerifyCode() {
     if (refs.current.email!.value.match(/^[\w.]{2,25}\@[\w]{0,20}\.[\w]{0,10}$/g)) {
@@ -57,7 +57,7 @@ const Login = (props: Props) => {
               return '发送';
             }
             return (prev as number - 1);
-          })
+          });
         }, 1000);
       } else {
         // 发送失败
@@ -66,7 +66,7 @@ const Login = (props: Props) => {
     } else {
       setInputError((prev) => {
         return { ...prev, email: true };
-      })
+      });
     }
   }
 
@@ -76,11 +76,11 @@ const Login = (props: Props) => {
     switch (loginFormStatus.login) {
       case 1: {
         if (!refs.current.email!.value.match(/^[\w.]{2,25}\@[\w]{0,20}\.[\w]{0,10}$/g)) {
-          setInputError((prev) => { return { ...prev, email: true } });
+          setInputError((prev) => { return { ...prev, email: true }; });
           error = 1;
         }
         if (refs.current.password!.value === '') {
-          setInputError((prev) => { return { ...prev, password: true } });
+          setInputError((prev) => { return { ...prev, password: true }; });
           error = 1;
         }
         if (error === 0) {
@@ -90,18 +90,14 @@ const Login = (props: Props) => {
           }).then((res) => {
             if (res.data.code === 200) {
               localStorage.setItem('uid', res.data.data.uid);
-              localStorage.setItem('phone', res.data.data.phone);
               localStorage.setItem('avatarUrl', res.data.data.avatarUrl);
-              localStorage.setItem('nickName', res.data.data.nickName);
-              localStorage.setItem('email', res.data.data.email);
-              localStorage.setItem('openid', res.data.data.openid);
               localStorage.setItem('role', String(res.data.data.role));
               localStorage.setItem('token', res.data.data.token);
               setInputError({ email: false, verifyCode: false, password: false });
               window.location.reload();
             } else {
               dispatch(updateSnackBar({ message: '登陆失败', severity: 'error', open: true }));
-              setInputError((prev) => { return { ...prev, password: true } });
+              setInputError((prev) => { return { ...prev, password: true }; });
             }
           });
         }
@@ -109,15 +105,15 @@ const Login = (props: Props) => {
       }
       case 0: {
         if (!refs.current.email!.value.match(/^[\w.]{2,25}\@[\w]{0,20}\.[\w]{0,10}$/g)) {
-          setInputError((prev) => { return { ...prev, email: true } });
+          setInputError((prev) => { return { ...prev, email: true }; });
           error = 1;
         }
         if (!refs.current.verifyCode!.value.match(/^[0-9]{6}$/g)) {
-          setInputError((prev) => { return { ...prev, verifyCode: true } });
+          setInputError((prev) => { return { ...prev, verifyCode: true }; });
           error = 1;
         }
         if (!refs.current.password!.value.match(/^[\S]{6,20}$/g)) {
-          setInputError((prev) => { return { ...prev, password: true } });
+          setInputError((prev) => { return { ...prev, password: true }; });
           error = 1;
         }
         if (error === 0) {
@@ -153,7 +149,7 @@ const Login = (props: Props) => {
         <Box className={styles.card} sx={{
           '& .MuiTextField-root': { mx: 1, my: 0.2 }
         }}>
-          <TextField inputRef={ref => { refs.current.email = ref }} id="email" error={inputError.email}
+          <TextField inputRef={ref => { refs.current.email = ref; }} id="email" error={inputError.email}
             helperText={inputError.email ? '请输入正确的邮箱' : ' '} label="邮箱" variant="outlined" />
           {
             loginFormStatus.login === 0 ?
@@ -173,20 +169,20 @@ const Login = (props: Props) => {
                   />
                   <FormHelperText>{inputError.verifyCode ? '请输入正确的验证码' : ' '}</FormHelperText>
                 </FormControl>
-                <TextField inputRef={ref => { refs.current.password = ref }} id="password" type='password' error={inputError.password}
+                <TextField inputRef={ref => { refs.current.password = ref; }} id="password" type='password' error={inputError.password}
                   helperText={inputError.password ? '密码为长度6-20的字母、数字和符号组合' : ' '} label="设置密码" variant="outlined" />
               </>
               :
-              <TextField inputRef={ref => { refs.current.password = ref }} id="password" type='password' error={inputError.password}
+              <TextField inputRef={ref => { refs.current.password = ref; }} id="password" type='password' error={inputError.password}
                 helperText={inputError.password ? '邮箱或密码错误' : ' '} label="密码" variant="outlined" />
           }
           <hr className={styles.hr} />
           <span style={{ margin: '0.5rem 0' }} className={styles.clickable_text}
             onClick={() => {
               if (loginFormStatus.login === 0)
-                setLoginFormStatus({ login: 1, labelText: '新用户注册', btnText: '登录' })
+                setLoginFormStatus({ login: 1, labelText: '新用户注册', btnText: '登录' });
               else
-                setLoginFormStatus({ login: 0, labelText: '使用密码登录', btnText: '注册' })
+                setLoginFormStatus({ login: 0, labelText: '使用密码登录', btnText: '注册' });
             }}
           >
             {loginFormStatus.labelText}
@@ -201,7 +197,7 @@ const Login = (props: Props) => {
         </Box>
       </main>
     </>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

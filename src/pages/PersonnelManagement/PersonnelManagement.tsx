@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
 
-type Props = {}
+type Props = {};
 
 const PersonnelManagement = (props: Props) => {
   return (
-    <div>PersonnelManagement</div>
-  )
-}
+    <div>
+      
+    </div>
+  );
+};
 
-export default PersonnelManagement
+export default PersonnelManagement;

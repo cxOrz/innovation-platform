@@ -36,7 +36,7 @@ const Applications = (props: Props) => {
                   </>
                 }
                 { // 超级管理、普通管理
-                  Number(user?.role) <= 1 &&
+                  user?.role <= 1 &&
                   <>
                     <AppCard click={() => { navigate('/apps/base/' + 1); }} data={apps.base[1]} />
                     <AppCard click={() => { navigate('/apps/base/' + 2); }} data={apps.base[2]} />
@@ -45,15 +45,21 @@ const Applications = (props: Props) => {
                   </>
 
                 }
-                { // 超级管理、普通管理、普通用户
-                  user?.role !== undefined &&
+                { // 超级管理、普通管理、成员
+                  user?.role <= 2 &&
                   <>
                     <AppCard click={() => { navigate('/apps/base/' + 5); }} data={apps.base[5]} />
                   </>
                 }
+                { // 超级管理、普通管理、成员、普通用户
+                  user?.role !== undefined &&
+                  <>
+                    <AppCard click={() => { navigate('/apps/base/' + 6); }} data={apps.base[6]} />
+                  </>
+                }
                 {
-                  apps.base.slice(6).map((app, i) => {
-                    return <AppCard key={i} click={() => { navigate('/apps/base/' + (i + 6)); }} data={app} />;
+                  apps.base.slice(7).map((app, i) => {
+                    return <AppCard key={i} click={() => { navigate('/apps/base/' + (i + 7)); }} data={app} />;
                   })
                 }
               </div>

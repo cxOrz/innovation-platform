@@ -26,13 +26,9 @@ function App() {
     // 将用户信息更新到redux全局状态
     if (userState) {
       dispatch(updateUser({
-        phone: userState.phone,
-        email: userState.email,
         uid: userState.uid,
-        openid: userState.openid,
         avatarUrl: userState.avatarUrl,
-        nickName: userState.nickName,
-        role: Number(userState.role),
+        role: userState.role,
         token: userState.token
       }));
     }

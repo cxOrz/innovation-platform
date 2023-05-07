@@ -14,7 +14,6 @@ const BlogFull = lazy(() => import('../components/BlogFull/BlogFull'));
 const BlogWriting = lazy(() => import('../pages/BlogWriting/BlogWriting'));
 const Members = lazy(() => import('../pages/Members/Members'));
 const User = lazy(() => import('../pages/User/User'));
-const SubmitOrder = lazy(() => import('../components/JoinUs/JoinUs'));
 const JoinUs = lazy(() => import('../pages/JoinUs/JoinUs'));
 const UserProfile = lazy(() => import('../components/UserProfile/UserProfile'));
 const OrderSupport = lazy(() => import('../components/OrderSupport/OrderSupport'));
@@ -22,6 +21,7 @@ const OrderManage = lazy(() => import('../pages/OrderManage/OrderManage'));
 const JoinUsManagement = lazy(() => import('../pages/JoinUsManagement/JoinUsManagement'));
 const PersonnelManagement = lazy(() => import('../pages/PersonnelManagement/PersonnelManagement'));
 const DeviceManagement = lazy(() => import('../pages/DeviceManagement/DeviceManagement'));
+const Attendance = lazy(() => import('../pages/Attendance/Attendance'));
 
 const AppRouter = () => {
   return (
@@ -38,6 +38,7 @@ const AppRouter = () => {
             <Route path='join-us-management' element={<Suspense fallback={<GlobalLoader loading />}><JoinUsManagement /></Suspense>} />
             <Route path='personnel-manage' element={<Suspense fallback={<GlobalLoader loading />}><PersonnelManagement /></Suspense>} />
             <Route path='device-manage' element={<Suspense fallback={<GlobalLoader loading />}><DeviceManagement /></Suspense>} />
+            <Route path='attendance' element={<Suspense fallback={<GlobalLoader loading />}><Attendance /></Suspense>} />
           </Route>
           <Route path='blog' element={<Suspense fallback={<GlobalLoader loading />}><Blog /></Suspense>} >
             <Route path='page/:page' element={<BlogPage />} />
@@ -47,7 +48,6 @@ const AppRouter = () => {
           <Route path='user' element={<Suspense fallback={<GlobalLoader loading />}><User /></Suspense>} >
             <Route path='profile' element={<UserProfile />} />
             <Route path='support' element={<OrderSupport />} />
-            <Route path='submit-order' element={<SubmitOrder />} />
           </Route>
         </Route>
       </Routes>

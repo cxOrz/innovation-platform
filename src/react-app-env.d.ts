@@ -1,15 +1,23 @@
 /// <reference types="react-scripts" />
 
 interface User {
+  // 以下可写入localStorage
   uid: string;
-  phone: string;
   avatarUrl: string;
-  nickName: string;
-  email: string;
-  openid: string;
   role: number;
   token: string;
+  // 以下存于内存
+  phone?: string;
+  nickName?: string;
+  email?: string;
 }
+
+type UserExt = User & {
+  date: Date;
+  realname: string;
+  idNo: string;
+  field: string;
+};
 
 interface BlogType {
   _id: string;
@@ -26,9 +34,9 @@ interface BlogType {
 type Message = {
   data: string;
   direction: number;
-}
+};
 
-type OrderStatus = '尚未受理' | '受理中' | '已解决' | '已关闭'
+type OrderStatus = '尚未受理' | '受理中' | '已解决' | '已关闭';
 
 interface Order {
   _id: string;

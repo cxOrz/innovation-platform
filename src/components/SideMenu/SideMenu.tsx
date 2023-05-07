@@ -4,7 +4,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import GroupsIcon from '@mui/icons-material/Groups';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +26,6 @@ const SideMenu = () => {
     switch (window.location.pathname) {
       case '/user/profile': setSelectedIndex(0); break;
       case '/user/support': setSelectedIndex(1); break;
-      case '/user/submit-order': setSelectedIndex(2); break;
     }
   }, [])
 
@@ -56,14 +54,6 @@ const SideMenu = () => {
           <MailOutlineIcon />
         </ListItemIcon>
         <ListItemText primary="工单支持" />
-      </ListItemButton>
-      <ListItemButton
-        selected={selectedIndex === 2}
-        onClick={() => handleListItemClick(2, 'submit-order')}>
-        <ListItemIcon>
-          <GroupsIcon />
-        </ListItemIcon>
-        <ListItemText primary="发起工单" />
       </ListItemButton>
       <ListItemButton
         onClick={logout}>

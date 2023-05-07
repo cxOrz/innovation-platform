@@ -1,46 +1,46 @@
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
-import Button from '@mui/material/Button'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
-import axios from 'axios'
-import 'highlight.js/styles/idea.css'
-import { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { Link, useParams } from 'react-router-dom'
-import remarkGfm from 'remark-gfm'
-import { blog_delete_, blog_get_ } from '../../configs/api'
-import { hljs } from '../../configs/global'
-import { useAppDispatch, useAppSelector } from '../../hooks/redux'
-import { selectBlog, updateBlog } from '../../stores/blog/blogSlice'
-import { selectUser } from '../../stores/user/userSlice'
-import Tag from '../Tag/Tag'
-import styles from './BlogFull.module.css'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
+import 'highlight.js/styles/idea.css';
+import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Link, useParams } from 'react-router-dom';
+import remarkGfm from 'remark-gfm';
+import { blog_delete_, blog_get_ } from '../../configs/api';
+import { hljs } from '../../configs/global';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { selectBlog, updateBlog } from '../../stores/blog/blogSlice';
+import { selectUser } from '../../stores/user/userSlice';
+import Tag from '../Tag/Tag';
+import styles from './BlogFull.module.css';
 
 /**
  * 博客完整阅读页，根据路由 id 展示整篇博文
  */
 const BlogFull = () => {
-  const blog = useAppSelector(selectBlog).data
-  const user = useAppSelector(selectUser)
-  const dispatch = useAppDispatch()
-  const params = useParams()
-  const [open, setOpen] = useState(false)
-  const [markdown, setMarkdown] = useState(blog.markdown)
-  const date = new Date(blog.date)
+  const blog = useAppSelector(selectBlog).data;
+  const user = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const params = useParams();
+  const [open, setOpen] = useState(false);
+  const [markdown, setMarkdown] = useState(blog.markdown);
+  const date = new Date(blog.date);
 
   function fetchBlog() {
     axios.get(blog_get_ + params.id).then((res) => {
-      setMarkdown(res.data.data.markdown.replace('<!--truncate-->', ''))
-      dispatch(updateBlog(res.data.data))
-    })
+      setMarkdown(res.data.data.markdown.replace('<!--truncate-->', ''));
+      dispatch(updateBlog(res.data.data));
+    });
   }
 
   function handleClose() {
-    setOpen(false)
+    setOpen(false);
   }
 
   function handleAgree() {
@@ -57,24 +57,24 @@ const BlogFull = () => {
   }
 
   function doDelete() {
-    setOpen(true)
+    setOpen(true);
   }
 
   useEffect(() => {
     // 侧栏跳转或直接用链接访问到此则请求博客
-    if (blog._id !== params.id) fetchBlog()
+    if (blog._id !== params.id) fetchBlog();
     else {
       // 从预览来的无需请求，在预览页已经设置当前博客到全局变量
-      setMarkdown(blog.markdown.replace('<!--truncate-->', ''))
+      setMarkdown(blog.markdown.replace('<!--truncate-->', ''));
     }
     // 延迟设置代码高亮
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
-        hljs.highlightElement(el)
-        el.style.padding = 0
-      })
-    }, 200)
-  }, [params.id])
+        hljs.highlightElement(el);
+        el.style.padding = 0;
+      });
+    }, 200);
+  }, [params.id]);
 
   return (
     <div className={styles.full}>
@@ -102,13 +102,13 @@ const BlogFull = () => {
               <strong>标签：</strong>
               {
                 blog.tag.map((t, i) => {
-                  return <Tag key={i} to=''>{t}</Tag>
+                  return <Tag key={i} to=''>{t}</Tag>;
                 })
               }
             </>
           }
         </div>
-        {user.data?.role === 0 &&
+        {user.data?.role <= 1 &&
           <div>
             <Link to='/blog-write?edit=true' className={styles.edit}><EditIcon fontSize='small' /><span>编辑此页</span></Link>
             <span className={styles.delete} onClick={doDelete}><DeleteIcon fontSize='small' /><span>删除</span></span>
@@ -136,7 +136,7 @@ const BlogFull = () => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default BlogFull
+export default BlogFull;

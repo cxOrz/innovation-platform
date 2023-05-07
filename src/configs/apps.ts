@@ -66,6 +66,14 @@ export const apps: Applications = {
       category: 'base'
     },
     {
+      title: '考勤大屏',
+      note: '提供考勤和展示功能',
+      description: '大屏排序展示所有成员考勤情况；点击卡片进行签到，再次点击签退；设置PIN进行验证；管理员可切换大屏模式为只读或读写；',
+      picture: 'attendance.webp',
+      url: `/apps/attendance`,
+      category: 'base'
+    },
+    {
       title: '成员招新',
       note: '快来加入我们吧',
       description: '在每年的各种比赛中，披荆斩棘，力争第一。我们不断磨炼自己，勤奋学习，寻找机会磨炼自己，我们历经坎坷，遇到过低谷，也到达过高峰，经过一代代的传承接力，每个人都拥有了更加充足的资源，收获更多的知识与经历。',
