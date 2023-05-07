@@ -7,9 +7,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import JoinStatus from './JoinStatus/JoinStatus';
-import useUserState from '../../hooks/useUserstate';
 import axios from 'axios';
 import { joinus_, joinus_status } from '../../configs/api';
+import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { selectUser } from '../../stores/user/userSlice';
+import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 
 const defaultApplication: Application = {
   name: '',
@@ -37,10 +40,12 @@ const academyList = [
 ];
 
 const JoinUs = () => {
-  const [userState] = useUserState();
+  const userState = useAppSelector(selectUser).data;
+  const dispatch = useAppDispatch();
   const [activeStep, setActiveStep] = useState<null | number>(null);
   const [form, setForm] = useState<Application>(defaultApplication);
   const [formStatus, setFormStatus] = useState(false);
+  const navigate = useNavigate();
 
   // 提交申请
   const submit = () => {
@@ -57,7 +62,7 @@ const JoinUs = () => {
 
   // 获取状态
   useEffect(() => {
-    if (userState) {
+    if (userState.token !== '') {
       axios.get(joinus_status, {
         headers: { 'Authorization': userState?.token ? userState?.token : "" }
       }).then((res) => {
@@ -67,8 +72,11 @@ const JoinUs = () => {
           default: setActiveStep(null);
         }
       });
+    } else {
+      dispatch(updateSnackBar({ open: true, message: '请先登录', severity: 'warning' }));
+      navigate('/user/profile');
     }
-  }, [userState]);
+  }, []);
 
   return (
     <Box sx={{ my: 4 }} textAlign="left">

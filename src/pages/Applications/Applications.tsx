@@ -43,7 +43,6 @@ const Applications = (props: Props) => {
                     <AppCard click={() => { navigate('/apps/base/' + 3); }} data={apps.base[3]} />
                     <AppCard click={() => { navigate('/apps/base/' + 4); }} data={apps.base[4]} />
                   </>
-
                 }
                 { // 超级管理、普通管理、成员
                   user?.role <= 2 &&

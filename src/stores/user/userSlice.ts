@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
 interface UserSlice {
-  data: User;
+  data: User & UserExt;
 }
 
 const initialState: UserSlice = {

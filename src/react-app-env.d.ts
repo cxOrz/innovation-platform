@@ -7,16 +7,19 @@ interface User {
   role: number;
   token: string;
   // 以下存于内存
-  phone?: string;
-  nickName?: string;
-  email?: string;
 }
 
-type UserExt = User & {
-  date: Date;
-  realname: string;
-  idNo: string;
-  field: string;
+interface UserExt {
+  email?: string;
+  phone?: string;
+  idNo?: string;
+  nickName?: string;
+  realname?: string;
+  gendor?: string;
+  major?: string;
+  academy?: string;
+  field?: string;
+  date?: Date;
 };
 
 interface BlogType {
