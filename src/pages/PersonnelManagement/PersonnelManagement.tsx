@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -29,7 +28,8 @@ export default function PersonnelManagement() {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 5,
     page: 0,
-    total: 0
+    total: 0,
+    searchParams: {}
   });
   const columns = useMemo(() => {
     const cols: GridColDef[] = [
@@ -118,20 +118,24 @@ export default function PersonnelManagement() {
 
   // 获取数据
   const fetchData = (page = 0, pageSize = 0) => {
-    if (userState) {
-      setLoading(true);
-      axios.get(personnel_, {
-        headers: { 'Authorization': userState?.token ? userState?.token : "" },
-        params: {
-          page,
-          pageSize
-        }
-      }).then(res => {
-        setLoading(false);
-        setPaginationModel({ ...paginationModel, total: res.data.total });
-        setData(res.data.data);
+    setLoading(true);
+    axios.get(personnel_, {
+      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      params: {
+        ...paginationModel.searchParams,
+        page,
+        pageSize
+      }
+    }).then(res => {
+      setLoading(false);
+      setPaginationModel({
+        page,
+        pageSize,
+        total: res.data.total,
+        searchParams: paginationModel.searchParams
       });
-    }
+      setData(res.data.data);
+    });
   };
 
   const processRowUpdate = useCallback(async (newRow: Personnel, oldRow: Personnel) => {
@@ -171,11 +175,16 @@ export default function PersonnelManagement() {
   };
 
   const onFilterChange = useCallback(async (filterModel: GridFilterModel) => {
-    console.log(filterModel.quickFilterValues);
     const payload: any = {};
     if (filterModel.quickFilterValues) {
       payload.search = filterModel.quickFilterValues[0];
     }
+    setPaginationModel({
+      ...paginationModel,
+      searchParams: {
+        ...payload
+      }
+    });
     const { data: result } = await axios.get(personnel_, {
       headers: { 'Authorization': userState?.token ? userState?.token : "" },
       params: {
@@ -185,17 +194,24 @@ export default function PersonnelManagement() {
       }
     });
     if (result.code === 200) {
+      setPaginationModel(prev => ({ ...prev, page: 0, total: result.total }));
       setData(result.data);
     }
   }, []);
 
   const deleteRow = (uid: string) => {
-
+    axios.delete(`${personnel_}/${uid}`, {
+      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+    }).then(res => {
+      if (res.data.code === 204) {
+        fetchData(0, paginationModel.pageSize);
+      }
+    });
   };
 
   useEffect(() => {
     fetchData(paginationModel.page, paginationModel.pageSize);
-  }, [userState, paginationModel.page, paginationModel.pageSize]);
+  }, [paginationModel.page, paginationModel.pageSize]);
 
   return (
     <Box sx={{ width: '100%' }}>
