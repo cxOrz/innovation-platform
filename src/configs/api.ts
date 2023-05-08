@@ -26,3 +26,5 @@ export const joinus_status = BaseUrl + '/joinus/status';
 export const device_ = BaseUrl + '/device';
 
 export const personnel_ = BaseUrl + '/personnel';
+
+export const attendance_ = BaseUrl + '/attendance';

@@ -147,7 +147,11 @@ export default function PersonnelManagement() {
     if (newRow.major !== oldRow.major) payload.major = newRow.major;
     if (newRow.academy !== oldRow.academy) payload.academy = newRow.academy;
     if (newRow.field !== oldRow.field) payload.field = newRow.field;
-    if (newRow.role !== oldRow.role) payload.role = newRow.role;
+    if (newRow.role !== oldRow.role) {
+      payload.role = newRow.role;
+      // 若修改权限，必带上姓名
+      payload.realname = oldRow.realname;
+    }
     // 若payload为空，说明无任何修改，返回oldRow
     if (equal(payload, {})) return oldRow;
     payload.uid = newRow.uid;
