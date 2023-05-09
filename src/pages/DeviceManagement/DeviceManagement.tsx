@@ -11,15 +11,15 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import useUserState from '../../hooks/useUserstate';
 import DeviceCard from './DeviceCard/DeviceCard';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import axios from 'axios';
 import { equal } from '../../Helper/helper';
 import { device_ } from '../../configs/api';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
+import { selectUser } from '../../stores/user/userSlice';
 
 interface Device {
   _id: string;
@@ -73,7 +73,7 @@ const CardList = [
 const DeviceManagement = () => {
   const [type, setType] = useState('pc');
   const dispatch = useAppDispatch();
-  const [userState] = useUserState();
+  const userState = useAppSelector(selectUser).data;
   const [data, setData] = useState<Device[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -148,7 +148,7 @@ const DeviceManagement = () => {
     if (userState) {
       setLoading(true);
       axios.get(device_, {
-        headers: { 'Authorization': userState?.token ? userState?.token : "" },
+        headers: { 'Authorization': userState.token },
         params: {
           page,
           pageSize,
@@ -166,7 +166,7 @@ const DeviceManagement = () => {
 
   const addRow = () => {
     axios.post(device_, detail, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+      headers: { 'Authorization': userState.token }
     }).then(res => {
       if (res.data.code === 200) {
         fetchData(paginationModel.page, paginationModel.pageSize, type);
@@ -193,7 +193,7 @@ const DeviceManagement = () => {
 
     dispatch(updateSnackBar({ open: true, message: '提交数据中...', severity: 'info' }));
     const { data } = await axios.put(device_, payload, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      headers: { 'Authorization': userState.token },
     });
     if (data.code === 200) {
       dispatch(updateSnackBar({ open: true, message: '提交成功', severity: 'success' }));
@@ -207,7 +207,7 @@ const DeviceManagement = () => {
 
   const deleteRow = async function (_id: string) {
     axios.delete(`${device_}/${_id}`, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+      headers: { 'Authorization': userState.token }
     }).then(res => {
       if (res.data.code === 204) {
         fetchData(paginationModel.page, paginationModel.pageSize, type);

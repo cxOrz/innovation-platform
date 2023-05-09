@@ -120,7 +120,7 @@ export default function PersonnelManagement() {
   const fetchData = (page = 0, pageSize = 0) => {
     setLoading(true);
     axios.get(personnel_, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      headers: { 'Authorization': userState.token },
       params: {
         ...paginationModel.searchParams,
         page,
@@ -158,7 +158,7 @@ export default function PersonnelManagement() {
 
     dispatch(updateSnackBar({ open: true, message: '提交数据中...', severity: 'info' }));
     const { data } = await axios.put(personnel_, payload, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      headers: { 'Authorization': userState.token },
     });
     if (data.code === 200) {
       dispatch(updateSnackBar({ open: true, message: '提交成功', severity: 'success' }));
@@ -190,7 +190,7 @@ export default function PersonnelManagement() {
       }
     });
     const { data: result } = await axios.get(personnel_, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      headers: { 'Authorization': userState.token },
       params: {
         ...payload,
         page: paginationModel.page,
@@ -205,7 +205,7 @@ export default function PersonnelManagement() {
 
   const deleteRow = (uid: string) => {
     axios.delete(`${personnel_}/${uid}`, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" }
+      headers: { 'Authorization': userState.token }
     }).then(res => {
       if (res.data.code === 204) {
         fetchData(0, paginationModel.pageSize);

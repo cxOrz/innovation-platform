@@ -15,10 +15,10 @@ import Divider from '@mui/material/Divider';
 import { DataGrid, GridColDef, GridToolbar, zhCN } from '@mui/x-data-grid';
 import axios from 'axios';
 import { joinus_ } from '../../configs/api';
-import useUserState from '../../hooks/useUserstate';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
-import { useAppDispatch } from '../../hooks/redux';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { equal } from '../../Helper/helper';
+import { selectUser } from '../../stores/user/userSlice';
 
 type ApplicationDetail = Application & {
   _id: string;
@@ -43,7 +43,7 @@ function getStatus(status = 6) {
 
 export default function JoinUsManagement() {
   const dispatch = useAppDispatch();
-  const [userState] = useUserState();
+  const userState = useAppSelector(selectUser).data;
   const [data, setData] = useState<ApplicationDetail[]>([]);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -174,7 +174,7 @@ export default function JoinUsManagement() {
     if (userState) {
       setLoading(true);
       axios.get(joinus_, {
-        headers: { 'Authorization': userState?.token ? userState?.token : "" },
+        headers: { 'Authorization': userState.token },
         params: {
           page,
           pageSize
@@ -203,7 +203,7 @@ export default function JoinUsManagement() {
 
     dispatch(updateSnackBar({ open: true, message: '提交数据中...', severity: 'info' }));
     const { data } = await axios.put(joinus_, payload, {
-      headers: { 'Authorization': userState?.token ? userState?.token : "" },
+      headers: { 'Authorization': userState.token },
     });
     if (data.code === 200) {
       dispatch(updateSnackBar({ open: true, message: '提交成功', severity: 'success' }));

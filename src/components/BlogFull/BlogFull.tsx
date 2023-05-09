@@ -110,7 +110,7 @@ const BlogFull = () => {
         </div>
         {user.data?.role <= 1 &&
           <div>
-            <Link to='/blog-write?edit=true' className={styles.edit}><EditIcon fontSize='small' /><span>编辑此页</span></Link>
+            <Link to='/apps/blog-write?edit=true' className={styles.edit}><EditIcon fontSize='small' /><span>编辑此页</span></Link>
             <span className={styles.delete} onClick={doDelete}><DeleteIcon fontSize='small' /><span>删除</span></span>
           </div>
         }
