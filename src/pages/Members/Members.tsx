@@ -3,9 +3,7 @@ import MemberCard from '../../components/MemberCard/MemberCard'
 import { members } from '../../configs/members'
 import styles from './Members.module.css'
 
-type Props = {}
-
-const Members = (props: Props) => {
+const Members = () => {
   return (
     <div className={styles.container}>
       <header className={styles.head_section}>

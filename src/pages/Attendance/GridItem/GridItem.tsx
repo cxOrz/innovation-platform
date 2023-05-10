@@ -19,7 +19,7 @@ function hourToLevel(hours: number) {
 
 function GridItem(props: GridItemProps) {
   return (
-    <div className={styles.box} data-level={hourToLevel(props.today)} data-id={props._id} data-on={props.on}>
+    <div className={styles.box} data-level={hourToLevel(props.today)} data-id={props._id} data-on={`${props.on}`}>
       <span className={styles.name}>{props.realname}</span>
       <span className={styles.today}>{props.today}</span>
       <span className={styles.total}>{props.total} hr</span>

@@ -53,7 +53,7 @@ const SideMenu = () => {
         <ListItemIcon>
           <MailOutlineIcon />
         </ListItemIcon>
-        <ListItemText primary="工单支持" />
+        <ListItemText primary="反馈中心" />
       </ListItemButton>
       <ListItemButton
         onClick={logout}>

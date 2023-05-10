@@ -61,6 +61,8 @@ const Attendance = () => {
             }
             else return item;
           }));
+        } else {
+          dispatch(updateSnackBar({ open: true, message: res.data.data, severity: 'error' }));
         }
       });
     }
@@ -134,6 +136,8 @@ const Attendance = () => {
         if (res.data.code === 200) {
           setMode('off');
           dispatch(updateSnackBar({ open: true, message: '已切换到只读模式', severity: 'success' }));
+        } else {
+          dispatch(updateSnackBar({ open: true, message: res.data.data, severity: 'error' }));
         }
       });
     } else {
@@ -184,7 +188,7 @@ const Attendance = () => {
           切换到{mode === 'off' ? '考勤' : '只读'}模式
         </Button>
       </Box>
-      <Box component="div" display="flex" flexWrap="wrap" gap={1} onClick={handleClick}>
+      <Box component="div" display="flex" justifyContent="center" flexWrap="wrap" gap={1} onClick={handleClick}>
         {
           data.map(item => {
             return <GridItem key={item._id} {...item} />;

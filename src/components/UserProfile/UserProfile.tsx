@@ -9,23 +9,29 @@ import { useAppDispatch, useAppSelector } from '../../hooks/redux';
 import { selectUser, updateAvatar, updateUser } from '../../stores/user/userSlice';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 import axios from 'axios';
-import { user_update, user_upload } from '../../configs/api';
+import { user_get, user_update, user_upload } from '../../configs/api';
 
 interface InputRefs {
   file: HTMLInputElement | null,
   uploadBtn: HTMLButtonElement | null;
 }
 
+const defaultForm = {
+  nickName: '',
+  phone: ''
+};
+
 const UserProfile = () => {
-  const userState = useAppSelector(selectUser);
+  const userState = useAppSelector(selectUser).data;
+  const dispatch = useAppDispatch();
   const [nickNameError, setNickNameError] = useErrorMsg(['', '昵称长度为0-14个字符，包括汉字、字母、数字']);
   const [uploadProgress, setUploadProgress] = useState(false);
   const [nickName, setNickName] = useState('');
+  const [form, setForm] = useState<typeof defaultForm>(defaultForm);
   const refs = useRef<InputRefs>({
     file: null,
     uploadBtn: null
   });
-  const dispatch = useAppDispatch();
 
   function uploadAvatar() {
     refs.current.uploadBtn!.disabled = true;
@@ -37,7 +43,7 @@ const UserProfile = () => {
     axios.post(user_upload, formdata, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'Authorization': userState.data?.token || ""
+        'Authorization': userState?.token || ""
       }
     }).then((res) => {
       dispatch(updateAvatar(res.data.data));
@@ -48,14 +54,12 @@ const UserProfile = () => {
   }
 
   function updateProfile() {
-    if (nickName.match(/^(?!-)[a-zA-Z0-9_\u4e00-\u9fa5]{0,14}$/g)) {
-      axios.post(user_update, {
-        nickName: nickName
-      }, {
-        headers: { 'Authorization': userState.data?.token ? userState.data?.token : "" }
+    if (form.nickName.match(/^(?!-)[a-zA-Z0-9_\u4e00-\u9fa5]{0,14}$/g)) {
+      axios.post(user_update, form, {
+        headers: { 'Authorization': userState.token }
       });
       setNickNameError(0, false);
-      dispatch(updateUser({ ...(userState.data) as any, nickName }));
+      dispatch(updateUser({ ...userState, ...form }));
       dispatch(updateSnackBar({ severity: 'success', open: true, message: '修改成功' }));
     } else {
       setNickNameError(1, true);
@@ -63,10 +67,18 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    if (userState.data.nickName) {
-      setNickName(userState.data.nickName);
+    if (userState) {
+      axios.get(user_get, {
+        headers: { 'Authorization': userState.token }
+      }).then(res => {
+        if (res.data.code === 200) {
+          const data = res.data.data;
+          setForm(prev => ({ ...prev, nickName: data.nickName, phone: data.phone }));
+          dispatch(updateUser({ ...userState, phone: data.phone }));
+        }
+      });
     }
-  }, [userState.data?.nickName]);
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -75,11 +87,23 @@ const UserProfile = () => {
       <div className={styles.content}>
         <h3>用户头像</h3>
         <div className={styles.avatar_section}>
-          <img className={styles.avatar} src={userState.data?.avatarUrl} />
-          <Button ref={ref => refs.current.uploadBtn = ref} sx={{ ml: '1rem' }} onClick={() => { refs.current.file!.click(); }} variant='outlined' disableElevation>
+          <img className={styles.avatar} src={userState?.avatarUrl} />
+          <Button
+            variant='outlined'
+            sx={{ ml: '1rem' }}
+            ref={ref => refs.current.uploadBtn = ref}
+            onClick={() => { refs.current.file!.click(); }}
+            disableElevation
+          >
             {uploadProgress && <CircularProgress size='16px' />}上传图片
           </Button>
-          <input onChange={() => { uploadAvatar(); }} ref={ref => refs.current.file = ref} hidden type='file' accept='image/jpeg,image/jpg,image/png,image/webp' />
+          <input
+            hidden
+            type='file'
+            ref={ref => refs.current.file = ref}
+            onChange={() => { uploadAvatar(); }}
+            accept='image/jpeg,image/jpg,image/png,image/webp'
+          />
         </div>
         <p className={styles.hero_paragraph}>上传一张图片作为头像，推荐尺寸为 256x256 px</p>
         <Box className={styles.info_section} sx={{
@@ -87,9 +111,22 @@ const UserProfile = () => {
             my: 1
           }
         }}>
-          <TextField size='small' label="手机号码" value={userState.data?.phone} sx={{ width: '290px' }} disabled />
-          <TextField error={nickNameError.status} helperText={nickNameError.msg} size='small' label="昵称"
-            sx={{ width: '290px' }} onChange={e => setNickName(e.target.value)} value={nickName} />
+          <TextField
+            label="手机号码"
+            size='small'
+            sx={{ width: '290px' }}
+            value={form.phone}
+            onChange={e => setForm(prev => ({ ...prev, phone: e.target.value }))}
+          />
+          <TextField
+            label="昵称"
+            size='small'
+            sx={{ width: '290px' }}
+            error={nickNameError.status}
+            helperText={nickNameError.msg}
+            value={form.nickName}
+            onChange={e => setForm(prev => ({ ...prev, nickName: e.target.value }))}
+          />
         </Box>
         <Button variant='contained' disableElevation onClick={updateProfile}>更新资料</Button>
       </div>

@@ -50,16 +50,16 @@ export const apps: Applications = {
       category: 'base'
     },
     {
-      title: '工单管理',
-      note: '处理分配到的工单',
-      description: '用户分派给你的工单，在这里进行处理。',
+      title: '反馈管理',
+      note: '处理分配到的反馈',
+      description: '用户分派给你的工单（反馈），在这里进行处理。',
       picture: 'order-manage.webp',
       url: `/apps/order-manage`,
       category: 'base'
     },
     {
       title: '招新管理',
-      note: '管理员及时反馈招新状态',
+      note: '管理员及时同步流程状态',
       description: '对用户提交的申请进行处理，可对每一阶段添加评价、打分，要及时修改流程状态，反馈给用户。',
       picture: 'join-us-manage.webp',
       url: `/apps/join-us-management`,

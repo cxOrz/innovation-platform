@@ -83,65 +83,62 @@ const DeviceManagement = () => {
     page: 0,
     total: 0
   });
-  const columns = useMemo(() => {
-    const cols: GridColDef[] = [
-      {
-        field: 'name',
-        headerName: '名称',
-        width: 150,
-        editable: true,
-        sortable: true
+  const columns: GridColDef[] = [
+    {
+      field: 'name',
+      headerName: '名称',
+      width: 150,
+      editable: true,
+      sortable: true
+    },
+    {
+      field: 'type',
+      headerName: '类型',
+      width: 130,
+      type: 'singleSelect',
+      valueOptions: typeItems,
+      sortable: false,
+      editable: true
+    },
+    {
+      field: 'price',
+      headerName: '价格',
+      type: 'number',
+      width: 110,
+      editable: true,
+    },
+    {
+      field: 'date',
+      headerName: '统计日期',
+      type: 'date',
+      width: 110,
+      valueGetter(params) {
+        return new Date(params.value);
       },
-      {
-        field: 'type',
-        headerName: '类型',
-        width: 130,
-        type: 'singleSelect',
-        valueOptions: typeItems,
-        sortable: false,
-        editable: true
-      },
-      {
-        field: 'price',
-        headerName: '价格',
-        type: 'number',
-        width: 110,
-        editable: true,
-      },
-      {
-        field: 'date',
-        headerName: '统计日期',
-        type: 'date',
-        width: 110,
-        valueGetter(params) {
-          return new Date(params.value);
-        },
-      },
-      {
-        field: 'note',
-        headerName: '备注',
-        width: 300,
-        editable: true,
-        sortable: false
-      },
-      {
-        field: 'operation',
-        headerName: '操作',
-        sortable: false,
-        width: 160,
-        renderCell: (params) => {
-          return <>
-            <Tooltip title="删除">
-              <IconButton size='small' onClick={() => { deleteRow(params.row._id); }}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          </>;
-        }
+    },
+    {
+      field: 'note',
+      headerName: '备注',
+      width: 300,
+      editable: true,
+      sortable: false
+    },
+    {
+      field: 'operation',
+      headerName: '操作',
+      sortable: false,
+      width: 160,
+      renderCell: (params) => {
+        return <>
+          <Tooltip title="删除">
+            <IconButton size='small' onClick={() => { deleteRow(params.row._id); }}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </>;
       }
-    ];
-    return cols;
-  }, [userState]);
+    }
+  ];
 
   // 获取数据
   const fetchData = (page = 0, pageSize = 0, type = 'pc') => {
@@ -243,7 +240,7 @@ const DeviceManagement = () => {
         <DeviceCard type="equipment" data={CardList[2]} onClick={setType} actived={type === 'equipment'} style={{ backgroundPosition: '100% 100%' }} />
         <DeviceCard type="office-supplies" data={CardList[3]} onClick={setType} actived={type === 'office-supplies'} style={{ backgroundPosition: '80% 30%' }} />
       </Box>
-      <Box textAlign="left" p={1} mt={2} mb={1}>
+      <Box textAlign="left" p={1} mt={2}>
         <Button onClick={() => { setOpen(true); }} variant="outlined" startIcon={<AddIcon />}>添加</Button>
       </Box>
       <Box p={1}>

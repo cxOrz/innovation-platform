@@ -232,7 +232,7 @@ export default function JoinUsManagement() {
   }, [userState, paginationModel.page, paginationModel.pageSize]);
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', height: '100%' }}>
       <DataGrid
         loading={loading}
         getRowId={r => r._id}

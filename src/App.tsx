@@ -8,6 +8,8 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import { selectSnackBar, updateSnackBar } from './stores/snackbar/snackbarSlice';
 import useUserState from './hooks/useUserstate';
+import axios from 'axios';
+import { user_get } from './configs/api';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -29,8 +31,24 @@ function App() {
         uid: userState.uid,
         avatarUrl: userState.avatarUrl,
         role: userState.role,
-        token: userState.token
+        token: userState.token,
+        phone: '', // 默认情况
+        email: '' // 默认情况
       }));
+      axios.get(user_get, {
+        headers: { 'Authorization': userState.token ? userState.token : "" }
+      }).then(res => {
+        if (res.data.code === 200) {
+          const result = res.data.data;
+          // 只更新这俩字段
+          if (result.role !== userState.role) {
+            localStorage.getItem('role');
+          }
+          if (result.avatarUrl !== userState.avatarUrl) {
+            localStorage.getItem('avatarUrl');
+          }
+        }
+      });
     }
   }, [userState]);
 
