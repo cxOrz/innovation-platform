@@ -12,7 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import { DataGrid, GridColDef, GridToolbar, zhCN } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridFilterModel, GridToolbar, zhCN } from '@mui/x-data-grid';
 import axios from 'axios';
 import { joinus_ } from '../../configs/api';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
@@ -51,7 +51,8 @@ export default function JoinUsManagement() {
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 5,
     page: 0,
-    total: 0
+    total: 0,
+    searchParams: {}
   });
   const columns = useMemo(() => {
     const cols: GridColDef[] = [
@@ -176,12 +177,16 @@ export default function JoinUsManagement() {
       axios.get(joinus_, {
         headers: { 'Authorization': userState.token },
         params: {
+          ...paginationModel.searchParams,
           page,
           pageSize
         }
       }).then(res => {
         setLoading(false);
-        setPaginationModel({ ...paginationModel, total: res.data.total });
+        setPaginationModel({
+          ...paginationModel,
+          total: res.data.total
+        });
         setData(res.data.data);
       });
     }
@@ -223,6 +228,31 @@ export default function JoinUsManagement() {
     setPaginationModel(prev => ({ ...m, total: prev.total }));
   };
 
+  const onFilterChange = useCallback(async (filterModel: GridFilterModel) => {
+    const payload: any = {};
+    if (filterModel.quickFilterValues) {
+      payload.search = filterModel.quickFilterValues[0];
+    }
+    setPaginationModel({
+      ...paginationModel,
+      searchParams: {
+        ...payload
+      }
+    });
+    const { data: result } = await axios.get(joinus_, {
+      headers: { 'Authorization': userState.token },
+      params: {
+        ...payload,
+        page: paginationModel.page,
+        pageSize: paginationModel.pageSize
+      }
+    });
+    if (result.code === 200) {
+      setPaginationModel(prev => ({ ...prev, page: 0, total: result.total }));
+      setData(result.data);
+    }
+  }, []);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -253,6 +283,8 @@ export default function JoinUsManagement() {
           },
         }}
         rowCount={paginationModel.total}
+        filterMode="server"
+        onFilterModelChange={onFilterChange}
         paginationMode="server"
         paginationModel={paginationModel}
         onPaginationModelChange={handlePaginationModelChange}

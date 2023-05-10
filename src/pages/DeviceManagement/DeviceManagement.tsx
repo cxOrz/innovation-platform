@@ -207,7 +207,7 @@ const DeviceManagement = () => {
       headers: { 'Authorization': userState.token }
     }).then(res => {
       if (res.data.code === 204) {
-        fetchData(paginationModel.page, paginationModel.pageSize, type);
+        fetchData(0, paginationModel.pageSize, type);
         dispatch(updateSnackBar({ open: true, message: '删除成功', severity: 'success' }));
       } else {
         dispatch(updateSnackBar({ open: true, message: '删除失败', severity: 'error' }));
