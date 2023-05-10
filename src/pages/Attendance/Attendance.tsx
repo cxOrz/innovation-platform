@@ -188,7 +188,7 @@ const Attendance = () => {
           切换到{mode === 'off' ? '考勤' : '只读'}模式
         </Button>
       </Box>
-      <Box component="div" display="flex" justifyContent="center" flexWrap="wrap" gap={1} onClick={handleClick}>
+      <Box component="div" maxWidth="80vw" display="flex" justifyContent="center" flexWrap="wrap" gap={1} onClick={handleClick}>
         {
           data.map(item => {
             return <GridItem key={item._id} {...item} />;
