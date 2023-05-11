@@ -1,14 +1,17 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from 'axios';
-import Box from '@mui/material/Box';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { DataGrid, GridColDef, GridFilterModel, GridToolbar, zhCN } from '@mui/x-data-grid';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { DataGrid, GridColDef, GridFilterModel, GridToolbarContainer, GridToolbarQuickFilter, zhCN } from '@mui/x-data-grid';
+import axios from 'axios';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import XLSX from 'xlsx';
+import { equal, filterGridData } from '../../Helper/helper';
 import { personnel_ } from '../../configs/api';
-import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { equal } from '../../Helper/helper';
+import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 import { selectUser } from '../../stores/user/userSlice';
 
 type Personnel = User & UserExt;
@@ -115,6 +118,70 @@ export default function PersonnelManagement() {
     ];
     return cols;
   }, [userState]);
+
+  function CustomToolbar() {
+    const handleExport = () => {
+      axios.get(personnel_, {
+        headers: { 'Authorization': userState.token }
+      }).then(res => {
+        const result = res.data;
+        if (result.code === 200) {
+          // 过滤需要的字段
+          const exportData = filterGridData(result.data, [
+            {
+              field: 'email',
+              headerName: '邮箱',
+            },
+            {
+              field: 'nickName',
+              headerName: '昵称',
+            },
+            {
+              field: 'realname',
+              headerName: '姓名',
+            },
+            {
+              field: 'gendor',
+              headerName: '性别',
+            },
+            {
+              field: 'phone',
+              headerName: '手机号码',
+            },
+            {
+              field: 'idNo',
+              headerName: '学号',
+            },
+            {
+              field: 'major',
+              headerName: '专业',
+            },
+            {
+              field: 'field',
+              headerName: '领域',
+            },
+            {
+              field: 'role',
+              headerName: '权限等级',
+            }
+          ]);
+
+          const worksheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet);
+          worksheet["!cols"] = [{ wch: 20 }, { wch: 8 }, { wch: 8 }, { wch: 8 }, { wch: 12 }, { wch: 12 }];
+          XLSX.writeFile(workbook, "招新表.xlsx", { compression: true });
+        }
+      });
+    };
+
+    return (
+      <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button onClick={handleExport} startIcon={<GetAppIcon />}>导出</Button>
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+    );
+  }
 
   // 获取数据
   const fetchData = (page = 0, pageSize = 0) => {
@@ -231,7 +298,7 @@ export default function PersonnelManagement() {
             },
           }
         }}
-        slots={{ toolbar: GridToolbar }}
+        slots={{ toolbar: CustomToolbar }}
         slotProps={{
           toolbar: {
             showQuickFilter: true,

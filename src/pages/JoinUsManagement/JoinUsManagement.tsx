@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import XLSX from 'xlsx';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import GetAppIcon from '@mui/icons-material/GetApp';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
@@ -12,12 +15,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import { DataGrid, GridColDef, GridFilterModel, GridToolbar, zhCN } from '@mui/x-data-grid';
-import axios from 'axios';
+import { DataGrid, GridColDef, GridFilterModel, GridToolbarQuickFilter, GridToolbarContainer, zhCN } from '@mui/x-data-grid';
 import { joinus_ } from '../../configs/api';
 import { updateSnackBar } from '../../stores/snackbar/snackbarSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { equal } from '../../Helper/helper';
+import { equal, filterGridData } from '../../Helper/helper';
 import { selectUser } from '../../stores/user/userSlice';
 
 type ApplicationDetail = Application & {
@@ -170,6 +172,89 @@ export default function JoinUsManagement() {
     return cols;
   }, []);
 
+  function CustomToolbar() {
+    const handleExport = () => {
+      axios.get(joinus_, {
+        headers: { 'Authorization': userState.token }
+      }).then(res => {
+        const result = res.data;
+        if (result.code === 200) {
+          // 过滤需要的字段
+          const exportData = filterGridData(result.data, [
+            {
+              field: 'idNo',
+              headerName: '学号',
+            },
+            {
+              field: 'name',
+              headerName: '姓名',
+            },
+            {
+              field: 'gendor',
+              headerName: '性别',
+            },
+            {
+              field: 'phone',
+              headerName: '手机号码',
+            },
+            {
+              field: 'email',
+              headerName: '邮箱',
+            },
+            {
+              field: 'major',
+              headerName: '专业',
+            },
+            {
+              field: 'exam_score',
+              headerName: '笔试分数',
+            },
+            {
+              field: 'interview_score',
+              headerName: '面试评分',
+            },
+            {
+              field: 'honors',
+              headerName: '荣誉经历',
+            },
+            {
+              field: 'self_eval',
+              headerName: '自我评价',
+            },
+            {
+              field: 'comments',
+              headerName: '留言',
+            },
+            {
+              field: 'status',
+              headerName: '流程状态',
+              filterCallback(dataItem) {
+                return getStatus(dataItem.status);
+              },
+            },
+            {
+              field: 'note',
+              headerName: '备注',
+            }
+          ]);
+
+          const worksheet = XLSX.utils.json_to_sheet(exportData);
+          const workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet);
+          worksheet["!cols"] = [{ wch: 13 }, { wch: 8 }, { wch: 8 }, { wch: 12 }, { wch: 20 }];
+          XLSX.writeFile(workbook, "招新表.xlsx", { compression: true });
+        }
+      });
+    };
+
+    return (
+      <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button onClick={handleExport} startIcon={<GetAppIcon />}>导出</Button>
+        <GridToolbarQuickFilter />
+      </GridToolbarContainer>
+    );
+  }
+
   // 获取数据
   const fetchData = (page = 0, pageSize = 0) => {
     if (userState) {
@@ -275,7 +360,7 @@ export default function JoinUsManagement() {
             },
           }
         }}
-        slots={{ toolbar: GridToolbar }}
+        slots={{ toolbar: CustomToolbar }}
         slotProps={{
           toolbar: {
             showQuickFilter: true,
