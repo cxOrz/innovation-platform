@@ -5,7 +5,7 @@ import { blog_ } from '../../configs/api';
 import BlogPreview from '../BlogPreview/BlogPreview';
 
 /**
- * 博客二级页面，根据路由页码显示对应页内容。嵌在 /blog 页面中。
+ * 博客页面组件，根据路由页码显示对应页预览内容。嵌在 /blog 页面中。
  */
 const BlogPage = () => {
   const params = useParams();

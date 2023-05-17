@@ -61,12 +61,7 @@ const BlogFull = () => {
   }
 
   useEffect(() => {
-    // 侧栏跳转或直接用链接访问到此则请求博客
-    if (blog._id !== params.id) fetchBlog();
-    else {
-      // 从预览来的无需请求，在预览页已经设置当前博客到全局变量
-      setMarkdown(blog.markdown.replace('<!--truncate-->', ''));
-    }
+    fetchBlog();
     // 延迟设置代码高亮
     setTimeout(() => {
       document.querySelectorAll('pre code').forEach((el: any) => {
