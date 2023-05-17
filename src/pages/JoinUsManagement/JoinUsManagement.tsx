@@ -290,6 +290,7 @@ export default function JoinUsManagement() {
     // 验证
     if (payload.exam_score > 100 || payload.exam_score < 0) { throw Error('笔试分数输入有误'); }
     if (payload.interview_score > 100 || payload.interview_score < 0) { throw Error('面试评分输入有误'); }
+    if (payload.status === 6) { throw Error('流程已处于最后阶段'); }
 
     dispatch(updateSnackBar({ open: true, message: '提交数据中...', severity: 'info' }));
     const { data } = await axios.put(joinus_, payload, {

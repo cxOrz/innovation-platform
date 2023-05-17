@@ -15,8 +15,7 @@ interface Props {
 
 /**
  * 
- * @param blog 传入博客，进行分割，展示一部分，称之为预览。 
- * @returns 返回的是本预览组件。
+ * @param blog 传入博客，进行分割，展示一部分，称之为预览。
  */
 const BlogPreview = ({ blog }: Props) => {
   const [preview, setPreview] = useState('')
