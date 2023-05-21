@@ -42,10 +42,10 @@ function App() {
           const result = res.data.data;
           // 只更新这俩字段
           if (result.role !== userState.role) {
-            localStorage.getItem('role');
+            localStorage.setItem('role', result.role);
           }
           if (result.avatarUrl !== userState.avatarUrl) {
-            localStorage.getItem('avatarUrl');
+            localStorage.setItem('avatarUrl', result.avatarUrl);
           }
         }
       });
