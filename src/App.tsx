@@ -47,6 +47,16 @@ function App() {
           if (result.avatarUrl !== userState.avatarUrl) {
             localStorage.setItem('avatarUrl', result.avatarUrl);
           }
+        } else if (res.data.code === 403) {
+          // 身份过期自动退出
+          dispatch(updateSnackBar({ message: '身份已过期', severity: 'error', open: true }));
+          dispatch(updateUser({
+            uid: userState.uid,
+            avatarUrl: userState.avatarUrl,
+            role: 3,
+            token: ''
+          }));
+          localStorage.clear();
         }
       });
     }

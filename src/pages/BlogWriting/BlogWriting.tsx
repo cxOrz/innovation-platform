@@ -48,7 +48,7 @@ const BlogWriting = () => {
           tag: tag,
           markdown: markdown
         }, { headers: { 'Authorization': userState?.token ? userState?.token : "" } }).then((res) => {
-          if (res.data.code === 401) {
+          if (res.data.code === 403) {
             dispatch(updateSnackBar({ open: true, severity: 'error', message: '无权进行发布！' }));
           } else {
             dispatch(updateSnackBar({ open: true, severity: 'success', message: '发布成功，即将跳转！' }));
